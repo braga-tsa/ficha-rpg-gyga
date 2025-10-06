@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ficha - Cordyceps Protocol (The Last of Us) - Editável</title>
+  <style>
+    :root{
+      --bg:#000000;
+      --panel:#0b0b0b;
+      --accent:#b58f12; /* amarelo escuro */
+      --muted:#ffffff;
+      --text:#f2f2f2;
+      --danger:#d14;
+      --success:#2bd14c;
+    }
+#hpMeter {
+  background: red !important;
+}
+#sanMeter {
+  background: #8A2BE2 !important;
+}
+#adrMeter {
+  background: #FFFF00 !important;
+}
+    *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--text)}
+    .container{max-width:1200px;margin:24px auto;padding:20px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 6px 30px rgba(0,0,0,0.6)}
+    h1{margin:0 0 8px;color:var(--accent)}
+    .row{display:flex;gap:16px;margin-bottom:16px}
+    .col{flex:1}
+    .panel{background:var(--panel);padding:12px;border-radius:8px;border:1px solid rgba(181,143,18,0.08)}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+    input[type=text],input[type=number],select,textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text)}
+    .small{max-width:160px}
+    .attributes{display:grid;grid-template-columns:repeat(8,1fr);gap:8px}
+    .attr{padding:10px;background:rgba(255,255,255,0.02);border-radius:6px;text-align:center}
+    .attr h3{margin:0;font-size:14px;color:var(--accent)}
+    .attr .val{font-size:20px;margin-top:6px}
+    button{background:var(--accent);border:none;color:#0b0b0b;padding:8px 10px;border-radius:6px;cursor:pointer}
+    button.ghost{background:transparent;border:1px solid rgba(181,143,18,0.12);color:var(--text)}
+    .bars{display:flex;gap:12px}
+    .bar{flex:1;padding:8px;border-radius:6px;background:linear-gradient(90deg, rgba(255,255,255,0.01), transparent);}
+    .bar .label{font-size:12px;color:var(--muted)}
+    .meter{height:18px;background:var(--muted);border-radius:8px;overflow:hidden;margin-top:8px}
+    .meter > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#ffd24d);width:0%}
+    .controls{display:flex;gap:8px;align-items:center;margin-top:8px}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px}
+    th{color:var(--accent);text-align:left}
+    .skill-val{width:64px}
+    .roll-result{min-width:130px}
+    .footer{margin-top:16px;font-size:13px;color:var(--muted)}
+    .top-actions{display:flex;gap:8px;align-items:center}
+    .pool{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .chip{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.02);cursor:pointer}
+    .assigned{background:rgba(181,143,18,0.18)}
+    .flex{display:flex;gap:8px;align-items:center}
+    .wide{grid-column:span 4}
+    @media(max-width:900px){.attributes{grid-template-columns:repeat(4,1fr)}.row{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ficha de Personagem — Cordyceps Protocol</h1>
+    <div class="row">
+      <div class="col panel">
+        <h2 style="margin-top:0;color:var(--accent);font-size:16px">Etapa 1 — Detalhes Pessoais</h2>
+        <div class="row">
+          <div class="col">
+            <label>Nome do Personagem</label>
+            <input id="nomePersonagem" type="text" />
+          </div>
+          <div class="col">
+            <label>Nome do Jogador</label>
+            <input id="nomeJogador" type="text" />
+          </div>
+          <div style="width:120px">
+            <label>Idade</label>
+            <input id="idade" type="number" min="0" />
+          </div>
+          <div style="width:140px">
+            <label>Gênero</label>
+            <input id="genero" type="text" />
+          </div>
+        </div>
+        <div style="margin-top:10px">
+          <label>Ocupação</label>
+          <input id="ocupacao" type="text" />
+        </div>
+        <div class="row" style="margin-top:10px">
+          <div class="col">
+            <label>Residência</label>
+            <input id="residencia" type="text" />
+          </div>
+          <div class="col">
+            <label>Local de Nascimento</label>
+            <input id="nascimento" type="text" />
+          </div>
+        </div>
+      </div>
+      <div class="col panel">
+        <h2 style="margin-top:0;color:var(--accent);font-size:16px">Etapa 2 — Atributos</h2>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Role 6x 3d6 e atribua (SOR é 3d6 separado).</div>
+        <div class="attributes" id="attributes">
+          <!-- attribute boxes injected by JS -->
+        </div>
+        <div style="margin-top:8px" class="flex">
+          <button id="rollPool">Gerar 6 rolagens (3d6)</button>
+          <button id="clearPool" class="ghost">Limpar Rolagens</button>
+          <div style="flex:1"></div>
+          <button id="rollSor">Rolar Sorte (3d6)</button>
+        </div>
+        <div class="pool" id="rollPoolChips"></div>
+        <div style="margin-top:8px;color:var(--muted);font-size:13px">Clique numa rolagem para atribuí-la a um atributo. Clique no valor do atributo para removê-lo e devolvê-lo ao pool.</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col panel">
+        <h2 style="margin-top:0;color:var(--accent);font-size:16px">Barras: Vida, Sanidade, Adrenalina</h2>
+        <div class="bars">
+          <div class="bar">
+            <div class="label">Vida (HP)</div>
+            <div class="meter"><i id="hpMeter"></i></div>
+            <div class="controls">
+              <div>Atual: <input id="hpCurrent" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
+              <div>Máx: <input id="hpMax" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
+              <button id="hpMinus">-</button>
+              <button id="hpPlus">+</button>
+            </div>
+          </div>
+          <div class="bar">
+            <div class="label">Sanidade</div>
+            <div class="meter"><i id="sanMeter"></i></div>
+            <div class="controls">
+              <div>Atual: <input id="sanCurrent" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
+              <div>Máx: <input id="sanMax" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
+              <button id="sanMinus">-</button>
+              <button id="sanPlus">+</button>
+            </div>
+          </div>
+          <div class="bar">
+            <div class="label">Adrenalina</div>
+            <div class="meter"><i id="adrMeter"></i></div>
+            <div class="controls">
+              <div>Atual: <input id="adrCurrent" type="number" min="0" max="100" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
+              <div>Máx: <input id="adrMax" type="number" min="0" max="100" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)" value="100"/></div>
+              <button id="adrMinus">-</button>
+              <button id="adrPlus">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col panel">
+        <h2 style="margin-top:0;color:var(--accent);font-size:16px">Etapa 3 e 4 — Ocupação & Perícias</h2>
+        <div style="font-size:13px;color:var(--muted)">Escolha ocupação, depois distribua pontos de perícia (o sistema de cálculo das perícias está fora do escopo automático aqui — converse com o Mestre). Abaixo está a lista completa de perícias: clique em ROLAR para testar (1d20).</div>
+        <div style="margin-top:8px;max-height:520px;overflow:auto">
+          <table id="skillsTable">
+            <thead>
+              <tr><th>Perícia</th><th>Valor Base</th><th>Valor Atual</th><th>Rolar</th><th>Resultado</th></tr>
+            </thead>
+            <tbody>
+              <!-- skills injected by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">Ficha salva automaticamente no armazenamento local do navegador. Botões: Rolar atributos (3d6), Sorte (3d6), rolagem de perícias (1d20).</div>
+  </div>
+
+  <script>
+    /* ---------- Data ---------- */
+    const ATTRS = ['FOR','CON','TAM','DES','APA','INT','MEN','SOR'];
+
+    const SKILLS = [
+      ['Acrobacia',4],['Antropologia',1],['Armas (Pistolas)',4],['Armas (Rifles/Espingardas)',5],['Armas (Arcos/Bestas)',3],
+      ['Arqueologia',1],['Arremessar',4],['Arte e Ofício',1],['Avaliação',1],['Cavalgar',1],['Charme',3],['Chaveiro',1],
+      ['Ciência (Biologia)',1],['Ciência (Forense)',1],['Ciência (Farmácia)',1],['Ciência (Química)',1],['Conhecimento',1],
+      ['Consertos Elétricos',2],['Consertos Mecânicos',2],['Contabilidade',1],['Demolições',1],['Direito',1],['Dirigir',4],
+      ['Disfarce',1],['Eletrônica',1],['Encontrar',5],['Escutar',4],['Esquivar',0],['Furtividade',4],['Hipnose',1],
+      ['História',1],['Intimidação',3],['Lábia',1],['Leitura Labial',1],['Língua (Nativa)',0],['Língua (Outra)',1],['Lutar (Brigar)',5],
+      ['Medicina',1],['Mergulho',1],['Mundo Natural',2],['Natação',2],['Navegação',2],['Ocultismo',2],['Operar Maquinário',1],
+      ['Persuasão',2],['Pilotar (Aeronave)',1],['Pilotar (Barco)',1],['Prestidigitação',2],['Primeiros Socorros',6],['Psicanálise',1],
+      ['Psicologia',2],['Rastrear',2],['Sobrevivência',2],['Treinar Animais',1],['Usar Bibliotecas',4],['Usar Computadores',4]
+    ];
+
+    // Table provided by user: mapping skill value (1..20) -> thresholds {normal,bom,extremo}
+    const THRESHOLDS = {
+      1: {N:20,B:null,E:null},2:{N:19,B:20,E:null},3:{N:18,B:20,E:null},4:{N:17,B:19,E:null},
+      5:{N:16,B:19,E:20},6:{N:15,B:18,E:20},7:{N:14,B:18,E:20},8:{N:13,B:17,E:20},
+      9:{N:12,B:17,E:20},10:{N:11,B:16,E:19},11:{N:10,B:16,E:19},12:{N:9,B:15,E:19},
+      13:{N:8,B:15,E:19},14:{N:7,B:14,E:19},15:{N:6,B:14,E:18},16:{N:5,B:13,E:18},
+      17:{N:4,B:13,E:18},18:{N:3,B:12,E:18},19:{N:2,B:12,E:18},20:{N:1,B:11,E:18}
+    };
+
+    /* ---------- Utilities ---------- */
+    function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+    function rollDice(n,sides){let out=[];for(let i=0;i<n;i++)out.push(randInt(1,sides));return out}
+    function roll3d6(){return rollDice(3,6).reduce((a,b)=>a+b,0)}
+    function saveState(){localStorage.setItem('ficha_cp',JSON.stringify(state))}
+    function loadState(){try{return JSON.parse(localStorage.getItem('ficha_cp'))||{}}catch(e){return {}}}
+
+    /* ---------- State ---------- */
+    let state = loadState();
+    // defaults
+    if(!state.attrs) state.attrs = {FOR:10,CON:10,TAM:13,DES:10,APA:10,INT:10,MEN:10,SOR:10};
+    if(!state.rollPool) state.rollPool = [];
+    if(!state.assigned) state.assigned = {};
+    if(!state.skills) state.skills = {};
+    if(!state.details) state.details = {};
+    if(state.hpMax===undefined) state.hpMax = Math.floor((state.attrs.CON + state.attrs.TAM)/2);
+    if(state.hpCurrent===undefined) state.hpCurrent = state.hpMax;
+    if(state.sanMax===undefined) state.sanMax = state.attrs.MEN * 5;
+    if(state.sanCurrent===undefined) state.sanCurrent = state.sanMax;
+    if(state.adrMax===undefined) state.adrMax = 100;
+    if(state.adrCurrent===undefined) state.adrCurrent = 0;
+
+    /* ---------- Render functions ---------- */
+    function renderAttributes(){
+      const container = document.getElementById('attributes');
+      container.innerHTML = '';
+      ATTRS.forEach(a=>{
+        const div = document.createElement('div');div.className='attr';
+        const title = document.createElement('h3');title.textContent=a;div.appendChild(title);
+        const val = document.createElement('div');val.className='val';val.id='attr_'+a;val.textContent = state.attrs[a] ?? '';
+        val.style.cursor='pointer';
+        val.title='Clique para remover e devolver ao pool (se aplicável)';
+        val.onclick = ()=>{ // remove assignment
+          if(state.assigned[a]){
+            state.rollPool.push(state.assigned[a]);
+            delete state.assigned[a];
+            state.attrs[a] = 0;
+            syncAfterChange();
+          }
+        };
+        div.appendChild(val);
+        container.appendChild(div);
+      });
+      // update HP and SAN
+      recalcHPandSAN();
+    }
+
+    function renderPool(){
+      const pool = document.getElementById('rollPoolChips');pool.innerHTML='';
+      state.rollPool.forEach((r,idx)=>{
+        const c = document.createElement('div');c.className='chip';c.textContent=r+' ('+idx+')';
+        c.onclick = ()=>{ // assign to selected attribute via prompt
+          const attr = prompt('Atribuir rolagem '+r+' a qual atributo? (use abreviação: FOR,CON,TAM,DES,APA,INT,MEN,SOR)');
+          if(!attr) return;
+          const A = attr.toUpperCase();
+          if(!ATTRS.includes(A)){alert('Atributo inválido');return}
+          if(state.assigned[A]){alert('Já existe valor atribuído a '+A+'. Remova primeiro clicando no valor do atributo.');return}
+          state.assigned[A]=r;state.attrs[A]=r;state.rollPool.splice(idx,1);syncAfterChange();
+        };
+        pool.appendChild(c);
+      });
+    }
+
+    function recalcHPandSAN(){
+      state.hpMax = Math.floor((Number(state.attrs.CON||0) + Number(state.attrs.TAM||0))/2);
+      if(state.hpCurrent > state.hpMax) state.hpCurrent = state.hpMax;
+      state.sanMax = (Number(state.attrs.MEN)||0)*5;
+      if(state.sanCurrent > state.sanMax) state.sanCurrent = state.sanMax;
+      // update inputs
+      document.getElementById('hpMax').value = state.hpMax;
+      document.getElementById('hpCurrent').value = state.hpCurrent;
+      document.getElementById('sanMax').value = state.sanMax;
+      document.getElementById('sanCurrent').value = state.sanCurrent;
+      updateMeters();
+      saveState();
+    }
+
+    function updateMeters(){
+      const hpPct = state.hpMax? Math.max(0,Math.min(100,Math.round(state.hpCurrent/state.hpMax*100))):0;
+      const sanPct = state.sanMax? Math.max(0,Math.min(100,Math.round(state.sanCurrent/state.sanMax*100))):0;
+      const adrPct = state.adrMax? Math.max(0,Math.min(100,Math.round(state.adrCurrent/state.adrMax*100))):0;
+      document.getElementById('hpMeter').style.width = hpPct + '%';
+      document.getElementById('sanMeter').style.width = sanPct + '%';
+      document.getElementById('adrMeter').style.width = adrPct + '%';
+    }
+
+    function renderSkills(){
+      const tbody = document.querySelector('#skillsTable tbody');tbody.innerHTML='';
+      SKILLS.forEach(([name,base])=>{
+        const tr = document.createElement('tr');
+        const curVal = state.skills[name] ?? base;
+        tr.innerHTML = `
+          <td>${name}</td>
+          <td class="skill-base">${base}</td>
+          <td><input class="skill-val" data-name="${name}" type="text" value="${curVal}"/></td>
+          <td><button data-roll="${name}">Rolar</button></td>
+          <td class="roll-result" id="res-${escapeId(name)}">-</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      // attach listeners
+      document.querySelectorAll('.skill-val').forEach(inp=>{
+  inp.addEventListener('input', e=>{
+    let val = Number(e.target.value);
+    if(isNaN(val)) val = 0;     // se digitar algo inválido
+    if(val < 1) val = 1;        // mínimo 1
+    if(val > 20) val = 20;      // máximo 20
+    e.target.value = val;       // atualiza o input visualmente
+    state.skills[e.target.dataset.name] = val;
+    saveState();
+  });
+});
+      document.querySelectorAll('button[data-roll]').forEach(btn=>{
+        btn.addEventListener('click',e=>{const name=e.currentTarget.dataset.roll;rollSkill(name);});
+      });
+    }
+
+    function escapeId(s){return s.replace(/[^a-z0-9]/gi,'_')}
+
+    /* ---------- Actions ---------- */
+    function syncAfterChange(){renderAttributes();renderPool();updateMeters();renderSkills();saveState();}
+
+    document.getElementById('rollPool').addEventListener('click',()=>{
+      // generate 6 x 3d6
+      for(let i=0;i<6;i++) state.rollPool.push(roll3d6());
+      saveState();renderPool();
+    });
+    document.getElementById('clearPool').addEventListener('click',()=>{state.rollPool=[];saveState();renderPool();});
+    document.getElementById('rollSor').addEventListener('click',()=>{const val=roll3d6();state.attrs.SOR=val;state.assigned.SOR=val;saveState();renderAttributes();});
+
+    // top detail inputs
+    ['nomePersonagem','nomeJogador','idade','genero','ocupacao','residencia','nascimento'].forEach(id=>{
+      const el = document.getElementById(id);
+      el.value = state.details[id] || '';
+      el.addEventListener('input',e=>{state.details[id]=e.target.value;saveState();});
+    });
+
+    // HP SAN ADR controls
+    document.getElementById('hpMinus').addEventListener('click',()=>{state.hpCurrent=Math.max(0,Number(state.hpCurrent)-1);document.getElementById('hpCurrent').value=state.hpCurrent;syncAfterChange();});
+    document.getElementById('hpPlus').addEventListener('click',()=>{state.hpCurrent=Math.min(state.hpMax,Number(state.hpCurrent)+1);document.getElementById('hpCurrent').value=state.hpCurrent;syncAfterChange();});
+    document.getElementById('sanMinus').addEventListener('click',()=>{state.sanCurrent=Math.max(0,Number(state.sanCurrent)-1);document.getElementById('sanCurrent').value=state.sanCurrent;syncAfterChange();});
+    document.getElementById('sanPlus').addEventListener('click',()=>{state.sanCurrent=Math.min(state.sanMax,Number(state.sanCurrent)+1);document.getElementById('sanCurrent').value=state.sanCurrent;syncAfterChange();});
+    document.getElementById('adrMinus').addEventListener('click',()=>{state.adrCurrent=Math.max(0,Number(state.adrCurrent)-1);document.getElementById('adrCurrent').value=state.adrCurrent;syncAfterChange();});
+    document.getElementById('adrPlus').addEventListener('click',()=>{state.adrCurrent=Math.min(state.adrMax,Number(state.adrCurrent)+1);document.getElementById('adrCurrent').value=state.adrCurrent;syncAfterChange();});
+
+    ['hpCurrent','hpMax','sanCurrent','sanMax','adrCurrent','adrMax'].forEach(id=>{
+      const el = document.getElementById(id);
+      el.value = state[id];
+      el.addEventListener('change',e=>{state[id]=Number(e.target.value);if(id==='hpMax' && state.hpCurrent>state.hpMax) state.hpCurrent=state.hpMax; if(id==='sanMax' && state.sanCurrent>state.sanMax) state.sanCurrent=state.sanMax;syncAfterChange();});
+    });
+
+    // make attributes clickable for manual editing
+    function attachAttrEditors(){
+      ATTRS.forEach(a=>{
+        const el = document.getElementById('attr_'+a);
+        el.addEventListener('dblclick',()=>{
+          const val = prompt('Novo valor para '+a+' (vazio cancela):',state.attrs[a]);
+          if(val===null) return;
+          const n = Number(val);
+          if(isNaN(n)) return alert('Valor inválido');
+          state.attrs[a]=n; if(a==='SOR') state.assigned.SOR=n;syncAfterChange();
+        });
+      });
+    }
+
+    /* ---------- Skill roll logic ---------- */
+    function thresholdsForSkill(val){ // val integer 0..20
+      const v = Math.max(0,Math.min(20,Math.floor(val)));
+      if(v<=0) return {N:21,B:null,E:null};
+      return THRESHOLDS[v] || {N:21,B:null,E:null};
+    }
+
+    function classifyRoll(skillVal,roll){
+      // higher roll better. If roll < normalThreshold => failure
+      const th = thresholdsForSkill(skillVal);
+      if(roll < th.N) return {type:'Falha',detail:`Rolou ${roll} < Normal(${th.N})`};
+      if(th.E !== null && roll >= th.E) return {type:'Extremo',detail:`Rolou ${roll} ≥ Extremo(${th.E})`};
+      if(th.B !== null && roll >= th.B) return {type:'Bom',detail:`Rolou ${roll} ≥ Bom(${th.B})`};
+      return {type:'Normal',detail:`Rolou ${roll} ≥ Normal(${th.N})`};
+    }
+
+    function rollSkill(name){
+      const val = state.skills[name] ?? SKILLS.find(s=>s[0]===name)[1] ?? 0;
+      const roll = randInt(1,20);
+      const outcome = classifyRoll(val,roll);
+      const el = document.getElementById('res-'+escapeId(name));
+      el.innerHTML = `<strong>${outcome.type}</strong> — ${outcome.detail}`;
+      // flash color
+      el.style.color = outcome.type==='Falha'? 'var(--muted)': outcome.type==='Normal'?'#ffffff': outcome.type==='Bom'?'#ffd24d':'#9ef39e';
+    }
+
+    /* ---------- Init ---------- */
+    function init(){
+      // ensure all skills in state
+      SKILLS.forEach(([name,base])=>{ if(state.skills[name]===undefined) state.skills[name]=base; });
+      // fill details
+      ['nomePersonagem','nomeJogador','idade','genero','ocupacao','residencia','nascimento'].forEach(id=>{document.getElementById(id).value = state.details[id] || ''});
+      // attrs
+      if(!state.attrs) state.attrs = {FOR:10,CON:10,TAM:13,DES:10,APA:10,INT:10,MEN:10,SOR:10};
+      renderAttributes();renderPool();renderSkills();attachAttrEditors();updateMeters();
+      // set attribute values to show
+      ATTRS.forEach(a=>document.getElementById('attr_'+a).textContent = state.attrs[a]);
+      // set inputs for HP/SAN/ADR
+      document.getElementById('hpCurrent').value = state.hpCurrent;document.getElementById('hpMax').value = state.hpMax;
+      document.getElementById('sanCurrent').value = state.sanCurrent;document.getElementById('sanMax').value = state.sanMax;
+      document.getElementById('adrCurrent').value = state.adrCurrent;document.getElementById('adrMax').value = state.adrMax;
+    }
+
+    // autosave on unload
+    window.addEventListener('beforeunload',saveState);
+    init();
+  </script>
+</body>
+</html>
