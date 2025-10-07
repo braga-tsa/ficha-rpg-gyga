@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ficha - Cordyceps Protocol (The Last of Us) - Editável</title>
   <style>
     :root{
@@ -59,7 +59,12 @@
     .wide{grid-column:span 4}
     @media(max-width:900px){.attributes{grid-template-columns:repeat(4,1fr)}.row{flex-direction:column}}
   </style>
-</head>
+<style id="__web-inspector-hide-shortcut-style__">
+.__web-inspector-hide-shortcut__, .__web-inspector-hide-shortcut__ *
+{
+    visibility: hidden !important;
+}
+</style></head>
 <body>
   <div class="container">
     <h1>Ficha de Personagem — Cordyceps Protocol</h1>
@@ -69,50 +74,43 @@
         <div class="row">
           <div class="col">
             <label>Nome do Personagem</label>
-            <input id="nomePersonagem" type="text" />
+            <input id="nomePersonagem" type="text">
           </div>
           <div class="col">
             <label>Nome do Jogador</label>
-            <input id="nomeJogador" type="text" />
+            <input id="nomeJogador" type="text">
           </div>
           <div style="width:120px">
             <label>Idade</label>
-            <input id="idade" type="number" min="0" />
+            <input id="idade" type="number" min="0">
           </div>
           <div style="width:140px">
             <label>Gênero</label>
-            <input id="genero" type="text" />
+            <input id="genero" type="text">
           </div>
         </div>
         <div style="margin-top:10px">
           <label>Ocupação</label>
-          <input id="ocupacao" type="text" />
+          <input id="ocupacao" type="text">
         </div>
         <div class="row" style="margin-top:10px">
           <div class="col">
             <label>Residência</label>
-            <input id="residencia" type="text" />
+            <input id="residencia" type="text">
           </div>
           <div class="col">
             <label>Local de Nascimento</label>
-            <input id="nascimento" type="text" />
+            <input id="nascimento" type="text">
           </div>
         </div>
       </div>
       <div class="col panel">
         <h2 style="margin-top:0;color:var(--accent);font-size:16px">Etapa 2 — Atributos</h2>
         <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Role 6x 3d6 e atribua (SOR é 3d6 separado).</div>
-        <div class="attributes" id="attributes">
-          <!-- attribute boxes injected by JS -->
-        </div>
-        <div style="margin-top:8px" class="flex">
-          <button id="rollPool">Gerar 6 rolagens (3d6)</button>
-          <button id="clearPool" class="ghost">Limpar Rolagens</button>
-          <div style="flex:1"></div>
-          <button id="rollSor">Rolar Sorte (3d6)</button>
-        </div>
-        <div class="pool" id="rollPoolChips"></div>
-        <div style="margin-top:8px;color:var(--muted);font-size:13px">Clique numa rolagem para atribuí-la a um atributo. Clique no valor do atributo para removê-lo e devolvê-lo ao pool.</div>
+        <div class="attributes" id="attributes"><div class="attr"><h3>FOR</h3><div class="val" id="attr_FOR" title="Clique para remover e devolver ao pool (se aplicável)" style="cursor: pointer;">10</div></div><div class="attr"><h3>CON</h3><div class="val" id="attr_CON" title="Clique para remover e devolver ao pool (se aplicável)" style="cursor: pointer;">16</div></div><div class="attr"><h3>TAM</h3><div class="val" id="attr_TAM" title="Clique para remover e devolver ao pool (se aplicável)" style="cursor: pointer;">15</div></div><div class="attr"><h3>DES</h3><div class="val" id="attr_DES" title="Clique para remover e devolver ao pool (se aplicável)" style="cursor: pointer;">10</div></div><div class="attr"><h3>APA</h3><div class="val" id="attr_APA" title="Clique para remover e devolver ao pool (se aplicável)" style="cursor: pointer;">10</div></div><div class="attr"><h3>INT</h3><div class="val" id="attr_INT" title="Clique para remover e devolver ao pool (se aplicável)" style="cursor: pointer;">10</div></div><div class="attr"><h3>MEN</h3><div class="val" id="attr_MEN" title="Clique para remover e devolver ao pool (se aplicável)" style="cursor: pointer;">16</div></div><div class="attr"><h3>SOR</h3><div class="val" id="attr_SOR" title="Clique para remover e devolver ao pool (se aplicável)" style="cursor: pointer;">10</div></div></div>
+        
+        
+        
       </div>
     </div>
 
@@ -122,30 +120,30 @@
         <div class="bars">
           <div class="bar">
             <div class="label">Vida (HP)</div>
-            <div class="meter"><i id="hpMeter"></i></div>
+            <div class="meter"><i id="hpMeter" style="width: 100%;"></i></div>
             <div class="controls">
-              <div>Atual: <input id="hpCurrent" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
-              <div>Máx: <input id="hpMax" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
+              <div>Atual: <input id="hpCurrent" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"></div>
+              <div>Máx: <input id="hpMax" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"></div>
               <button id="hpMinus">-</button>
               <button id="hpPlus">+</button>
             </div>
           </div>
           <div class="bar">
             <div class="label">Sanidade</div>
-            <div class="meter"><i id="sanMeter"></i></div>
+            <div class="meter"><i id="sanMeter" style="width: 100%;"></i></div>
             <div class="controls">
-              <div>Atual: <input id="sanCurrent" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
-              <div>Máx: <input id="sanMax" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
+              <div>Atual: <input id="sanCurrent" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"></div>
+              <div>Máx: <input id="sanMax" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"></div>
               <button id="sanMinus">-</button>
               <button id="sanPlus">+</button>
             </div>
           </div>
           <div class="bar">
             <div class="label">Adrenalina</div>
-            <div class="meter"><i id="adrMeter"></i></div>
+            <div class="meter"><i id="adrMeter" style="width: 0%;"></i></div>
             <div class="controls">
-              <div>Atual: <input id="adrCurrent" type="number" min="0" max="100" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
-              <div>Máx: <input id="adrMax" type="number" min="0" max="100" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)" value="100"/></div>
+              <div>Atual: <input id="adrCurrent" type="number" min="0" max="100" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"></div>
+              <div>Máx: <input id="adrMax" type="number" min="0" max="100" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)" value="100"></div>
               <button id="adrMinus">-</button>
               <button id="adrPlus">+</button>
             </div>
@@ -153,16 +151,350 @@
         </div>
       </div>
       <div class="col panel">
-        <h2 style="margin-top:0;color:var(--accent);font-size:16px">Etapa 3 e 4 — Ocupação & Perícias</h2>
+        <h2 style="margin-top:0;color:var(--accent);font-size:16px">Etapa 3 e 4 — Ocupação &amp; Perícias</h2>
         <div style="font-size:13px;color:var(--muted)">Escolha ocupação, depois distribua pontos de perícia (o sistema de cálculo das perícias está fora do escopo automático aqui — converse com o Mestre). Abaixo está a lista completa de perícias: clique em ROLAR para testar (1d20).</div>
         <div style="margin-top:8px;max-height:520px;overflow:auto">
           <table id="skillsTable">
             <thead>
               <tr><th>Perícia</th><th>Valor Base</th><th>Valor Atual</th><th>Rolar</th><th>Resultado</th></tr>
             </thead>
-            <tbody>
-              <!-- skills injected by JS -->
-            </tbody>
+            <tbody><tr>
+          <td>Acrobacia</td>
+          <td class="skill-base">4</td>
+          <td><input class="skill-val" data-name="Acrobacia" type="text" value="10"></td>
+          <td><button data-roll="Acrobacia">Rolar</button></td>
+          <td class="roll-result" id="res-Acrobacia">-</td>
+        </tr><tr>
+          <td>Antropologia</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Antropologia" type="text" value="1"></td>
+          <td><button data-roll="Antropologia">Rolar</button></td>
+          <td class="roll-result" id="res-Antropologia">-</td>
+        </tr><tr>
+          <td>Armas (Pistolas)</td>
+          <td class="skill-base">4</td>
+          <td><input class="skill-val" data-name="Armas (Pistolas)" type="text" value="4"></td>
+          <td><button data-roll="Armas (Pistolas)">Rolar</button></td>
+          <td class="roll-result" id="res-Armas__Pistolas_">-</td>
+        </tr><tr>
+          <td>Armas (Rifles/Espingardas)</td>
+          <td class="skill-base">5</td>
+          <td><input class="skill-val" data-name="Armas (Rifles/Espingardas)" type="text" value="5"></td>
+          <td><button data-roll="Armas (Rifles/Espingardas)">Rolar</button></td>
+          <td class="roll-result" id="res-Armas__Rifles_Espingardas_">-</td>
+        </tr><tr>
+          <td>Armas (Arcos/Bestas)</td>
+          <td class="skill-base">3</td>
+          <td><input class="skill-val" data-name="Armas (Arcos/Bestas)" type="text" value="3"></td>
+          <td><button data-roll="Armas (Arcos/Bestas)">Rolar</button></td>
+          <td class="roll-result" id="res-Armas__Arcos_Bestas_">-</td>
+        </tr><tr>
+          <td>Arqueologia</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Arqueologia" type="text" value="1"></td>
+          <td><button data-roll="Arqueologia">Rolar</button></td>
+          <td class="roll-result" id="res-Arqueologia">-</td>
+        </tr><tr>
+          <td>Arremessar</td>
+          <td class="skill-base">4</td>
+          <td><input class="skill-val" data-name="Arremessar" type="text" value="4"></td>
+          <td><button data-roll="Arremessar">Rolar</button></td>
+          <td class="roll-result" id="res-Arremessar">-</td>
+        </tr><tr>
+          <td>Arte e Ofício</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Arte e Ofício" type="text" value="1"></td>
+          <td><button data-roll="Arte e Ofício">Rolar</button></td>
+          <td class="roll-result" id="res-Arte_e_Of_cio">-</td>
+        </tr><tr>
+          <td>Avaliação</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Avaliação" type="text" value="1"></td>
+          <td><button data-roll="Avaliação">Rolar</button></td>
+          <td class="roll-result" id="res-Avalia__o">-</td>
+        </tr><tr>
+          <td>Cavalgar</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Cavalgar" type="text" value="1"></td>
+          <td><button data-roll="Cavalgar">Rolar</button></td>
+          <td class="roll-result" id="res-Cavalgar">-</td>
+        </tr><tr>
+          <td>Charme</td>
+          <td class="skill-base">3</td>
+          <td><input class="skill-val" data-name="Charme" type="text" value="3"></td>
+          <td><button data-roll="Charme">Rolar</button></td>
+          <td class="roll-result" id="res-Charme">-</td>
+        </tr><tr>
+          <td>Chaveiro</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Chaveiro" type="text" value="1"></td>
+          <td><button data-roll="Chaveiro">Rolar</button></td>
+          <td class="roll-result" id="res-Chaveiro">-</td>
+        </tr><tr>
+          <td>Ciência (Biologia)</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Ciência (Biologia)" type="text" value="1"></td>
+          <td><button data-roll="Ciência (Biologia)">Rolar</button></td>
+          <td class="roll-result" id="res-Ci_ncia__Biologia_">-</td>
+        </tr><tr>
+          <td>Ciência (Forense)</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Ciência (Forense)" type="text" value="1"></td>
+          <td><button data-roll="Ciência (Forense)">Rolar</button></td>
+          <td class="roll-result" id="res-Ci_ncia__Forense_">-</td>
+        </tr><tr>
+          <td>Ciência (Farmácia)</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Ciência (Farmácia)" type="text" value="1"></td>
+          <td><button data-roll="Ciência (Farmácia)">Rolar</button></td>
+          <td class="roll-result" id="res-Ci_ncia__Farm_cia_">-</td>
+        </tr><tr>
+          <td>Ciência (Química)</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Ciência (Química)" type="text" value="1"></td>
+          <td><button data-roll="Ciência (Química)">Rolar</button></td>
+          <td class="roll-result" id="res-Ci_ncia__Qu_mica_">-</td>
+        </tr><tr>
+          <td>Conhecimento</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Conhecimento" type="text" value="1"></td>
+          <td><button data-roll="Conhecimento">Rolar</button></td>
+          <td class="roll-result" id="res-Conhecimento">-</td>
+        </tr><tr>
+          <td>Consertos Elétricos</td>
+          <td class="skill-base">2</td>
+          <td><input class="skill-val" data-name="Consertos Elétricos" type="text" value="2"></td>
+          <td><button data-roll="Consertos Elétricos">Rolar</button></td>
+          <td class="roll-result" id="res-Consertos_El_tricos">-</td>
+        </tr><tr>
+          <td>Consertos Mecânicos</td>
+          <td class="skill-base">2</td>
+          <td><input class="skill-val" data-name="Consertos Mecânicos" type="text" value="2"></td>
+          <td><button data-roll="Consertos Mecânicos">Rolar</button></td>
+          <td class="roll-result" id="res-Consertos_Mec_nicos">-</td>
+        </tr><tr>
+          <td>Contabilidade</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Contabilidade" type="text" value="1"></td>
+          <td><button data-roll="Contabilidade">Rolar</button></td>
+          <td class="roll-result" id="res-Contabilidade">-</td>
+        </tr><tr>
+          <td>Demolições</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Demolições" type="text" value="1"></td>
+          <td><button data-roll="Demolições">Rolar</button></td>
+          <td class="roll-result" id="res-Demoli__es">-</td>
+        </tr><tr>
+          <td>Direito</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Direito" type="text" value="1"></td>
+          <td><button data-roll="Direito">Rolar</button></td>
+          <td class="roll-result" id="res-Direito">-</td>
+        </tr><tr>
+          <td>Dirigir</td>
+          <td class="skill-base">4</td>
+          <td><input class="skill-val" data-name="Dirigir" type="text" value="4"></td>
+          <td><button data-roll="Dirigir">Rolar</button></td>
+          <td class="roll-result" id="res-Dirigir">-</td>
+        </tr><tr>
+          <td>Disfarce</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Disfarce" type="text" value="1"></td>
+          <td><button data-roll="Disfarce">Rolar</button></td>
+          <td class="roll-result" id="res-Disfarce">-</td>
+        </tr><tr>
+          <td>Eletrônica</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Eletrônica" type="text" value="1"></td>
+          <td><button data-roll="Eletrônica">Rolar</button></td>
+          <td class="roll-result" id="res-Eletr_nica">-</td>
+        </tr><tr>
+          <td>Encontrar</td>
+          <td class="skill-base">5</td>
+          <td><input class="skill-val" data-name="Encontrar" type="text" value="5"></td>
+          <td><button data-roll="Encontrar">Rolar</button></td>
+          <td class="roll-result" id="res-Encontrar">-</td>
+        </tr><tr>
+          <td>Escutar</td>
+          <td class="skill-base">4</td>
+          <td><input class="skill-val" data-name="Escutar" type="text" value="4"></td>
+          <td><button data-roll="Escutar">Rolar</button></td>
+          <td class="roll-result" id="res-Escutar">-</td>
+        </tr><tr>
+          <td>Esquivar</td>
+          <td class="skill-base">0</td>
+          <td><input class="skill-val" data-name="Esquivar" type="text" value="0"></td>
+          <td><button data-roll="Esquivar">Rolar</button></td>
+          <td class="roll-result" id="res-Esquivar">-</td>
+        </tr><tr>
+          <td>Furtividade</td>
+          <td class="skill-base">4</td>
+          <td><input class="skill-val" data-name="Furtividade" type="text" value="4"></td>
+          <td><button data-roll="Furtividade">Rolar</button></td>
+          <td class="roll-result" id="res-Furtividade">-</td>
+        </tr><tr>
+          <td>Hipnose</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Hipnose" type="text" value="1"></td>
+          <td><button data-roll="Hipnose">Rolar</button></td>
+          <td class="roll-result" id="res-Hipnose">-</td>
+        </tr><tr>
+          <td>História</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="História" type="text" value="1"></td>
+          <td><button data-roll="História">Rolar</button></td>
+          <td class="roll-result" id="res-Hist_ria">-</td>
+        </tr><tr>
+          <td>Intimidação</td>
+          <td class="skill-base">3</td>
+          <td><input class="skill-val" data-name="Intimidação" type="text" value="3"></td>
+          <td><button data-roll="Intimidação">Rolar</button></td>
+          <td class="roll-result" id="res-Intimida__o">-</td>
+        </tr><tr>
+          <td>Lábia</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Lábia" type="text" value="1"></td>
+          <td><button data-roll="Lábia">Rolar</button></td>
+          <td class="roll-result" id="res-L_bia">-</td>
+        </tr><tr>
+          <td>Leitura Labial</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Leitura Labial" type="text" value="1"></td>
+          <td><button data-roll="Leitura Labial">Rolar</button></td>
+          <td class="roll-result" id="res-Leitura_Labial">-</td>
+        </tr><tr>
+          <td>Língua (Nativa)</td>
+          <td class="skill-base">0</td>
+          <td><input class="skill-val" data-name="Língua (Nativa)" type="text" value="0"></td>
+          <td><button data-roll="Língua (Nativa)">Rolar</button></td>
+          <td class="roll-result" id="res-L_ngua__Nativa_">-</td>
+        </tr><tr>
+          <td>Língua (Outra)</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Língua (Outra)" type="text" value="1"></td>
+          <td><button data-roll="Língua (Outra)">Rolar</button></td>
+          <td class="roll-result" id="res-L_ngua__Outra_">-</td>
+        </tr><tr>
+          <td>Lutar (Brigar)</td>
+          <td class="skill-base">5</td>
+          <td><input class="skill-val" data-name="Lutar (Brigar)" type="text" value="5"></td>
+          <td><button data-roll="Lutar (Brigar)">Rolar</button></td>
+          <td class="roll-result" id="res-Lutar__Brigar_">-</td>
+        </tr><tr>
+          <td>Medicina</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Medicina" type="text" value="1"></td>
+          <td><button data-roll="Medicina">Rolar</button></td>
+          <td class="roll-result" id="res-Medicina">-</td>
+        </tr><tr>
+          <td>Mergulho</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Mergulho" type="text" value="1"></td>
+          <td><button data-roll="Mergulho">Rolar</button></td>
+          <td class="roll-result" id="res-Mergulho">-</td>
+        </tr><tr>
+          <td>Mundo Natural</td>
+          <td class="skill-base">2</td>
+          <td><input class="skill-val" data-name="Mundo Natural" type="text" value="2"></td>
+          <td><button data-roll="Mundo Natural">Rolar</button></td>
+          <td class="roll-result" id="res-Mundo_Natural">-</td>
+        </tr><tr>
+          <td>Natação</td>
+          <td class="skill-base">2</td>
+          <td><input class="skill-val" data-name="Natação" type="text" value="2"></td>
+          <td><button data-roll="Natação">Rolar</button></td>
+          <td class="roll-result" id="res-Nata__o">-</td>
+        </tr><tr>
+          <td>Navegação</td>
+          <td class="skill-base">2</td>
+          <td><input class="skill-val" data-name="Navegação" type="text" value="2"></td>
+          <td><button data-roll="Navegação">Rolar</button></td>
+          <td class="roll-result" id="res-Navega__o">-</td>
+        </tr><tr>
+          <td>Ocultismo</td>
+          <td class="skill-base">2</td>
+          <td><input class="skill-val" data-name="Ocultismo" type="text" value="2"></td>
+          <td><button data-roll="Ocultismo">Rolar</button></td>
+          <td class="roll-result" id="res-Ocultismo">-</td>
+        </tr><tr>
+          <td>Operar Maquinário</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Operar Maquinário" type="text" value="1"></td>
+          <td><button data-roll="Operar Maquinário">Rolar</button></td>
+          <td class="roll-result" id="res-Operar_Maquin_rio">-</td>
+        </tr><tr>
+          <td>Persuasão</td>
+          <td class="skill-base">2</td>
+          <td><input class="skill-val" data-name="Persuasão" type="text" value="2"></td>
+          <td><button data-roll="Persuasão">Rolar</button></td>
+          <td class="roll-result" id="res-Persuas_o">-</td>
+        </tr><tr>
+          <td>Pilotar (Aeronave)</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Pilotar (Aeronave)" type="text" value="1"></td>
+          <td><button data-roll="Pilotar (Aeronave)">Rolar</button></td>
+          <td class="roll-result" id="res-Pilotar__Aeronave_">-</td>
+        </tr><tr>
+          <td>Pilotar (Barco)</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Pilotar (Barco)" type="text" value="1"></td>
+          <td><button data-roll="Pilotar (Barco)">Rolar</button></td>
+          <td class="roll-result" id="res-Pilotar__Barco_">-</td>
+        </tr><tr>
+          <td>Prestidigitação</td>
+          <td class="skill-base">2</td>
+          <td><input class="skill-val" data-name="Prestidigitação" type="text" value="2"></td>
+          <td><button data-roll="Prestidigitação">Rolar</button></td>
+          <td class="roll-result" id="res-Prestidigita__o">-</td>
+        </tr><tr>
+          <td>Primeiros Socorros</td>
+          <td class="skill-base">6</td>
+          <td><input class="skill-val" data-name="Primeiros Socorros" type="text" value="6"></td>
+          <td><button data-roll="Primeiros Socorros">Rolar</button></td>
+          <td class="roll-result" id="res-Primeiros_Socorros">-</td>
+        </tr><tr>
+          <td>Psicanálise</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Psicanálise" type="text" value="1"></td>
+          <td><button data-roll="Psicanálise">Rolar</button></td>
+          <td class="roll-result" id="res-Psican_lise">-</td>
+        </tr><tr>
+          <td>Psicologia</td>
+          <td class="skill-base">2</td>
+          <td><input class="skill-val" data-name="Psicologia" type="text" value="2"></td>
+          <td><button data-roll="Psicologia">Rolar</button></td>
+          <td class="roll-result" id="res-Psicologia">-</td>
+        </tr><tr>
+          <td>Rastrear</td>
+          <td class="skill-base">2</td>
+          <td><input class="skill-val" data-name="Rastrear" type="text" value="2"></td>
+          <td><button data-roll="Rastrear">Rolar</button></td>
+          <td class="roll-result" id="res-Rastrear">-</td>
+        </tr><tr>
+          <td>Sobrevivência</td>
+          <td class="skill-base">2</td>
+          <td><input class="skill-val" data-name="Sobrevivência" type="text" value="2"></td>
+          <td><button data-roll="Sobrevivência">Rolar</button></td>
+          <td class="roll-result" id="res-Sobreviv_ncia">-</td>
+        </tr><tr>
+          <td>Treinar Animais</td>
+          <td class="skill-base">1</td>
+          <td><input class="skill-val" data-name="Treinar Animais" type="text" value="1"></td>
+          <td><button data-roll="Treinar Animais">Rolar</button></td>
+          <td class="roll-result" id="res-Treinar_Animais">-</td>
+        </tr><tr>
+          <td>Usar Bibliotecas</td>
+          <td class="skill-base">4</td>
+          <td><input class="skill-val" data-name="Usar Bibliotecas" type="text" value="4"></td>
+          <td><button data-roll="Usar Bibliotecas">Rolar</button></td>
+          <td class="roll-result" id="res-Usar_Bibliotecas">-</td>
+        </tr><tr>
+          <td>Usar Computadores</td>
+          <td class="skill-base">4</td>
+          <td><input class="skill-val" data-name="Usar Computadores" type="text" value="4"></td>
+          <td><button data-roll="Usar Computadores">Rolar</button></td>
+          <td class="roll-result" id="res-Usar_Computadores">-</td>
+        </tr></tbody>
           </table>
         </div>
       </div>
@@ -408,5 +740,72 @@
     window.addEventListener('beforeunload',saveState);
     init();
   </script>
+
+
 </body>
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ficha - Cordyceps Protocol (The Last of Us) - Editável</title>
+  <style>
+    :root{
+      --bg:#000000;
+      --panel:#0b0b0b;
+      --accent:#b58f12; /* amarelo escuro */
+      --muted:#ffffff;
+      --text:#f2f2f2;
+      --danger:#d14;
+      --success:#2bd14c;
+    }
+#hpMeter {
+  background: red !important;
+}
+#sanMeter {
+  background: #8A2BE2 !important;
+}
+#adrMeter {
+  background: #FFFF00 !important;
+}
+    *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--text)}
+    .container{max-width:1300px;margin:24px auto;padding:0px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 6px 30px rgba(0,0,0,0.6)}
+    h1{margin:0 0 8px;color:var(--accent)}
+    .row{display:flex;gap:16px;margin-bottom:16px}
+    .col{flex:1}
+    .panel{background:var(--panel);padding:12px;border-radius:8px;border:1px solid rgba(181,143,18,0.08)}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+    input[type=text],input[type=number],select,textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text)}
+    .small{max-width:160px}
+    .attributes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .attr{padding:10px;background:rgba(255,255,255,0.02);border-radius:6px;text-align:center}
+    .attr h3{margin:0;font-size:14px;color:var(--accent)}
+    .attr .val{font-size:20px;margin-top:6px}
+    button{background:var(--accent);border:none;color:#0b0b0b;padding:8px 10px;border-radius:6px;cursor:pointer}
+    button.ghost{background:transparent;border:1px solid rgba(181,143,18,0.12);color:var(--text)}
+    .bars{display:flex;gap:12px}
+    .bar{flex:1;padding:8px;border-radius:6px;background:linear-gradient(90deg, rgba(255,255,255,0.01), transparent);}
+    .bar .label{font-size:12px;color:var(--muted)}
+    .meter{height:18px;background:var(--muted);border-radius:8px;overflow:hidden;margin-top:8px}
+    .meter > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#ffd24d);width:0%}
+    .controls{display:flex;gap:8px;align-items:center;margin-top:8px}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px}
+    th{color:var(--accent);text-align:left}
+    .skill-val{width:64px}
+    .roll-result{min-width:130px}
+    .footer{margin-top:16px;font-size:13px;color:var(--muted)}
+    .top-actions{display:flex;gap:8px;align-items:center}
+    .pool{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .chip{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.02);cursor:pointer}
+    .assigned{background:rgba(181,143,18,0.18)}
+    .flex{display:flex;gap:8px;align-items:center}
+    .wide{grid-column:span 4}
+    @media(max-width:900px){.attributes{grid-template-columns:repeat(4,1fr)}.row{flex-direction:column}}
+  </style>
+<style id="__web-inspector-hide-shortcut-style__">
+.__web-inspector-hide-shortcut__, .__web-inspector-hide-shortcut__ *
+{
+    visibility: hidden !important;
+}
+</style>
 </html>
