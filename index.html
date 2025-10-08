@@ -27,7 +27,18 @@
     html,body{height:100%;margin:0;background:var(--bg);color:var(--text)}
     .container{max-width:1300px;margin:24px auto;padding:0px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 6px 30px rgba(0,0,0,0.6)}
     h1{margin:0 0 8px;color:var(--accent)}
-    .row{display:flex;gap:16px;margin-bottom:16px}
+    .row.top {
+  display:flex;
+  flex-wrap: wrap;  /* permite quebrar linha se necessário */
+  gap:16px;
+  margin-bottom:16px;
+}
+    .row.bottom {
+  display:flex;
+  gap:16px;
+  align-items:flex-start; /* força topo */
+  margin-bottom:16px;
+}
     .col{flex:1}
     .panel{background:var(--panel);padding:12px;border-radius:8px;border:1px solid rgba(181,143,18,0.08)}
     label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
@@ -92,10 +103,10 @@ input[type=number] {
 <body>
   <div class="container">
     <h1>Ficha de Personagem — Cordyceps Protocol</h1>
-    <div class="row">
+    <div class="row top">
       <div class="col panel">
         <h2 style="margin-top:0;color:var(--accent);font-size:16px">Etapa 1 — Detalhes Pessoais</h2>
-        <div class="row">
+        <div class="row top">
           <div class="col">
             <label>Nome do Personagem</label>
             <input id="nomePersonagem" type="text" />
@@ -117,7 +128,7 @@ input[type=number] {
           <label>Ocupação</label>
           <input id="ocupacao" type="text" />
         </div>
-        <div class="row" style="margin-top:10px">
+        <div class="row bottom" style="margin-top:10px">
           <div class="col">
             <label>Residência</label>
             <input id="residencia" type="text" />
@@ -146,11 +157,13 @@ input[type=number] {
       </div>
     </div>
 
-    <div class="row">
-      <div class="col panel">
-        <h2 style="margin-top:0;color:var(--accent);font-size:16px">Barras: Vida, Sanidade, Adrenalina</h2>
-        <div class="bars">
-          <div class="bar">
+<div class="row bottom">
+  <!-- Coluna esquerda: barras + inventário -->
+  <div class="col panel" style="flex: 0 0 750px; max-width: 750px;">
+    <!-- Barras -->
+    <div class="panel" style="margin-bottom:12px;">
+      <h2 style="margin-top:0;color:var(--accent);font-size:16px">Barras: Vida, Sanidade, Adrenalina</h2>
+      <div class="bars">
             <div class="label">Vida (HP)</div>
             <div class="meter"><i id="hpMeter"></i></div>
             <div class="controls">
@@ -181,16 +194,23 @@ input[type=number] {
             </div>
           </div>
         </div>
-      </div>
-      <div class="col panel">
-        <h2 style="margin-top:0;color:var(--accent);font-size:16px">Etapa 3 e 4 — Ocupação & Perícias</h2>
-        <div style="font-size:13px;color:var(--muted)">Escolha ocupação, depois distribua pontos de perícia (o sistema de cálculo das perícias está fora do escopo automático aqui — converse com o Mestre). Abaixo está a lista completa de perícias: clique em ROLAR para testar (1d20).</div>
-        <div style="margin-top:8px;max-height:520px;overflow:auto">
-          <table id="skillsTable">
-            <thead>
-              <tr><th>Perícia</th><th>Valor Base</th><th>Valor Atual</th><th>Rolar</th><th>Resultado</th></tr>
-            </thead>
-            <tbody>
+
+    <div class="panel">
+      <h2 style="margin-top:0;color:var(--accent);font-size:16px">Inventário</h2>
+      <textarea id="inventory" placeholder="Digite os itens aqui..." 
+        style="width:100%;min-height:150px;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text);resize:vertical"></textarea>
+    </div>
+  </div>
+
+  <div class="col panel" style="flex: 1; min-width: 400px;">
+    <h2 style="margin-top:0;color:var(--accent);font-size:16px">Etapa 3 e 4 — Ocupação & Perícias</h2>
+    <div style="font-size:13px;color:var(--muted)">Escolha ocupação, depois distribua pontos de perícia...</div>
+    <div style="margin-top:8px;max-height:520px;overflow:auto">
+      <table id="skillsTable">
+        <thead>
+          <tr><th>Perícia</th><th>Valor Base</th><th>Valor Atual</th><th>Rolar</th><th>Resultado</th></tr>
+        </thead>
+        <tbody>
               <!-- skills injected by JS -->
             </tbody>
           </table>
