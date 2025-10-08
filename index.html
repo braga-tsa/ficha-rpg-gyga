@@ -67,6 +67,26 @@ div[style*="Role 6x 3d6"],
 div[style*="Clique numa rolagem"] {
   display: none !important;
 }
+    input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.attr-input {
+  width: 70px;
+  text-align: center;
+  font-size: 18px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 6px;
+}
   </style>
 </head>
 <body>
@@ -229,29 +249,46 @@ div[style*="Clique numa rolagem"] {
     if(state.adrCurrent===undefined) state.adrCurrent = 0;
 
     /* ---------- Render functions ---------- */
-    function renderAttributes(){
-      const container = document.getElementById('attributes');
-      container.innerHTML = '';
-      ATTRS.forEach(a=>{
-        const div = document.createElement('div');div.className='attr';
-        const title = document.createElement('h3');title.textContent=a;div.appendChild(title);
-        const val = document.createElement('div');val.className='val';val.id='attr_'+a;val.textContent = state.attrs[a] ?? '';
-        val.style.cursor='pointer';
-        val.title='Clique para remover e devolver ao pool (se aplicável)';
-        val.onclick = ()=>{ // remove assignment
-          if(state.assigned[a]){
-            state.rollPool.push(state.assigned[a]);
-            delete state.assigned[a];
-            state.attrs[a] = 0;
-            syncAfterChange();
-          }
-        };
-        div.appendChild(val);
-        container.appendChild(div);
-      });
-      // update HP and SAN
+    function renderAttributes() {
+  const container = document.getElementById('attributes');
+  container.innerHTML = '';
+
+  ATTRS.forEach(a => {
+    const div = document.createElement('div');
+    div.className = 'attr';
+
+    const title = document.createElement('h3');
+    title.textContent = a;
+    div.appendChild(title);
+
+    // campo numérico digitável direto (sem setas)
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.id = 'attr_' + a;
+    input.min = 0;
+    input.max = 20;
+    input.value = state.attrs[a] ?? 0;
+    input.classList.add('attr-input');
+
+    // impede digitar letras e mantém entre 0 e 20
+    input.addEventListener('input', e => {
+      let val = e.target.value.replace(/[^0-9]/g, '');
+      if (val === '') val = 0;
+      let n = Number(val);
+      if (n < 0) n = 0;
+      if (n > 20) n = 20;
+      state.attrs[a] = n;
+      e.target.value = n;
       recalcHPandSAN();
-    }
+      saveState();
+    });
+
+    div.appendChild(input);
+    container.appendChild(div);
+  });
+
+  recalcHPandSAN();
+}
 
     function renderPool(){
       const pool = document.getElementById('rollPoolChips');pool.innerHTML='';
@@ -357,20 +394,6 @@ div[style*="Clique numa rolagem"] {
       el.addEventListener('change',e=>{state[id]=Number(e.target.value);if(id==='hpMax' && state.hpCurrent>state.hpMax) state.hpCurrent=state.hpMax; if(id==='sanMax' && state.sanCurrent>state.sanMax) state.sanCurrent=state.sanMax;syncAfterChange();});
     });
 
-    // make attributes clickable for manual editing
-    function attachAttrEditors(){
-      ATTRS.forEach(a=>{
-        const el = document.getElementById('attr_'+a);
-        el.addEventListener('dblclick',()=>{
-          const val = prompt('Novo valor para '+a+' (vazio cancela):',state.attrs[a]);
-          if(val===null) return;
-          const n = Number(val);
-          if(isNaN(n)) return alert('Valor inválido');
-          state.attrs[a]=n; if(a==='SOR') state.assigned.SOR=n;syncAfterChange();
-        });
-      });
-    }
-
     /* ---------- Skill roll logic ---------- */
     function thresholdsForSkill(val){ // val integer 0..20
       const v = Math.max(0,Math.min(20,Math.floor(val)));
@@ -405,7 +428,7 @@ div[style*="Clique numa rolagem"] {
       ['nomePersonagem','nomeJogador','idade','genero','ocupacao','residencia','nascimento'].forEach(id=>{document.getElementById(id).value = state.details[id] || ''});
       // attrs
       if(!state.attrs) state.attrs = {FOR:10,CON:10,TAM:13,DES:10,APA:10,INT:10,MEN:10,SOR:10};
-      renderAttributes();renderPool();renderSkills();attachAttrEditors();updateMeters();
+      renderAttributes();renderPool();renderSkills();updateMeters();
       // set attribute values to show
       ATTRS.forEach(a=>document.getElementById('attr_'+a).textContent = state.attrs[a]);
       // set inputs for HP/SAN/ADR
