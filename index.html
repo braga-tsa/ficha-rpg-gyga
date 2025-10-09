@@ -98,6 +98,41 @@ input[type=number] {
   border-radius: 6px;
   padding: 6px;
 }
+
+.adrenalina-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.adrenalina-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  width: 100%;
+  height: 20px; /* mesma altura da barra normal */
+  margin-top: 8px; /* aqui igual às outras barras */
+}
+
+.adrenalina-bar .segment{
+  flex:1;
+  border:2px solid #FFD700;
+  border-radius:8px;
+  height:100%;
+  background:transparent;
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+  transition: background .15s, border-color .15s;
+}
+.adrenalina-bar .segment.filled{
+  background:#FFD700;
+  border-color:#e6be00;
+}
+.adrenalina-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 7px;
+}
   </style>
 </head>
 <body>
@@ -157,50 +192,72 @@ input[type=number] {
       </div>
     </div>
 
-<div class="row bottom">
-  <!-- Coluna esquerda: barras + inventário -->
-  <div class="col panel" style="flex: 0 0 750px; max-width: 750px;">
-    <!-- Barras -->
-    <div class="panel" style="margin-bottom:12px;">
+<div class="row bottom" style="display:flex;align-items:flex-start;gap:16px;">
+  <!-- Coluna esquerda: Barras (top) + Inventário (baixo) -->
+  <div class="col" style="flex: 0 0 823px; max-width:823px; display:flex; flex-direction:column; gap:12px;">
+    <!-- Panel Barras -->
+    <div class="panel">
       <h2 style="margin-top:0;color:var(--accent);font-size:16px">Barras: Vida, Sanidade, Adrenalina</h2>
-      <div class="bars">
-            <div class="label">Vida (HP)</div>
-            <div class="meter"><i id="hpMeter"></i></div>
-            <div class="controls">
-              <div>Atual: <input id="hpCurrent" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
-              <div>Máx: <input id="hpMax" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
-              <button id="hpMinus">-</button>
-              <button id="hpPlus">+</button>
-            </div>
-          </div>
-          <div class="bar">
-            <div class="label">Sanidade</div>
-            <div class="meter"><i id="sanMeter"></i></div>
-            <div class="controls">
-              <div>Atual: <input id="sanCurrent" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
-              <div>Máx: <input id="sanMax" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
-              <button id="sanMinus">-</button>
-              <button id="sanPlus">+</button>
-            </div>
-          </div>
-          <div class="bar">
-            <div class="label">Adrenalina</div>
-            <div class="meter"><i id="adrMeter"></i></div>
-            <div class="controls">
-              <div>Atual: <input id="adrCurrent" type="number" min="0" max="100" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
-              <div>Máx: <input id="adrMax" type="number" min="0" max="100" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)" value="100"/></div>
-              <button id="adrMinus">-</button>
-              <button id="adrPlus">+</button>
-            </div>
+      <div class="bars" style="display:flex;gap:12px;">
+        <!-- Vida (não alterar ids) -->
+        <div class="bar" style="flex:1;">
+          <div class="label">Vida (HP)</div>
+          <div class="meter"><i id="hpMeter"></i></div>
+          <div class="controls">
+            <div>Atual: <input id="hpCurrent" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
+            <div>Máx: <input id="hpMax" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
+            <button id="hpMinus">-</button>
+            <button id="hpPlus">+</button>
           </div>
         </div>
 
-    <div class="panel">
-      <h2 style="margin-top:0;color:var(--accent);font-size:16px">Inventário</h2>
-      <textarea id="inventory" placeholder="Digite os itens aqui..." 
-        style="width:100%;min-height:150px;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text);resize:vertical"></textarea>
+        <!-- Sanidade (não alterar ids) -->
+        <div class="bar" style="flex:1;">
+          <div class="label">Sanidade</div>
+          <div class="meter"><i id="sanMeter"></i></div>
+          <div class="controls">
+            <div>Atual: <input id="sanCurrent" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
+            <div>Máx: <input id="sanMax" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
+            <button id="sanMinus">-</button>
+            <button id="sanPlus">+</button>
+          </div>
+        </div>
+
+<div class="bar" style="flex:1;">
+  <div class="label">Adrenalina</div>
+
+  <!-- nova visual segmentada -->
+  <div class="adrenalina-container" style="display:flex;flex-direction:column;gap:8px;width:100%;">
+    <div class="adrenalina-bar" style="display:flex;gap:6px;width:100%;height:18px;">
+      <div class="segment"></div>
+      <div class="segment"></div>
+      <div class="segment"></div>
+      <div class="segment"></div>
+    </div>
+
+    <div class="adrenalina-controls" style="display:flex;align-items:center;gap:8px;">
+      <button id="adrMinus">-</button>
+      <span id="adrValue">1</span>
+      <button id="adrPlus">+</button>
     </div>
   </div>
+
+  <!-- elementos legados (ocultos) para evitar erros no código existente -->
+  <div class="meter" style="display:none"><i id="adrMeter"></i></div>
+  <input id="adrCurrent" type="hidden" value="1"/>
+  <input id="adrMax" type="hidden" value="4"/>
+</div>
+</div>
+
+<div class="panel" style="margin-top:16px;">
+  <h2 style="margin-top:0;color:var(--accent);font-size:16px">Inventário</h2>
+  <textarea id="inventory" placeholder="Digite os itens aqui..."
+    style="width:100%;min-height:150px;padding:8px;border-radius:6px;
+    border:1px solid rgba(255,255,255,0.06);background:transparent;
+    color:var(--text);resize:vertical"></textarea>
+    </div>
+  </div>
+</div>
 
   <div class="col panel" style="flex: 1; min-width: 400px;">
     <h2 style="margin-top:0;color:var(--accent);font-size:16px">Etapa 3 e 4 — Ocupação & Perícias</h2>
@@ -265,8 +322,8 @@ input[type=number] {
     if(state.hpCurrent===undefined) state.hpCurrent = state.hpMax;
     if(state.sanMax===undefined) state.sanMax = state.attrs.MEN * 5;
     if(state.sanCurrent===undefined) state.sanCurrent = state.sanMax;
-    if(state.adrMax===undefined) state.adrMax = 100;
-    if(state.adrCurrent===undefined) state.adrCurrent = 0;
+    if(state.adrMax===undefined) state.adrMax = 4;
+    if(state.adrCurrent===undefined) state.adrCurrent = 1;
 
     /* ---------- Render functions ---------- */
     function renderAttributes() {
@@ -296,7 +353,6 @@ input[type=number] {
       if (val === '') val = 0;
       let n = Number(val);
       if (n < 0) n = 0;
-      if (n > 20) n = 20;
       state.attrs[a] = n;
       e.target.value = n;
       recalcHPandSAN();
@@ -340,15 +396,36 @@ input[type=number] {
       saveState();
     }
 
-    function updateMeters(){
-      const hpPct = state.hpMax? Math.max(0,Math.min(100,Math.round(state.hpCurrent/state.hpMax*100))):0;
-      const sanPct = state.sanMax? Math.max(0,Math.min(100,Math.round(state.sanCurrent/state.sanMax*100))):0;
-      const adrPct = state.adrMax? Math.max(0,Math.min(100,Math.round(state.adrCurrent/state.adrMax*100))):0;
-      document.getElementById('hpMeter').style.width = hpPct + '%';
-      document.getElementById('sanMeter').style.width = sanPct + '%';
-      document.getElementById('adrMeter').style.width = adrPct + '%';
-    }
+function updateMeters(){
+  const hpPct = state.hpMax? Math.max(0,Math.min(100,Math.round(state.hpCurrent/state.hpMax*100))):0;
+  const sanPct = state.sanMax? Math.max(0,Math.min(100,Math.round(state.sanCurrent/state.sanMax*100))):0;
+  const adrPct = state.adrMax? Math.max(0,Math.min(100,Math.round(state.adrCurrent/state.adrMax*100))):0;
 
+  const hpEl = document.getElementById('hpMeter');
+  if(hpEl) hpEl.style.width = hpPct + '%';
+
+  const sanEl = document.getElementById('sanMeter');
+  if(sanEl) sanEl.style.width = sanPct + '%';
+
+  // legacy meter (pode estar oculto) — atualiza só se existir
+  const adrEl = document.getElementById('adrMeter');
+  if(adrEl) adrEl.style.width = adrPct + '%';
+
+  // --- atualiza a barra segmentada da adrenalina ---
+  const segmentos = document.querySelectorAll('.adrenalina-bar .segment');
+  if(segmentos && segmentos.length){
+    // usamos state.adrCurrent em 0..4 (garantido pelo default que alteramos)
+    const count = Math.max(0, Math.min(4, Math.round(Number(state.adrCurrent) || 0)));
+    segmentos.forEach((seg, i) => {
+      if(i < count) seg.classList.add('filled'); else seg.classList.remove('filled');
+    });
+    // atualiza o span visível e o hidden input para manter compatibilidade
+    const vspan = document.getElementById('adrValue'); if(vspan) vspan.textContent = count;
+    const hidden = document.getElementById('adrCurrent'); if(hidden) hidden.value = count;
+  }
+
+  saveState();
+}
     function renderSkills(){
       const tbody = document.querySelector('#skillsTable tbody');tbody.innerHTML='';
       SKILLS.forEach(([name,base])=>{
@@ -456,6 +533,32 @@ input[type=number] {
       document.getElementById('sanCurrent').value = state.sanCurrent;document.getElementById('sanMax').value = state.sanMax;
       document.getElementById('adrCurrent').value = state.adrCurrent;document.getElementById('adrMax').value = state.adrMax;
     }
+
+let adrenalina = 1; // começa em 1
+
+function atualizarAdrenalinaBar() {
+  const segmentos = document.querySelectorAll('.adrenalina-bar .segment');
+  segmentos.forEach((seg, i) => {
+    seg.classList.toggle('filled', i < adrenalina);
+  });
+  document.getElementById('adrValue').textContent = adrenalina;
+}
+
+document.getElementById('adrMinus').addEventListener('click', () => {
+  if (adrenalina > 0) {
+    adrenalina--;
+    atualizarAdrenalinaBar();
+  }
+});
+
+document.getElementById('adrPlus').addEventListener('click', () => {
+  if (adrenalina < 4) {
+    adrenalina++;
+    atualizarAdrenalinaBar();
+  }
+});
+
+atualizarAdrenalinaBar();
 
     // autosave on unload
     window.addEventListener('beforeunload',saveState);
