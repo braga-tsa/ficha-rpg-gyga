@@ -249,14 +249,48 @@ input[type=number] {
 </div>
 </div>
 
-<div class="panel" style="margin-top:16px;">
-  <h2 style="margin-top:0;color:var(--accent);font-size:16px">Inventário</h2>
-  <textarea id="inventory" placeholder="Digite os itens aqui..."
-    style="width:100%;min-height:150px;padding:8px;border-radius:6px;
-    border:1px solid rgba(255,255,255,0.06);background:transparent;
-    color:var(--text);resize:vertical"></textarea>
+  <!-- 🧍 Diagrama Corporal -->
+    <div style="display:flex; gap:16px; margin-top:12px;">
+      <!-- Boneco -->
+      <div id="body-diagram" style="height:270px; flex:1; display:flex; justify-content:flex-start; padding-left: 42px;">
+        <svg id="body-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 2800" style="height:100%; width:auto;">
+    <g fill="#888">
+      <path id="head" d="M850.54 3.71c-286.42,0.77 -170.63,475.91 -2.26,470.04 176.41,-6.13 269.57,-470.77 2.26,-470.04z"/>
+      <path id="torso" d="M739.07 505.38c-14.3,-5.86 -14.17,-1.08 -22.8,6.11 -15.37,12.78 -50.91,27.97 -65.58,32.58 -45.68,14.26 -110.44,26.5 -155.23,48.88 -5.94,2.97 -18.13,8.97 -9.54,17.13 40.07,37.66 67.33,89.93 88.23,147.71 52.43,144.97 55.43,331.34 51.44,457.9 -2.86,98.03 -41.38,188.76 -41.38,285.77 0,1.97 1.59,3.56 3.54,3.56l519.2 0.01c0.24,-0.25 3.63,-0.13 3.68,-3.64 0.16,-11.18 0.01,-20.43 -1.51,-31.56 -7.09,-51.95 -21.79,-120.55 -31.66,-182.39 -20.77,-130.25 -3.43,-331.37 14.56,-458.58 5.34,-37.77 26.93,-78.57 43.08,-110.18 20.4,-39.76 63.76,-88.08 74.61,-109.76 2.82,-5.04 1.3,-10.22 -3.17,-13.52 -9.77,-7.15 -52.24,-21 -64.99,-24.69 -48.15,-13.91 -103.71,-21.83 -144.73,-48.91 -8.69,-5.74 -16.67,-11.18 -21.48,-12.52 -9.33,-2.59 -17.47,-1.53 -24.48,3.37 -42.97,28.75 -164.23,12.28 -211.79,-7.27z"/>
+      <path id="left-arm" d="M1136.68 831.22c-42.92,168.46 54.68,382.71 85.95,549.57 2.66,14.47 2.83,26.64 0.54,41.13 -4.83,25.14 -12.58,46.86 -18.15,72.59 -5.26,24.22 -12.97,46.02 -10.96,76.14 0.82,12.18 3.51,22.72 11.29,21.08 11.91,-2.52 24.75,-58.23 25.6,-68.42 0.36,-4.54 5.65,-3.61 9.63,-3.61 1.91,0 3.47,1.55 3.47,3.47 0,6.93 -7.88,47.37 -9.79,56.31 -3.23,15.23 -32.99,73.54 -36.7,82.34 -9.46,22.91 3.09,34.25 18.4,16.72 20.56,-23.54 26.72,-40.67 43.68,-65.47 14.98,-22.01 26.99,-44.79 31.36,-71.91 5.61,-34.37 9.5,-83.92 9.81,-118.24 0,-97.27 -8.45,-189.01 -14.85,-287.63 -5.75,-88.61 -25.67,-168.82 -29.78,-266.74 -2.81,-66.88 -13.15,-184.51 -12.99,-193.43 0.19,-10.8 -7.55,-16.29 -16.55,-7.18 -67.55,67.93 -69.39,79.77 -89.96,163.28z"/>
+      <path id="right-arm" d="M470.76 1385.48c31.99,-170.66 131.82,-389.81 87.92,-562.12 -21.04,-85.42 -22.92,-97.53 -92.02,-167.02 -9.21,-9.31 -17.13,-3.7 -16.93,7.35 0.16,9.12 -10.41,129.44 -13.29,197.86 -4.2,100.15 -24.58,182.19 -30.46,272.83 -6.54,100.87 -15.18,194.71 -15.18,294.2 0.32,35.1 4.29,85.79 10.03,120.94 4.46,27.74 16.75,51.04 32.08,73.55 17.34,25.37 23.65,42.9 44.68,66.97 15.66,17.93 28.49,6.34 18.81,-17.1 -3.79,-9 -34.24,-68.64 -37.53,-84.22 -1.96,-9.15 -10.02,-50.51 -10.02,-57.6 0,-1.96 1.59,-3.55 3.55,-3.55 4.07,0 9.48,-0.94 9.85,3.7 0.87,10.42 14,67.4 26.19,69.98 7.95,1.67 10.71,-9.11 11.54,-21.56 2.06,-30.81 -5.83,-53.11 -11.2,-77.88 -5.71,-26.32 -13.63,-48.54 -18.58,-74.25 -2.34,-14.83 -2.16,-27.27 0.56,-42.08z"/>
+      <path id="left-leg" d="M872.67 1544.43c0,9.41 30.97,314.66 41.97,384.88 1.31,8.36 11.27,50.77 16.45,76.8 7.92,39.81 -7,141.5 -10.02,207.52 -3.5,76.52 10.68,174.09 12.35,261.94 0.89,46.72 -6.58,86.72 -6.25,137.04 0.14,23.6 -6.78,34.09 -7.05,58.91 -0.57,41.88 62.01,34.99 90.24,34.99 10.62,-0.15 50.54,-2.78 53.76,-14.17 4.91,-17.53 -22.37,-35.86 -31.86,-54.65 -34.23,-67.94 -16.28,-148.64 -3.6,-220.04 0,-0.06 0.02,-0.12 0.04,-0.18 16.48,-57.06 36.57,-128.8 46,-186.53 14.91,-91.12 -1.25,-183.87 -1.93,-275.18 -1.43,-78.78 23.99,-190.27 25.65,-277.13 0.32,-47.63 0,-94.14 0,-140.74 0.01,-2.82 -6.3,-1.89 -8.01,-1.71 -83.9,8.95 -131.68,10.6 -216.38,6.95 -0.65,-0.06 -1.36,0.59 -1.36,1.3z"/>
+      <path id="right-leg" d="M820.47 1537.12c-85.58,3.69 -133.86,2.01 -218.63,-7.02 -1.73,-0.19 -8.1,-1.13 -8.09,1.72 0,47.09 -0.32,94.08 0,142.21 1.67,87.76 27.36,200.41 25.91,280.01 -0.68,92.26 -17.01,185.97 -1.95,278.03 9.53,58.34 29.83,130.83 46.48,188.48 0.03,0.06 0.04,0.12 0.04,0.18 12.81,72.14 30.95,153.68 -3.63,222.32 -9.59,18.99 -37.16,37.51 -32.19,55.22 3.24,11.52 43.58,14.18 54.32,14.33 28.52,0 91.75,6.95 91.18,-35.36 -0.29,-25.08 -7.27,-35.68 -7.13,-59.52 0.34,-50.85 -7.22,-91.26 -6.32,-138.47 1.69,-88.76 16.02,-187.34 12.48,-264.66 -3.05,-66.71 -18.13,-169.45 -10.12,-209.68 5.23,-26.3 15.29,-69.15 16.62,-77.6 11.11,-70.95 42.41,-379.37 42.41,-388.87 0,-0.73 -0.72,-1.38 -1.38,-1.32z"/>
+    </g>
+  </svg>
+</div>
+
+  <div class="col panel" style="flex:0 0 350px; min-width:535px;">
+    <h2 style="margin-top:0;color:var(--accent);font-size:16px">Inventário</h2>
+    <div style="display:flex;gap:12px;align-items:center;">
+      <div>
+        <label>Peso (atual/máx)</label>
+        <input type="number" id="pesoMax" style="width:60px;" min="0" value="50"/> /
+        <span id="pesoAtual">0</span>
+      </div>
+      <div>
+        <label>Espaços (atual/máx)</label>
+        <input type="number" id="espacoMax" style="width:60px;" min="0" value="20"/> /
+        <span id="espacoAtual">0</span>
+      </div>
     </div>
+    <table id="inventoryTable" style="width:100%;margin-top:8px;">
+      <thead>
+        <tr>
+          <th>Item</th><th>Peso</th><th>Espaços</th><th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button id="addItemBtn" style="margin-top:8px;">Adicionar Item</button>
   </div>
+</div>
+</div>
 </div>
 
   <div class="col panel" style="flex: 1; min-width: 400px;">
@@ -269,6 +303,61 @@ input[type=number] {
         </thead>
         <tbody>
               <!-- skills injected by JS -->
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const parts = document.querySelectorAll("#body-svg path");
+  const state = { bodyColors: {} };
+
+  // Carrega cores salvas
+  const saved = localStorage.getItem('bodyColors');
+  if (saved) {
+    const savedColors = JSON.parse(saved);
+    parts.forEach(part => {
+      if (savedColors[part.id]) part.setAttribute("fill", savedColors[part.id]);
+      state.bodyColors[part.id] = savedColors[part.id];
+    });
+  }
+
+  function saveState() {
+    localStorage.setItem('bodyColors', JSON.stringify(state.bodyColors));
+  }
+
+  parts.forEach(part => {
+    part.addEventListener("click", () => {
+      const current = part.getAttribute("fill");
+      let next;
+
+      switch (current) {
+        case "#888":
+        case "rgb(136, 136, 136)":
+          next = "yellow";
+          break;
+        case "yellow":
+        case "rgb(255, 255, 0)":
+          next = "red";
+          break;
+        case "red":
+        case "rgb(255, 0, 0)":
+          next = "#888";
+          break;
+        default:
+          next = "#888";
+          break;
+      }
+
+      part.setAttribute("fill", next);
+      state.bodyColors[part.id] = next; // salva a cor no state
+      saveState(); // salva no localStorage
+    });
+
+    part.style.cursor = "pointer";
+    part.style.transition = "fill 0.3s ease";
+  });
+});
+
+</script>
+
             </tbody>
           </table>
         </div>
@@ -534,9 +623,16 @@ function updateMeters(){
       document.getElementById('adrCurrent').value = state.adrCurrent;document.getElementById('adrMax').value = state.adrMax;
     }
 
-let adrenalina = 1; // começa em 1
+const maxAdrenalina = 4;
+let adrenalina = 0;
 
+// Carregar adrenalina do localStorage
+const saved = parseInt(localStorage.getItem('adrenalina'));
+if (!isNaN(saved)) adrenalina = saved;
+
+// Atualiza visual da barra
 function atualizarAdrenalinaBar() {
+  adrenalina = Math.min(Math.max(adrenalina, 0), maxAdrenalina); // garante limites
   const segmentos = document.querySelectorAll('.adrenalina-bar .segment');
   segmentos.forEach((seg, i) => {
     seg.classList.toggle('filled', i < adrenalina);
@@ -544,25 +640,126 @@ function atualizarAdrenalinaBar() {
   document.getElementById('adrValue').textContent = adrenalina;
 }
 
+// Botões
 document.getElementById('adrMinus').addEventListener('click', () => {
-  if (adrenalina > 0) {
-    adrenalina--;
-    atualizarAdrenalinaBar();
-  }
+  adrenalina--;
+  atualizarAdrenalinaBar();
 });
-
 document.getElementById('adrPlus').addEventListener('click', () => {
-  if (adrenalina < 4) {
-    adrenalina++;
-    atualizarAdrenalinaBar();
-  }
+  adrenalina++;
+  atualizarAdrenalinaBar();
 });
 
-atualizarAdrenalinaBar();
+// Salvar sempre que a barra mudar
+function saveState() {
+  localStorage.setItem('adrenalina', adrenalina);
+}
+window.addEventListener('beforeunload', saveState);
 
-    // autosave on unload
-    window.addEventListener('beforeunload',saveState);
-    init();
+// Atualiza barra após DOM pronto
+document.addEventListener("DOMContentLoaded", () => {
+  atualizarAdrenalinaBar();
+  // aqui você chama init() depois que tudo estiver visível
+  init();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const inventoryTable = document.getElementById("inventoryTable").querySelector("tbody");
+  const pesoAtualEl = document.getElementById("pesoAtual");
+  const espacoAtualEl = document.getElementById("espacoAtual");
+  const pesoMaxEl = document.getElementById("pesoMax");
+  const espacoMaxEl = document.getElementById("espacoMax");
+  const addItemBtn = document.getElementById("addItemBtn");
+
+  // Carrega inventário do localStorage
+  let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+
+  function saveInventory() {
+    localStorage.setItem('inventory', JSON.stringify(inventory));
+  }
+
+  function atualizarTotais() {
+    const totalPeso = inventory.reduce((sum, item) => sum + (Number(item.peso)||0), 0);
+    const totalEspaco = inventory.reduce((sum, item) => sum + (Number(item.espaco)||0), 0);
+    pesoAtualEl.textContent = totalPeso;
+    espacoAtualEl.textContent = totalEspaco;
+    saveInventory();
+  }
+
+  function criarLinha(item = {nome:'', peso:0, espaco:0}) {
+    const tr = document.createElement("tr");
+
+    const nomeInput = document.createElement("input");
+    nomeInput.type = "text";
+    nomeInput.value = item.nome;
+    nomeInput.style.width = "100%";
+
+    const pesoInput = document.createElement("input");
+    pesoInput.type = "number";
+    pesoInput.min = 0;
+    pesoInput.value = item.peso;
+    pesoInput.style.width = "60px";
+
+    const espacoInput = document.createElement("input");
+    espacoInput.type = "number";
+    espacoInput.min = 0;
+    espacoInput.value = item.espaco;
+    espacoInput.style.width = "60px";
+
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "❌";
+    removeBtn.style.cursor = "pointer";
+
+    // Atualiza objeto e totais ao mudar
+    [nomeInput, pesoInput, espacoInput].forEach(inp => {
+      inp.addEventListener("input", () => {
+        item.nome = nomeInput.value;
+        item.peso = Number(pesoInput.value) || 0;
+        item.espaco = Number(espacoInput.value) || 0;
+        atualizarTotais();
+      });
+    });
+
+    removeBtn.addEventListener("click", () => {
+      inventory = inventory.filter(i => i !== item);
+      tr.remove();
+      atualizarTotais();
+    });
+
+    tr.appendChild(createTd(nomeInput));
+    tr.appendChild(createTd(pesoInput));
+    tr.appendChild(createTd(espacoInput));
+    tr.appendChild(createTd(removeBtn));
+
+    inventoryTable.appendChild(tr);
+  }
+
+  function createTd(el) {
+    const td = document.createElement("td");
+    td.appendChild(el);
+    return td;
+  }
+
+  function renderInventory() {
+    inventoryTable.innerHTML = "";
+    inventory.forEach(item => criarLinha(item));
+    atualizarTotais();
+  }
+
+  addItemBtn.addEventListener("click", () => {
+    const newItem = {nome:'', peso:0, espaco:1};
+    inventory.push(newItem);
+    criarLinha(newItem);
+    atualizarTotais();
+  });
+
+  // Atualiza máximos e salva
+  pesoMaxEl.addEventListener("input", () => saveInventory());
+  espacoMaxEl.addEventListener("input", () => saveInventory());
+
+  renderInventory();
+});
+
   </script>
 </body>
 </html>
