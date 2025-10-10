@@ -328,23 +328,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const current = part.getAttribute("fill");
       let next;
 
-      switch (current) {
-        case "#888":
-        case "rgb(136, 136, 136)":
-          next = "yellow";
-          break;
-        case "yellow":
-        case "rgb(255, 255, 0)":
-          next = "red";
-          break;
-        case "red":
-        case "rgb(255, 0, 0)":
-          next = "#888";
-          break;
-        default:
-          next = "#888";
-          break;
-      }
+switch (true) {
+  case current === "#888" || current === "rgb(136, 136, 136)":
+    next = "rgba(255, 255, 0, 0.75)";
+    break;
+  case current.includes("255, 255, 0"): // amarelo
+    next = "rgba(255, 0, 0, 0.75)";
+    break;
+  case current.includes("255, 0, 0"): // vermelho
+    next = "#888";
+    break;
+  default:
+    next = "#888";
+    break;
+}
 
       part.setAttribute("fill", next);
       state.bodyColors[part.id] = next; // salva a cor no state
