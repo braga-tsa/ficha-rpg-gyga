@@ -324,7 +324,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   parts.forEach(part => {
-    part.addEventListener("click", () => {
+      let current = part.getAttribute("fill") || "#888";
+        part.setAttribute("fill", current);
+        state.bodyColors[part.id] = current;
+    
+        part.addEventListener("click", () => {
       const current = part.getAttribute("fill");
       let next;
 
