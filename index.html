@@ -14,753 +14,725 @@
       --danger:#d14;
       --success:#2bd14c;
     }
-#hpMeter {
-  background: red !important;
-}
-#sanMeter {
-  background: #8A2BE2 !important;
-}
-#adrMeter {
-  background: #FFFF00 !important;
-}
+    #hpMeter { background: red !important; }
+    #sanMeter { background: #8A2BE2 !important; }
+    #adrMeter { background: #FFFF00 !important; }
+
     *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
     html,body{height:100%;margin:0;background:var(--bg);color:var(--text)}
     .container{max-width:1300px;margin:24px auto;padding:0px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 6px 30px rgba(0,0,0,0.6)}
     h1{margin:0 0 8px;color:var(--accent)}
-    .row.top {
-  display:flex;
-  flex-wrap: wrap;  /* permite quebrar linha se necessário */
-  gap:16px;
-  margin-bottom:16px;
-}
-    .row.bottom {
-  display:flex;
-  gap:16px;
-  align-items:flex-start; /* força topo */
-  margin-bottom:16px;
-}
+    h2{margin-top:0;color:var(--accent);font-size:16px}
+    .row.top { display:flex; flex-wrap: wrap; gap:16px; margin-bottom:16px; }
+    .row.bottom { display:flex; gap:16px; align-items:flex-start; margin-bottom:16px; }
     .col{flex:1}
     .panel{background:var(--panel);padding:12px;border-radius:8px;border:1px solid rgba(181,143,18,0.08)}
     label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
-    input[type=text],input[type=number],select,textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text)}
+    input[type=text],input[type=number],select,textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text);font-size:15px;}
+    textarea{min-height:40px;resize:vertical;}
     .small{max-width:160px}
     .attributes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
     .attr{padding:10px;background:rgba(255,255,255,0.02);border-radius:6px;text-align:center}
     .attr h3{margin:0;font-size:14px;color:var(--accent)}
     .attr .val{font-size:20px;margin-top:6px}
-    button{background:var(--accent);border:none;color:#0b0b0b;padding:8px 10px;border-radius:6px;cursor:pointer}
+    button{background:var(--accent);border:none;color:#0b0b0b;padding:8px 10px;border-radius:6px;cursor:pointer; font-weight: bold;}
     button.ghost{background:transparent;border:1px solid rgba(181,143,18,0.12);color:var(--text)}
     .bars{display:flex;gap:12px}
     .bar{flex:1;padding:8px;border-radius:6px;background:linear-gradient(90deg, rgba(255,255,255,0.01), transparent);}
-    .bar .label{font-size:12px;color:var(--muted)}
     .meter{height:18px;background:var(--muted);border-radius:8px;overflow:hidden;margin-top:8px}
     .meter > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#ffd24d);width:0%}
-    .controls{display:flex;gap:8px;align-items:center;margin-top:8px}
+    .controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+   }
     table{width:100%;border-collapse:collapse;margin-top:10px}
     th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px}
     th{color:var(--accent);text-align:left}
-    .skill-val{width:64px}
+    .skill-val {
+    width: 70px;
+    text-align: center;
+    font-size: 12px;
+    padding: 0px;
+    }
     .roll-result{min-width:130px}
     .footer{margin-top:16px;font-size:13px;color:var(--muted)}
-    .top-actions{display:flex;gap:8px;align-items:center}
-    .pool{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-    .chip{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.02);cursor:pointer}
-    .assigned{background:rgba(181,143,18,0.18)}
     .flex{display:flex;gap:8px;align-items:center}
-    .wide{grid-column:span 4}
     @media(max-width:900px){.attributes{grid-template-columns:repeat(4,1fr)}.row{flex-direction:column}}
-    #rollPool,
-#clearPool,
-#rollSor,
-#rollPoolChips,
-#attributes + div, /* texto explicativo após atributos */
-div[style*="Role 6x 3d6"],
-div[style*="Clique numa rolagem"] {
-  display: none !important;
-}
+    
     input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-input[type=number] {
-  -moz-appearance: textfield;
-  appearance: textfield;
-}
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
-.attr-input {
-  width: 70px;
-  text-align: center;
-  font-size: 18px;
-  background: transparent;
-  color: var(--text);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 6px;
-  padding: 6px;
-}
+    .attr-input { width: 70px; text-align: center; font-size: 18px; background: transparent; color: var(--text); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; padding: 6px; }
+    .adrenalina-container { display: flex; flex-direction: column; width: 100%; }
+    .adrenalina-bar { display: flex; justify-content: space-between; gap: 4px; width: 100%; height: 20px; margin-top: 8px; }
+    .adrenalina-bar .segment{ flex:1; border:2px solid #FFD700; border-radius:8px; height:100%; background:transparent; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); transition: background .15s, border-color .15s; }
+    .adrenalina-bar .segment.filled{ background:#FFD700; border-color:#e6be00; }
+    .adrenalina-controls { display: flex; align-items: center; gap: 8px; margin-top: 19px; }
 
-.adrenalina-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
+    /* --- ESTILOS DAS ABAS --- */
+    .tab-nav {
+      display: flex;
+      gap: 4px;
+      border-bottom: 2px solid var(--panel);
+      margin-bottom: 16px;
+    }
+    .tab-btn {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      border-radius: 6px 6px 0 0;
+      font-size: 16px;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+    .tab-btn.active {
+      background: var(--panel);
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+    }
+    .tab-content {
+      display: none; /* Esconde todas as abas por padrão */
+    }
+    .tab-content.active {
+      display: block; /* Mostra a aba ativa */
+    }
 
-.adrenalina-bar {
-  display: flex;
-  justify-content: space-between;
-  gap: 4px;
-  width: 100%;
-  height: 20px; /* mesma altura da barra normal */
-  margin-top: 8px; /* aqui igual às outras barras */
-}
-
-.adrenalina-bar .segment{
-  flex:1;
-  border:2px solid #FFD700;
-  border-radius:8px;
-  height:100%;
-  background:transparent;
-  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
-  transition: background .15s, border-color .15s;
-}
-.adrenalina-bar .segment.filled{
-  background:#FFD700;
-  border-color:#e6be00;
-}
-.adrenalina-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 7px;
-}
+    /* --- ESTILOS PARA ABA INFO --- */
+    #tabInfo .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    #tabInfo .info-grid .full-width {
+      grid-column: span 2;
+    }
+    @media(max-width: 768px) {
+      #tabInfo .info-grid {
+        grid-template-columns: 1fr;
+      }
+      #tabInfo .info-grid .full-width {
+        grid-column: span 1;
+      }
+    }
   </style>
 </head>
 <body>
+
   <div class="container">
     <h1>Ficha de Personagem — Cordyceps Protocol</h1>
-    <div class="row top">
-      <div class="col panel">
-        <h2 style="margin-top:0;color:var(--accent);font-size:16px">Etapa 1 — Detalhes Pessoais</h2>
-        <div class="row top">
-          <div class="col">
-            <label>Nome do Personagem</label>
-            <input id="nomePersonagem" type="text" />
+
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="tabStatus">Status</button>
+      <button class="tab-btn" data-tab="tabHabilidades">Habilidades</button>
+      <button class="tab-btn" data-tab="tabInfo">Info</button>
+    </div>
+
+    <div id="tabStatus" class="tab-content active">
+      <div class="row top">
+          <div class="col panel">
+            <h2>Etapa 1 — Detalhes Pessoais</h2>
+            <div class="row top">
+              <div class="col">
+                <label>Nome do Personagem</label>
+                <input id="nomePersonagem" type="text" />
+              </div>
+              <div class="col">
+                <label>Nome do Jogador</label>
+                <input id="nomeJogador" type="text" />
+              </div>
+              <div style="width:120px">
+                <label>Idade</label>
+                <input id="idade" type="number" min="0" />
+              </div>
+              <div style="width:140px">
+                <label>Gênero</label>
+                <input id="genero" type="text" />
+              </div>
+            </div>
+            <div style="margin-top:10px">
+              <label>Ocupação</label>
+              <input id="ocupacao" type="text" />
+            </div>
+            <div class="row bottom" style="margin-top:10px">
+              <div class="col">
+                <label>Residência</label>
+                <input id="residencia" type="text" />
+              </div>
+              <div class="col">
+                <label>Local de Nascimento</label>
+                <input id="nascimento" type="text" />
+              </div>
+            </div>
           </div>
-          <div class="col">
-            <label>Nome do Jogador</label>
-            <input id="nomeJogador" type="text" />
-          </div>
-          <div style="width:120px">
-            <label>Idade</label>
-            <input id="idade" type="number" min="0" />
-          </div>
-          <div style="width:140px">
-            <label>Gênero</label>
-            <input id="genero" type="text" />
+          <div class="col panel">
+            <h2>Etapa 2 — Atributos</h2>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Atribua os valores nos campos abaixo.</div>
+            <div class="attributes" id="attributes">
+              </div>
           </div>
         </div>
-        <div style="margin-top:10px">
-          <label>Ocupação</label>
-          <input id="ocupacao" type="text" />
+
+        <div class="row bottom">
+          <div class="col" style="flex: 0 0 805px; max-width:805px; display:flex; flex-direction:column; gap:12px;">
+            <div class="panel">
+              <h2>Barras: Vida, Sanidade, Adrenalina</h2>
+               <div class="bars">
+                <div class="bar">
+                  <div class="label">Vida (HP)</div>
+                  <div class="meter"><i id="hpMeter"></i></div>
+                  <div class="controls">
+                    <div>Atual: <input id="hpCurrent" type="number" min="0" style="width:80px;"/></div>
+                    <div>Máx: <input id="hpMax" type="number" min="0" style="width:80px;"/></div>
+                    <button id="hpMinus">-</button>
+                    <button id="hpPlus">+</button>
+                  </div>
+                </div>
+
+                <div class="bar">
+                  <div class="label">Sanidade</div>
+                  <div class="meter"><i id="sanMeter"></i></div>
+                  <div class="controls">
+                    <div>Atual: <input id="sanCurrent" type="number" min="0" style="width:80px;"/></div>
+                    <div>Máx: <input id="sanMax" type="number" min="0" style="width:80px;"/></div>
+                    <button id="sanMinus">-</button>
+                    <button id="sanPlus">+</button>
+                  </div>
+                </div>
+
+                <div class="bar">
+                  <div class="label">Adrenalina</div>
+                  <div class="adrenalina-container">
+                    <div class="adrenalina-bar">
+                      <div class="segment"></div><div class="segment"></div><div class="segment"></div><div class="segment"></div>
+                    </div>
+                    <div class="adrenalina-controls">
+                      <button id="adrMinus">-</button>
+                      <span id="adrValue">1</span>
+                      <button id="adrPlus">+</button>
+                    </div>
+                  </div>
+                  <input id="adrCurrent" type="hidden" value="1"/><input id="adrMax" type="hidden" value="4"/>
+                </div>
+              </div>
+
+              <div style="display:flex; gap:16px; margin-top:12px;">
+                <div id="body-diagram" style="height:270px; flex:1; display:flex; justify-content:flex-start; padding-left: 42px;">
+                   <svg id="body-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 2800" style="height:100%; width:auto;">
+                    <g fill="#888">
+                      <path id="head" d="M850.54 3.71c-286.42,0.77 -170.63,475.91 -2.26,470.04 176.41,-6.13 269.57,-470.77 2.26,-470.04z"/>
+                      <path id="torso" d="M739.07 505.38c-14.3,-5.86 -14.17,-1.08 -22.8,6.11 -15.37,12.78 -50.91,27.97 -65.58,32.58 -45.68,14.26 -110.44,26.5 -155.23,48.88 -5.94,2.97 -18.13,8.97 -9.54,17.13 40.07,37.66 67.33,89.93 88.23,147.71 52.43,144.97 55.43,331.34 51.44,457.9 -2.86,98.03 -41.38,188.76 -41.38,285.77 0,1.97 1.59,3.56 3.54,3.56l519.2 0.01c0.24,-0.25 3.63,-0.13 3.68,-3.64 0.16,-11.18 0.01,-20.43 -1.51,-31.56 -7.09,-51.95 -21.79,-120.55 -31.66,-182.39 -20.77,-130.25 -3.43,-331.37 14.56,-458.58 5.34,-37.77 26.93,-78.57 43.08,-110.18 20.4,-39.76 63.76,-88.08 74.61,-109.76 2.82,-5.04 1.3,-10.22 -3.17,-13.52 -9.77,-7.15 -52.24,-21 -64.99,-24.69 -48.15,-13.91 -103.71,-21.83 -144.73,-48.91 -8.69,-5.74 -16.67,-11.18 -21.48,-12.52 -9.33,-2.59 -17.47,-1.53 -24.48,3.37 -42.97,28.75 -164.23,12.28 -211.79,-7.27z"/>
+                      <path id="left-arm" d="M1136.68 831.22c-42.92,168.46 54.68,382.71 85.95,549.57 2.66,14.47 2.83,26.64 0.54,41.13 -4.83,25.14 -12.58,46.86 -18.15,72.59 -5.26,24.22 -12.97,46.02 -10.96,76.14 0.82,12.18 3.51,22.72 11.29,21.08 11.91,-2.52 24.75,-58.23 25.6,-68.42 0.36,-4.54 5.65,-3.61 9.63,-3.61 1.91,0 3.47,1.55 3.47,3.47 0,6.93 -7.88,47.37 -9.79,56.31 -3.23,15.23 -32.99,73.54 -36.7,82.34 -9.46,22.91 3.09,34.25 18.4,16.72 20.56,-23.54 26.72,-40.67 43.68,-65.47 14.98,-22.01 26.99,-44.79 31.36,-71.91 5.61,-34.37 9.5,-83.92 9.81,-118.24 0,-97.27 -8.45,-189.01 -14.85,-287.63 -5.75,-88.61 -25.67,-168.82 -29.78,-266.74 -2.81,-66.88 -13.15,-184.51 -12.99,-193.43 0.19,-10.8 -7.55,-16.29 -16.55,-7.18 -67.55,67.93 -69.39,79.77 -89.96,163.28z"/>
+                      <path id="right-arm" d="M470.76 1385.48c31.99,-170.66 131.82,-389.81 87.92,-562.12 -21.04,-85.42 -22.92,-97.53 -92.02,-167.02 -9.21,-9.31 -17.13,-3.7 -16.93,7.35 0.16,9.12 -10.41,129.44 -13.29,197.86 -4.2,100.15 -24.58,182.19 -30.46,272.83 -6.54,100.87 -15.18,194.71 -15.18,294.2 0.32,35.1 4.29,85.79 10.03,120.94 4.46,27.74 16.75,51.04 32.08,73.55 17.34,25.37 23.65,42.9 44.68,66.97 15.66,17.93 28.49,6.34 18.81,-17.1 -3.79,-9 -34.24,-68.64 -37.53,-84.22 -1.96,-9.15 -10.02,-50.51 -10.02,-57.6 0,-1.96 1.59,-3.55 3.55,-3.55 4.07,0 9.48,-0.94 9.85,3.7 0.87,10.42 14,67.4 26.19,69.98 7.95,1.67 10.71,-9.11 11.54,-21.56 2.06,-30.81 -5.83,-53.11 -11.2,-77.88 -5.71,-26.32 -13.63,-48.54 -18.58,-74.25 -2.34,-14.83 -2.16,-27.27 0.56,-42.08z"/>
+                      <path id="left-leg" d="M872.67 1544.43c0,9.41 30.97,314.66 41.97,384.88 1.31,8.36 11.27,50.77 16.45,76.8 7.92,39.81 -7,141.5 -10.02,207.52 -3.5,76.52 10.68,174.09 12.35,261.94 0.89,46.72 -6.58,86.72 -6.25,137.04 0.14,23.6 -6.78,34.09 -7.05,58.91 -0.57,41.88 62.01,34.99 90.24,34.99 10.62,-0.15 50.54,-2.78 53.76,-14.17 4.91,-17.53 -22.37,-35.86 -31.86,-54.65 -34.23,-67.94 -16.28,-148.64 -3.6,-220.04 0,-0.06 0.02,-0.12 0.04,-0.18 16.48,-57.06 36.57,-128.8 46,-186.53 14.91,-91.12 -1.25,-183.87 -1.93,-275.18 -1.43,-78.78 23.99,-190.27 25.65,-277.13 0.32,-47.63 0,-94.14 0,-140.74 0.01,-2.82 -6.3,-1.89 -8.01,-1.71 -83.9,8.95 -131.68,10.6 -216.38,6.95 -0.65,-0.06 -1.36,0.59 -1.36,1.3z"/>
+                      <path id="right-leg" d="M820.47 1537.12c-85.58,3.69 -133.86,2.01 -218.63,-7.02 -1.73,-0.19 -8.1,-1.13 -8.09,1.72 0,47.09 -0.32,94.08 0,142.21 1.67,87.76 27.36,200.41 25.91,280.01 -0.68,92.26 -17.01,185.97 -1.95,278.03 9.53,58.34 29.83,130.83 46.48,188.48 0.03,0.06 0.04,0.12 0.04,0.18 12.81,72.14 30.95,153.68 -3.63,222.32 -9.59,18.99 -37.16,37.51 -32.19,55.22 3.24,11.52 43.58,14.18 54.32,14.33 28.52,0 91.75,6.95 91.18,-35.36 -0.29,-25.08 -7.27,-35.68 -7.13,-59.52 0.34,-50.85 -7.22,-91.26 -6.32,-138.47 1.69,-88.76 16.02,-187.34 12.48,-264.66 -3.05,-66.71 -18.13,-169.45 -10.12,-209.68 5.23,-26.3 15.29,-69.15 16.62,-77.6 11.11,-70.95 42.41,-379.37 42.41,-388.87 0,-0.73 -0.72,-1.38 -1.38,-1.32z"/>
+                    </g>
+                  </svg>
+                </div>
+
+                <div class="col panel" style="flex:0 0 340px; min-width:540px;">
+                  <h2>Inventário</h2>
+                  <div style="display:flex;gap:12px;align-items:center;">
+                    <div>
+                      <div style="display:flex; gap:24px; align-items:center; margin-bottom:8px;">
+                        <div>
+                          <label><strong>Peso:</strong></label>
+                          <span id="pesoAtual">0</span> /
+                          <input type="number" id="pesoMax" style="width:35px; text-align: center; background:transparent; border:none;" min="0" value="11" readonly>
+                        </div>
+                        <div>
+                          <label><strong>Espaço:</strong></label>
+                          <span id="espacoAtual">0</span> /
+                          <input type="number" id="espacoMax" style="width:35px; text-align: center;" min="0" value="4">
+                        </div>
+                        <div>
+                          <label><strong>Mochila:</strong></label>
+                          <input type="number" id="Mochila" style="width:35px; text-align: center;" min="0" value="8">
+                        </div>
+                      </div>
+                      <table id="inventoryTable" style="width:125%;margin-top:8px;">
+                        <thead><tr><th>Item</th><th>Peso</th><th>Espaços</th><th></th></tr></thead>
+                        <tbody></tbody>
+                      </table>
+                      <button id="addItemBtn" style="margin-top:8px;">Adicionar Item</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col panel" style="flex: 1; min-width: 440px;">
+            <h2>Etapa 3 e 4 — Ocupação & Perícias</h2>
+            <div style="font-size:13px;color:var(--muted)">Distribua os pontos de perícia abaixo.</div>
+            <div style="margin-top:8px;max-height:430px;overflow:auto">
+              <table id="skillsTable">
+                <thead><tr><th>Perícia</th><th>Valor Base</th><th>Valor Atual</th><th>Rolar</th><th>Resultado</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        <div class="row bottom" style="margin-top:10px">
-          <div class="col">
-            <label>Residência</label>
-            <input id="residencia" type="text" />
-          </div>
-          <div class="col">
-            <label>Local de Nascimento</label>
-            <input id="nascimento" type="text" />
-          </div>
+    </div>
+
+    <div id="tabHabilidades" class="tab-content">
+      <div class="panel">
+        <h2>Habilidades Especiais</h2>
+        <table id="habilidadesTable">
+            <thead>
+                <tr>
+                    <th style="width: 25%; height: 40px;">Nome da Habilidade</th>
+                    <th style="width: 55%; height: 40px;">Efeito</th>
+                    <th style="width: 15%; height: 40px;">Custo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+        <button id="addHabilidadeBtn" style="margin-top: 12px;">Adicionar Habilidade</button>
+      </div>
+    </div>
+
+    <div id="tabInfo" class="tab-content">
+      <div class="panel">
+        <h2>Antecedentes</h2>
+        <div class="info-grid">
+            <div>
+                <label>Descrição Pessoal</label>
+                <textarea id="infoDescricao"></textarea>
+            </div>
+            <div>
+                <label>Características</label>
+                <textarea id="infoCaracteristicas"></textarea>
+            </div>
+            <div>
+                <label>Ideologia/Crenças</label>
+                <textarea id="infoIdeologia"></textarea>
+            </div>
+            <div>
+                <label>Ferimentos & Cicatrizes</label>
+                <textarea id="infoFerimentos"></textarea>
+            </div>
+            <div>
+                <label>Pessoas Significativas</label>
+                <textarea id="infoPessoas"></textarea>
+            </div>
+            <div>
+                <label>Locais Importantes</label>
+                <textarea id="infoLocais"></textarea>
+            </div>
+            <div>
+                <label>Fobias & Manias</label>
+                <textarea id="infoFobias"></textarea>
+            </div>
+            <div>
+                <label>Objetos Importantes</label>
+                <textarea id="infoObjetos"></textarea>
+            </div>
         </div>
       </div>
-      <div class="col panel">
-        <h2 style="margin-top:0;color:var(--accent);font-size:16px">Etapa 2 — Atributos</h2>
-        <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Role 6x 3d6 e atribua (SOR é 3d6 separado).</div>
-        <!-- Removido texto e botões de rolagem -->
-        <div class="attributes" id="attributes">
-          <!-- attribute boxes injected by JS -->
+      <div class="panel" style="margin-top: 16px;">
+        <h2>Dinheiro e Recursos</h2>
+        <div class="info-grid">
+            <div>
+                <label>Dinheiro</label>
+                <input type="text" id="infoDinheiro" />
+            </div>
+            <div>
+                <label>Patrimônio</label>
+                <input type="text" id="infoPatrimonio" />
+            </div>
         </div>
-        <div style="margin-top:8px" class="flex">
-          <button id="rollPool">Gerar 6 rolagens (3d6)</button>
-          <button id="clearPool" class="ghost">Limpar Rolagens</button>
-          <div style="flex:1"></div>
-          <button id="rollSor">Rolar Sorte (3d6)</button>
-        </div>
-        <!-- Mantém o container da pool vazio só se quiser preservar estrutura -->
-        <div class="pool" id="rollPoolChips" style="display:none"></div>
       </div>
     </div>
 
-<div class="row bottom" style="display:flex;align-items:flex-start;gap:16px;">
-  <!-- Coluna esquerda: Barras (top) + Inventário (baixo) -->
-  <div class="col" style="flex: 0 0 823px; max-width:823px; display:flex; flex-direction:column; gap:12px;">
-    <!-- Panel Barras -->
-    <div class="panel">
-      <h2 style="margin-top:0;color:var(--accent);font-size:16px">Barras: Vida, Sanidade, Adrenalina</h2>
-      <div class="bars" style="display:flex;gap:12px;">
-        <!-- Vida (não alterar ids) -->
-        <div class="bar" style="flex:1;">
-          <div class="label">Vida (HP)</div>
-          <div class="meter"><i id="hpMeter"></i></div>
-          <div class="controls">
-            <div>Atual: <input id="hpCurrent" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
-            <div>Máx: <input id="hpMax" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
-            <button id="hpMinus">-</button>
-            <button id="hpPlus">+</button>
-          </div>
-        </div>
 
-        <!-- Sanidade (não alterar ids) -->
-        <div class="bar" style="flex:1;">
-          <div class="label">Sanidade</div>
-          <div class="meter"><i id="sanMeter"></i></div>
-          <div class="controls">
-            <div>Atual: <input id="sanCurrent" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
-            <div>Máx: <input id="sanMax" type="number" min="0" style="width:80px;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:4px;color:var(--text)"/></div>
-            <button id="sanMinus">-</button>
-            <button id="sanPlus">+</button>
-          </div>
-        </div>
-
-<div class="bar" style="flex:1;">
-  <div class="label">Adrenalina</div>
-
-  <!-- nova visual segmentada -->
-  <div class="adrenalina-container" style="display:flex;flex-direction:column;gap:8px;width:100%;">
-    <div class="adrenalina-bar" style="display:flex;gap:6px;width:100%;height:18px;">
-      <div class="segment"></div>
-      <div class="segment"></div>
-      <div class="segment"></div>
-      <div class="segment"></div>
-    </div>
-
-    <div class="adrenalina-controls" style="display:flex;align-items:center;gap:8px;">
-      <button id="adrMinus">-</button>
-      <span id="adrValue">1</span>
-      <button id="adrPlus">+</button>
-    </div>
+    <div class="footer">Ficha salva automaticamente no armazenamento local do navegador.</div>
   </div>
 
-  <!-- elementos legados (ocultos) para evitar erros no código existente -->
-  <div class="meter" style="display:none"><i id="adrMeter"></i></div>
-  <input id="adrCurrent" type="hidden" value="1"/>
-  <input id="adrMax" type="hidden" value="4"/>
-</div>
-</div>
-
-  <!-- 🧍 Diagrama Corporal -->
-    <div style="display:flex; gap:16px; margin-top:12px;">
-      <!-- Boneco -->
-      <div id="body-diagram" style="height:270px; flex:1; display:flex; justify-content:flex-start; padding-left: 42px;">
-        <svg id="body-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 2800" style="height:100%; width:auto;">
-    <g fill="#888">
-      <path id="head" d="M850.54 3.71c-286.42,0.77 -170.63,475.91 -2.26,470.04 176.41,-6.13 269.57,-470.77 2.26,-470.04z"/>
-      <path id="torso" d="M739.07 505.38c-14.3,-5.86 -14.17,-1.08 -22.8,6.11 -15.37,12.78 -50.91,27.97 -65.58,32.58 -45.68,14.26 -110.44,26.5 -155.23,48.88 -5.94,2.97 -18.13,8.97 -9.54,17.13 40.07,37.66 67.33,89.93 88.23,147.71 52.43,144.97 55.43,331.34 51.44,457.9 -2.86,98.03 -41.38,188.76 -41.38,285.77 0,1.97 1.59,3.56 3.54,3.56l519.2 0.01c0.24,-0.25 3.63,-0.13 3.68,-3.64 0.16,-11.18 0.01,-20.43 -1.51,-31.56 -7.09,-51.95 -21.79,-120.55 -31.66,-182.39 -20.77,-130.25 -3.43,-331.37 14.56,-458.58 5.34,-37.77 26.93,-78.57 43.08,-110.18 20.4,-39.76 63.76,-88.08 74.61,-109.76 2.82,-5.04 1.3,-10.22 -3.17,-13.52 -9.77,-7.15 -52.24,-21 -64.99,-24.69 -48.15,-13.91 -103.71,-21.83 -144.73,-48.91 -8.69,-5.74 -16.67,-11.18 -21.48,-12.52 -9.33,-2.59 -17.47,-1.53 -24.48,3.37 -42.97,28.75 -164.23,12.28 -211.79,-7.27z"/>
-      <path id="left-arm" d="M1136.68 831.22c-42.92,168.46 54.68,382.71 85.95,549.57 2.66,14.47 2.83,26.64 0.54,41.13 -4.83,25.14 -12.58,46.86 -18.15,72.59 -5.26,24.22 -12.97,46.02 -10.96,76.14 0.82,12.18 3.51,22.72 11.29,21.08 11.91,-2.52 24.75,-58.23 25.6,-68.42 0.36,-4.54 5.65,-3.61 9.63,-3.61 1.91,0 3.47,1.55 3.47,3.47 0,6.93 -7.88,47.37 -9.79,56.31 -3.23,15.23 -32.99,73.54 -36.7,82.34 -9.46,22.91 3.09,34.25 18.4,16.72 20.56,-23.54 26.72,-40.67 43.68,-65.47 14.98,-22.01 26.99,-44.79 31.36,-71.91 5.61,-34.37 9.5,-83.92 9.81,-118.24 0,-97.27 -8.45,-189.01 -14.85,-287.63 -5.75,-88.61 -25.67,-168.82 -29.78,-266.74 -2.81,-66.88 -13.15,-184.51 -12.99,-193.43 0.19,-10.8 -7.55,-16.29 -16.55,-7.18 -67.55,67.93 -69.39,79.77 -89.96,163.28z"/>
-      <path id="right-arm" d="M470.76 1385.48c31.99,-170.66 131.82,-389.81 87.92,-562.12 -21.04,-85.42 -22.92,-97.53 -92.02,-167.02 -9.21,-9.31 -17.13,-3.7 -16.93,7.35 0.16,9.12 -10.41,129.44 -13.29,197.86 -4.2,100.15 -24.58,182.19 -30.46,272.83 -6.54,100.87 -15.18,194.71 -15.18,294.2 0.32,35.1 4.29,85.79 10.03,120.94 4.46,27.74 16.75,51.04 32.08,73.55 17.34,25.37 23.65,42.9 44.68,66.97 15.66,17.93 28.49,6.34 18.81,-17.1 -3.79,-9 -34.24,-68.64 -37.53,-84.22 -1.96,-9.15 -10.02,-50.51 -10.02,-57.6 0,-1.96 1.59,-3.55 3.55,-3.55 4.07,0 9.48,-0.94 9.85,3.7 0.87,10.42 14,67.4 26.19,69.98 7.95,1.67 10.71,-9.11 11.54,-21.56 2.06,-30.81 -5.83,-53.11 -11.2,-77.88 -5.71,-26.32 -13.63,-48.54 -18.58,-74.25 -2.34,-14.83 -2.16,-27.27 0.56,-42.08z"/>
-      <path id="left-leg" d="M872.67 1544.43c0,9.41 30.97,314.66 41.97,384.88 1.31,8.36 11.27,50.77 16.45,76.8 7.92,39.81 -7,141.5 -10.02,207.52 -3.5,76.52 10.68,174.09 12.35,261.94 0.89,46.72 -6.58,86.72 -6.25,137.04 0.14,23.6 -6.78,34.09 -7.05,58.91 -0.57,41.88 62.01,34.99 90.24,34.99 10.62,-0.15 50.54,-2.78 53.76,-14.17 4.91,-17.53 -22.37,-35.86 -31.86,-54.65 -34.23,-67.94 -16.28,-148.64 -3.6,-220.04 0,-0.06 0.02,-0.12 0.04,-0.18 16.48,-57.06 36.57,-128.8 46,-186.53 14.91,-91.12 -1.25,-183.87 -1.93,-275.18 -1.43,-78.78 23.99,-190.27 25.65,-277.13 0.32,-47.63 0,-94.14 0,-140.74 0.01,-2.82 -6.3,-1.89 -8.01,-1.71 -83.9,8.95 -131.68,10.6 -216.38,6.95 -0.65,-0.06 -1.36,0.59 -1.36,1.3z"/>
-      <path id="right-leg" d="M820.47 1537.12c-85.58,3.69 -133.86,2.01 -218.63,-7.02 -1.73,-0.19 -8.1,-1.13 -8.09,1.72 0,47.09 -0.32,94.08 0,142.21 1.67,87.76 27.36,200.41 25.91,280.01 -0.68,92.26 -17.01,185.97 -1.95,278.03 9.53,58.34 29.83,130.83 46.48,188.48 0.03,0.06 0.04,0.12 0.04,0.18 12.81,72.14 30.95,153.68 -3.63,222.32 -9.59,18.99 -37.16,37.51 -32.19,55.22 3.24,11.52 43.58,14.18 54.32,14.33 28.52,0 91.75,6.95 91.18,-35.36 -0.29,-25.08 -7.27,-35.68 -7.13,-59.52 0.34,-50.85 -7.22,-91.26 -6.32,-138.47 1.69,-88.76 16.02,-187.34 12.48,-264.66 -3.05,-66.71 -18.13,-169.45 -10.12,-209.68 5.23,-26.3 15.29,-69.15 16.62,-77.6 11.11,-70.95 42.41,-379.37 42.41,-388.87 0,-0.73 -0.72,-1.38 -1.38,-1.32z"/>
-    </g>
-  </svg>
-</div>
-
-  <div class="col panel" style="flex:0 0 350px; min-width:535px;">
-    <h2 style="margin-top:0;color:var(--accent);font-size:16px">Inventário</h2>
-    <div style="display:flex;gap:12px;align-items:center;">
-      <div>
-        <label>Peso (atual/máx)</label>
-        <input type="number" id="pesoMax" style="width:60px;" min="0" value="50"/> /
-        <span id="pesoAtual">0</span>
-      </div>
-      <div>
-        <label>Espaços (atual/máx)</label>
-        <input type="number" id="espacoMax" style="width:60px;" min="0" value="20"/> /
-        <span id="espacoAtual">0</span>
-      </div>
-    </div>
-    <table id="inventoryTable" style="width:100%;margin-top:8px;">
-      <thead>
-        <tr>
-          <th>Item</th><th>Peso</th><th>Espaços</th><th></th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <button id="addItemBtn" style="margin-top:8px;">Adicionar Item</button>
-  </div>
-</div>
-</div>
-</div>
-
-  <div class="col panel" style="flex: 1; min-width: 400px;">
-    <h2 style="margin-top:0;color:var(--accent);font-size:16px">Etapa 3 e 4 — Ocupação & Perícias</h2>
-    <div style="font-size:13px;color:var(--muted)">Escolha ocupação, depois distribua pontos de perícia...</div>
-    <div style="margin-top:8px;max-height:520px;overflow:auto">
-      <table id="skillsTable">
-        <thead>
-          <tr><th>Perícia</th><th>Valor Base</th><th>Valor Atual</th><th>Rolar</th><th>Resultado</th></tr>
-        </thead>
-        <tbody>
-              <!-- skills injected by JS -->
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const parts = document.querySelectorAll("#body-svg path");
-  const state = { bodyColors: {} };
-
-  // Carrega cores salvas
-  const saved = localStorage.getItem('bodyColors');
-  if (saved) {
-    const savedColors = JSON.parse(saved);
-    parts.forEach(part => {
-      if (savedColors[part.id]) part.setAttribute("fill", savedColors[part.id]);
-      state.bodyColors[part.id] = savedColors[part.id];
-    });
-  }
-
-  function saveState() {
-    localStorage.setItem('bodyColors', JSON.stringify(state.bodyColors));
-  }
-
-  parts.forEach(part => {
-      let current = part.getAttribute("fill") || "#888";
-        part.setAttribute("fill", current);
-        state.bodyColors[part.id] = current;
-    
-        part.addEventListener("click", () => {
-      const current = part.getAttribute("fill");
-      let next;
-
-switch (true) {
-  case current === "#888" || current === "rgb(136, 136, 136)":
-    next = "rgba(255, 255, 0, 0.75)";
-    break;
-  case current.includes("255, 255, 0"): // amarelo
-    next = "rgba(255, 0, 0, 0.75)";
-    break;
-  case current.includes("255, 0, 0"): // vermelho
-    next = "#888";
-    break;
-  default:
-    next = "#888";
-    break;
-}
-
-      part.setAttribute("fill", next);
-      state.bodyColors[part.id] = next; // salva a cor no state
-      saveState(); // salva no localStorage
-    });
-
-    part.style.cursor = "pointer";
-    part.style.transition = "fill 0.3s ease";
-  });
-});
-
-</script>
-
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer">Ficha salva automaticamente no armazenamento local do navegador. Botões: Rolar atributos (3d6), Sorte (3d6), rolagem de perícias (1d20).</div>
-  </div>
 
   <script>
-    /* ---------- Data ---------- */
+    /* ---------- DATA (SEM MUDANÇAS) ---------- */
     const ATTRS = ['FOR','CON','TAM','DES','APA','INT','MEN','SOR'];
+    const SKILLS = [['Acrobacia',4],['Antropologia',1],['Armas (Pistolas)',4],['Armas (Rifles/Espingardas)',5],['Armas (Arcos/Bestas)',3],['Arqueologia',1],['Arremessar',4],['Arte e Ofício',1],['Avaliação',1],['Cavalgar',1],['Charme',3],['Chaveiro',1],['Ciência (Biologia)',1],['Ciência (Forense)',1],['Ciência (Farmácia)',1],['Ciência (Química)',1],['Conhecimento',1],['Consertos Elétricos',2],['Consertos Mecânicos',2],['Contabilidade',1],['Demolições',1],['Direito',1],['Dirigir',4],['Disfarce',1],['Eletrônica',1],['Encontrar',5],['Escutar',4],['Esquivar',0],['Furtividade',4],['Hipnose',1],['História',1],['Intimidação',3],['Lábia',1],['Leitura Labial',1],['Língua (Nativa)',0],['Língua (Outra)',1],['Lutar (Brigar)',5],['Medicina',1],['Mergulho',1],['Mundo Natural',2],['Natação',2],['Navegação',2],['Ocultismo',2],['Operar Maquinário',1],['Persuasão',2],['Pilotar (Aeronave)',1],['Pilotar (Barco)',1],['Prestidigitação',2],['Primeiros Socorros',6],['Psicanálise',1],['Psicologia',2],['Rastrear',2],['Sobrevivência',2],['Treinar Animais',1],['Usar Bibliotecas',4],['Usar Computadores',4]];
+    const THRESHOLDS = {1:{N:20,B:null,E:null},2:{N:19,B:20,E:null},3:{N:18,B:20,E:null},4:{N:17,B:19,E:null},5:{N:16,B:19,E:20},6:{N:15,B:18,E:20},7:{N:14,B:18,E:20},8:{N:13,B:17,E:20},9:{N:12,B:17,E:20},10:{N:11,B:16,E:19},11:{N:10,B:16,E:19},12:{N:9,B:15,E:19},13:{N:8,B:15,E:19},14:{N:7,B:14,E:19},15:{N:6,B:14,E:18},16:{N:5,B:13,E:18},17:{N:4,B:13,E:18},18:{N:3,B:12,E:18},19:{N:2,B:12,E:18},20:{N:1,B:11,E:18}};
 
-    const SKILLS = [
-      ['Acrobacia',4],['Antropologia',1],['Armas (Pistolas)',4],['Armas (Rifles/Espingardas)',5],['Armas (Arcos/Bestas)',3],
-      ['Arqueologia',1],['Arremessar',4],['Arte e Ofício',1],['Avaliação',1],['Cavalgar',1],['Charme',3],['Chaveiro',1],
-      ['Ciência (Biologia)',1],['Ciência (Forense)',1],['Ciência (Farmácia)',1],['Ciência (Química)',1],['Conhecimento',1],
-      ['Consertos Elétricos',2],['Consertos Mecânicos',2],['Contabilidade',1],['Demolições',1],['Direito',1],['Dirigir',4],
-      ['Disfarce',1],['Eletrônica',1],['Encontrar',5],['Escutar',4],['Esquivar',0],['Furtividade',4],['Hipnose',1],
-      ['História',1],['Intimidação',3],['Lábia',1],['Leitura Labial',1],['Língua (Nativa)',0],['Língua (Outra)',1],['Lutar (Brigar)',5],
-      ['Medicina',1],['Mergulho',1],['Mundo Natural',2],['Natação',2],['Navegação',2],['Ocultismo',2],['Operar Maquinário',1],
-      ['Persuasão',2],['Pilotar (Aeronave)',1],['Pilotar (Barco)',1],['Prestidigitação',2],['Primeiros Socorros',6],['Psicanálise',1],
-      ['Psicologia',2],['Rastrear',2],['Sobrevivência',2],['Treinar Animais',1],['Usar Bibliotecas',4],['Usar Computadores',4]
-    ];
-
-    // Table provided by user: mapping skill value (1..20) -> thresholds {normal,bom,extremo}
-    const THRESHOLDS = {
-      1: {N:20,B:null,E:null},2:{N:19,B:20,E:null},3:{N:18,B:20,E:null},4:{N:17,B:19,E:null},
-      5:{N:16,B:19,E:20},6:{N:15,B:18,E:20},7:{N:14,B:18,E:20},8:{N:13,B:17,E:20},
-      9:{N:12,B:17,E:20},10:{N:11,B:16,E:19},11:{N:10,B:16,E:19},12:{N:9,B:15,E:19},
-      13:{N:8,B:15,E:19},14:{N:7,B:14,E:19},15:{N:6,B:14,E:18},16:{N:5,B:13,E:18},
-      17:{N:4,B:13,E:18},18:{N:3,B:12,E:18},19:{N:2,B:12,E:18},20:{N:1,B:11,E:18}
-    };
-
-    /* ---------- Utilities ---------- */
+    /* ---------- UTILITIES ---------- */
     function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
     function rollDice(n,sides){let out=[];for(let i=0;i<n;i++)out.push(randInt(1,sides));return out}
-    function roll3d6(){return rollDice(3,6).reduce((a,b)=>a+b,0)}
     function saveState(){localStorage.setItem('ficha_cp',JSON.stringify(state))}
     function loadState(){try{return JSON.parse(localStorage.getItem('ficha_cp'))||{}}catch(e){return {}}}
+    function escapeId(s){return s.replace(/[^a-z0-9]/gi,'_')}
 
-    /* ---------- State ---------- */
+    /* ---------- STATE (MODIFICADO) ---------- */
     let state = loadState();
-    // defaults
     if(!state.attrs) state.attrs = {FOR:10,CON:10,TAM:13,DES:10,APA:10,INT:10,MEN:10,SOR:10};
-    if(!state.rollPool) state.rollPool = [];
-    if(!state.assigned) state.assigned = {};
     if(!state.skills) state.skills = {};
     if(!state.details) state.details = {};
+    if(!state.info) state.info = {}; // <-- NOVO: Adiciona o objeto 'info' para a nova aba
     if(state.hpMax===undefined) state.hpMax = Math.floor((state.attrs.CON + state.attrs.TAM)/2);
     if(state.hpCurrent===undefined) state.hpCurrent = state.hpMax;
     if(state.sanMax===undefined) state.sanMax = state.attrs.MEN * 5;
     if(state.sanCurrent===undefined) state.sanCurrent = state.sanMax;
-    if(state.adrMax===undefined) state.adrMax = 4;
     if(state.adrCurrent===undefined) state.adrCurrent = 1;
 
-    /* ---------- Render functions ---------- */
-    function renderAttributes() {
-  const container = document.getElementById('attributes');
-  container.innerHTML = '';
+    /* ---------- SCRIPT PRINCIPAL (MODIFICADO) ---------- */
+    document.addEventListener("DOMContentLoaded", () => {
+        
+      /* --- LÓGICA DAS ABAS --- */
+      const tabButtons = document.querySelectorAll(".tab-btn");
+      const tabContents = document.querySelectorAll(".tab-content");
 
-  ATTRS.forEach(a => {
-    const div = document.createElement('div');
-    div.className = 'attr';
-
-    const title = document.createElement('h3');
-    title.textContent = a;
-    div.appendChild(title);
-
-    // campo numérico digitável direto (sem setas)
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.id = 'attr_' + a;
-    input.min = 0;
-    input.max = 20;
-    input.value = state.attrs[a] ?? 0;
-    input.classList.add('attr-input');
-
-    // impede digitar letras e mantém entre 0 e 20
-    input.addEventListener('input', e => {
-      let val = e.target.value.replace(/[^0-9]/g, '');
-      if (val === '') val = 0;
-      let n = Number(val);
-      if (n < 0) n = 0;
-      state.attrs[a] = n;
-      e.target.value = n;
-      recalcHPandSAN();
-      saveState();
-    });
-
-    div.appendChild(input);
-    container.appendChild(div);
-  });
-
-  recalcHPandSAN();
-}
-
-    function renderPool(){
-      const pool = document.getElementById('rollPoolChips');pool.innerHTML='';
-      state.rollPool.forEach((r,idx)=>{
-        const c = document.createElement('div');c.className='chip';c.textContent=r+' ('+idx+')';
-        c.onclick = ()=>{ // assign to selected attribute via prompt
-          const attr = prompt('Atribuir rolagem '+r+' a qual atributo? (use abreviação: FOR,CON,TAM,DES,APA,INT,MEN,SOR)');
-          if(!attr) return;
-          const A = attr.toUpperCase();
-          if(!ATTRS.includes(A)){alert('Atributo inválido');return}
-          if(state.assigned[A]){alert('Já existe valor atribuído a '+A+'. Remova primeiro clicando no valor do atributo.');return}
-          state.assigned[A]=r;state.attrs[A]=r;state.rollPool.splice(idx,1);syncAfterChange();
-        };
-        pool.appendChild(c);
+      tabButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          // Remove 'active' de todos
+          tabButtons.forEach(btn => btn.classList.remove("active"));
+          tabContents.forEach(content => content.classList.remove("active"));
+          
+          // Adiciona 'active' ao clicado
+          button.classList.add("active");
+          document.getElementById(button.dataset.tab).classList.add("active");
+        });
       });
-    }
 
-    function recalcHPandSAN(){
-      state.hpMax = Math.floor((Number(state.attrs.CON||0) + Number(state.attrs.TAM||0))/2);
-      if(state.hpCurrent > state.hpMax) state.hpCurrent = state.hpMax;
-      state.sanMax = (Number(state.attrs.MEN)||0)*5;
-      if(state.sanCurrent > state.sanMax) state.sanCurrent = state.sanMax;
-      // update inputs
-      document.getElementById('hpMax').value = state.hpMax;
-      document.getElementById('hpCurrent').value = state.hpCurrent;
-      document.getElementById('sanMax').value = state.sanMax;
-      document.getElementById('sanCurrent').value = state.sanCurrent;
-      updateMeters();
-      saveState();
-    }
+      /* --- LÓGICA DA FICHA (adaptada) --- */
+      function renderAttributes() {
+        const container = document.getElementById('attributes');
+        container.innerHTML = '';
+        ATTRS.forEach(a => {
+          const div = document.createElement('div');
+          div.className = 'attr';
+          div.innerHTML = `<h3>${a}</h3>`;
+          const input = document.createElement('input');
+          input.type = 'number';
+          input.id = 'attr_' + a;
+          input.min = 0;
+          input.max = 20;
+          input.value = state.attrs[a] ?? 0;
+          input.classList.add('attr-input');
+          input.addEventListener('input', e => {
+            let val = e.target.value.replace(/[^0-9]/g, '');
+            if (val === '') val = 0;
+            let n = Number(val);
+            if (n < 0) n = 0;
+            state.attrs[a] = n;
+            e.target.value = n;
+            recalcHPandSAN();
+            saveState();
+          });
+          div.appendChild(input);
+          container.appendChild(div);
+        });
+        recalcHPandSAN();
+      }
 
-function updateMeters(){
-  const hpPct = state.hpMax? Math.max(0,Math.min(100,Math.round(state.hpCurrent/state.hpMax*100))):0;
-  const sanPct = state.sanMax? Math.max(0,Math.min(100,Math.round(state.sanCurrent/state.sanMax*100))):0;
-  const adrPct = state.adrMax? Math.max(0,Math.min(100,Math.round(state.adrCurrent/state.adrMax*100))):0;
+      function recalcHPandSAN(){
+          state.hpMax = Math.floor((Number(state.attrs.CON||0) + Number(state.attrs.TAM||0))/2);
+          if(state.hpCurrent > state.hpMax) state.hpCurrent = state.hpMax;
+          state.sanMax = (Number(state.attrs.MEN)||0)*5;
+          if(state.sanCurrent > state.sanMax) state.sanCurrent = state.sanMax;
+          
+          const pesoMaxEl = document.getElementById('pesoMax');
+          if (pesoMaxEl) {
+              const forca = Number(state.attrs.FOR) || 0;
+              const pesoMaxCalculado = 11 + Math.floor(forca / 2);
+              pesoMaxEl.value = pesoMaxCalculado;
+              pesoMaxEl.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+          
+          document.getElementById('hpMax').value = state.hpMax;
+          document.getElementById('hpCurrent').value = state.hpCurrent;
+          document.getElementById('sanMax').value = state.sanMax;
+          document.getElementById('sanCurrent').value = state.sanCurrent;
+          updateMeters();
+          saveState();
+      }
 
-  const hpEl = document.getElementById('hpMeter');
-  if(hpEl) hpEl.style.width = hpPct + '%';
+      function updateMeters(){
+          const hpPct = state.hpMax? Math.max(0,Math.min(100,Math.round(state.hpCurrent/state.hpMax*100))):0;
+          const sanPct = state.sanMax? Math.max(0,Math.min(100,Math.round(state.sanCurrent/state.sanMax*100))):0;
+          document.getElementById('hpMeter').style.width = hpPct + '%';
+          document.getElementById('sanMeter').style.width = sanPct + '%';
+          
+          const segmentos = document.querySelectorAll('.adrenalina-bar .segment');
+          const count = Math.max(0, Math.min(4, Math.round(Number(state.adrCurrent) || 0)));
+          segmentos.forEach((seg, i) => seg.classList.toggle('filled', i < count));
+          document.getElementById('adrValue').textContent = count;
+          
+          saveState();
+      }
 
-  const sanEl = document.getElementById('sanMeter');
-  if(sanEl) sanEl.style.width = sanPct + '%';
+      function renderSkills(){
+        const tbody = document.querySelector('#skillsTable tbody');
+        tbody.innerHTML='';
+        SKILLS.forEach(([name,base])=>{
+          const tr = document.createElement('tr');
+          const curVal = state.skills[name] ?? base;
+          tr.innerHTML = `<td>${name}</td><td class="skill-base">${base}</td><td><input class="skill-val" data-name="${name}" type="number" min="1" max="20" value="${curVal}"/></td><td><button data-roll="${name}">Rolar</button></td><td class="roll-result" id="res-${escapeId(name)}">-</td>`;
+          tbody.appendChild(tr);
+        });
+        document.querySelectorAll('.skill-val').forEach(inp=>{
+          inp.addEventListener('input', e=>{
+            let val = Number(e.target.value);
+            if(isNaN(val)) val = 0; if(val < 1) val = 1; if(val > 20) val = 20;
+            e.target.value = val;
+            state.skills[e.target.dataset.name] = val;
+            saveState();
+          });
+        });
+        document.querySelectorAll('button[data-roll]').forEach(btn=>{
+          btn.addEventListener('click',e=>{const name=e.currentTarget.dataset.roll;rollSkill(name);});
+        });
+      }
 
-  // legacy meter (pode estar oculto) — atualiza só se existir
-  const adrEl = document.getElementById('adrMeter');
-  if(adrEl) adrEl.style.width = adrPct + '%';
+      function rollSkill(name){
+          const val = state.skills[name] ?? SKILLS.find(s=>s[0]===name)[1] ?? 0;
+          const roll = randInt(1,20);
+          const th = THRESHOLDS[Math.max(1,Math.min(20,Math.floor(val)))] || {N:21,B:null,E:null};
+          let outcome = {type:'Falha',detail:`Rolou ${roll} < Normal(${th.N})`};
+          if(roll >= th.N) outcome = {type:'Normal',detail:`Rolou ${roll} ≥ Normal(${th.N})`};
+          if(th.B !== null && roll >= th.B) outcome = {type:'Bom',detail:`Rolou ${roll} ≥ Bom(${th.B})`};
+          if(th.E !== null && roll >= th.E) outcome = {type:'Extremo',detail:`Rolou ${roll} ≥ Extremo(${th.E})`};
+          
+          const el = document.getElementById('res-'+escapeId(name));
+          el.innerHTML = `<strong>${outcome.type}</strong> — ${outcome.detail}`;
+          el.style.color = outcome.type==='Falha'? 'var(--muted)': outcome.type==='Normal'?'#ffffff': outcome.type==='Bom'?'#ffd24d':'#9ef39e';
+      }
 
-  // --- atualiza a barra segmentada da adrenalina ---
-  const segmentos = document.querySelectorAll('.adrenalina-bar .segment');
-  if(segmentos && segmentos.length){
-    // usamos state.adrCurrent em 0..4 (garantido pelo default que alteramos)
-    const count = Math.max(0, Math.min(4, Math.round(Number(state.adrCurrent) || 0)));
-    segmentos.forEach((seg, i) => {
-      if(i < count) seg.classList.add('filled'); else seg.classList.remove('filled');
-    });
-    // atualiza o span visível e o hidden input para manter compatibilidade
-    const vspan = document.getElementById('adrValue'); if(vspan) vspan.textContent = count;
-    const hidden = document.getElementById('adrCurrent'); if(hidden) hidden.value = count;
-  }
+      function syncAll(){
+          renderAttributes();
+          renderSkills();
+          updateMeters();
+          saveState();
+      }
 
-  saveState();
-}
-    function renderSkills(){
-      const tbody = document.querySelector('#skillsTable tbody');tbody.innerHTML='';
-      SKILLS.forEach(([name,base])=>{
-        const tr = document.createElement('tr');
-        const curVal = state.skills[name] ?? base;
-        tr.innerHTML = `
-          <td>${name}</td>
-          <td class="skill-base">${base}</td>
-          <td><input class="skill-val" data-name="${name}" type="text" value="${curVal}"/></td>
-          <td><button data-roll="${name}">Rolar</button></td>
-          <td class="roll-result" id="res-${escapeId(name)}">-</td>
-        `;
-        tbody.appendChild(tr);
+      // --- LISTENERS DE CONTROLES (HP, SAN, ADR) ---
+      document.getElementById('hpMinus').addEventListener('click',()=>{state.hpCurrent=Math.max(0,Number(state.hpCurrent)-1);syncAll();});
+      document.getElementById('hpPlus').addEventListener('click',()=>{state.hpCurrent=Math.min(state.hpMax,Number(state.hpCurrent)+1);syncAll();});
+      document.getElementById('sanMinus').addEventListener('click',()=>{state.sanCurrent=Math.max(0,Number(state.sanCurrent)-1);syncAll();});
+      document.getElementById('sanPlus').addEventListener('click',()=>{state.sanCurrent=Math.min(state.sanMax,Number(state.sanCurrent)+1);syncAll();});
+      document.getElementById('adrMinus').addEventListener('click',()=>{state.adrCurrent=Math.max(0,Number(state.adrCurrent)-1);syncAll();});
+      document.getElementById('adrPlus').addEventListener('click',()=>{state.adrCurrent=Math.min(4,Number(state.adrCurrent)+1);syncAll();});
+
+      ['hpCurrent','hpMax','sanCurrent','sanMax'].forEach(id=>{
+        const el = document.getElementById(id);
+        el.value = state[id];
+        el.addEventListener('change',e=>{
+          state[id]=Number(e.target.value);
+          if(id==='hpMax' && state.hpCurrent>state.hpMax) state.hpCurrent=state.hpMax; 
+          if(id==='sanMax' && state.sanCurrent>state.sanMax) state.sanCurrent=state.sanMax;
+          syncAll();
+        });
       });
-      // attach listeners
-      document.querySelectorAll('.skill-val').forEach(inp=>{
-  inp.addEventListener('input', e=>{
-    let val = Number(e.target.value);
-    if(isNaN(val)) val = 0;     // se digitar algo inválido
-    if(val < 1) val = 1;        // mínimo 1
-    if(val > 20) val = 20;      // máximo 20
-    e.target.value = val;       // atualiza o input visualmente
-    state.skills[e.target.dataset.name] = val;
-    saveState();
-  });
-});
-      document.querySelectorAll('button[data-roll]').forEach(btn=>{
-        btn.addEventListener('click',e=>{const name=e.currentTarget.dataset.roll;rollSkill(name);});
+
+      // --- LISTENERS PARA CAMPOS DE TEXTO (DETALHES E INFO) ---
+      const detailIds = ['nomePersonagem','nomeJogador','idade','genero','ocupacao','residencia','nascimento'];
+      detailIds.forEach(id=>{
+        const el = document.getElementById(id);
+        el.value = state.details[id] || '';
+        el.addEventListener('input',e=>{state.details[id]=e.target.value;saveState();});
       });
-    }
+      
+      const infoIds = ['infoDescricao','infoCaracteristicas','infoIdeologia','infoFerimentos','infoPessoas','infoLocais','infoFobias','infoObjetos', 'infoDinheiro', 'infoPatrimonio'];
+      infoIds.forEach(id=>{
+        const el = document.getElementById(id);
+        el.value = state.info[id] || '';
+        el.addEventListener('input',e=>{state.info[id]=e.target.value;saveState();});
+      });
 
-    function escapeId(s){return s.replace(/[^a-z0-9]/gi,'_')}
 
-    /* ---------- Actions ---------- */
-    function syncAfterChange(){renderAttributes();renderPool();updateMeters();renderSkills();saveState();}
-
-    document.getElementById('rollPool').addEventListener('click',()=>{
-      // generate 6 x 3d6
-      for(let i=0;i<6;i++) state.rollPool.push(roll3d6());
-      saveState();renderPool();
-    });
-    document.getElementById('clearPool').addEventListener('click',()=>{state.rollPool=[];saveState();renderPool();});
-    document.getElementById('rollSor').addEventListener('click',()=>{const val=roll3d6();state.attrs.SOR=val;state.assigned.SOR=val;saveState();renderAttributes();});
-
-    // top detail inputs
-    ['nomePersonagem','nomeJogador','idade','genero','ocupacao','residencia','nascimento'].forEach(id=>{
-      const el = document.getElementById(id);
-      el.value = state.details[id] || '';
-      el.addEventListener('input',e=>{state.details[id]=e.target.value;saveState();});
-    });
-
-    // HP SAN ADR controls
-    document.getElementById('hpMinus').addEventListener('click',()=>{state.hpCurrent=Math.max(0,Number(state.hpCurrent)-1);document.getElementById('hpCurrent').value=state.hpCurrent;syncAfterChange();});
-    document.getElementById('hpPlus').addEventListener('click',()=>{state.hpCurrent=Math.min(state.hpMax,Number(state.hpCurrent)+1);document.getElementById('hpCurrent').value=state.hpCurrent;syncAfterChange();});
-    document.getElementById('sanMinus').addEventListener('click',()=>{state.sanCurrent=Math.max(0,Number(state.sanCurrent)-1);document.getElementById('sanCurrent').value=state.sanCurrent;syncAfterChange();});
-    document.getElementById('sanPlus').addEventListener('click',()=>{state.sanCurrent=Math.min(state.sanMax,Number(state.sanCurrent)+1);document.getElementById('sanCurrent').value=state.sanCurrent;syncAfterChange();});
-    document.getElementById('adrMinus').addEventListener('click',()=>{state.adrCurrent=Math.max(0,Number(state.adrCurrent)-1);document.getElementById('adrCurrent').value=state.adrCurrent;syncAfterChange();});
-    document.getElementById('adrPlus').addEventListener('click',()=>{state.adrCurrent=Math.min(state.adrMax,Number(state.adrCurrent)+1);document.getElementById('adrCurrent').value=state.adrCurrent;syncAfterChange();});
-
-    ['hpCurrent','hpMax','sanCurrent','sanMax','adrCurrent','adrMax'].forEach(id=>{
-      const el = document.getElementById(id);
-      el.value = state[id];
-      el.addEventListener('change',e=>{state[id]=Number(e.target.value);if(id==='hpMax' && state.hpCurrent>state.hpMax) state.hpCurrent=state.hpMax; if(id==='sanMax' && state.sanCurrent>state.sanMax) state.sanCurrent=state.sanMax;syncAfterChange();});
-    });
-
-    /* ---------- Skill roll logic ---------- */
-    function thresholdsForSkill(val){ // val integer 0..20
-      const v = Math.max(0,Math.min(20,Math.floor(val)));
-      if(v<=0) return {N:21,B:null,E:null};
-      return THRESHOLDS[v] || {N:21,B:null,E:null};
-    }
-
-    function classifyRoll(skillVal,roll){
-      // higher roll better. If roll < normalThreshold => failure
-      const th = thresholdsForSkill(skillVal);
-      if(roll < th.N) return {type:'Falha',detail:`Rolou ${roll} < Normal(${th.N})`};
-      if(th.E !== null && roll >= th.E) return {type:'Extremo',detail:`Rolou ${roll} ≥ Extremo(${th.E})`};
-      if(th.B !== null && roll >= th.B) return {type:'Bom',detail:`Rolou ${roll} ≥ Bom(${th.B})`};
-      return {type:'Normal',detail:`Rolou ${roll} ≥ Normal(${th.N})`};
-    }
-
-    function rollSkill(name){
-      const val = state.skills[name] ?? SKILLS.find(s=>s[0]===name)[1] ?? 0;
-      const roll = randInt(1,20);
-      const outcome = classifyRoll(val,roll);
-      const el = document.getElementById('res-'+escapeId(name));
-      el.innerHTML = `<strong>${outcome.type}</strong> — ${outcome.detail}`;
-      // flash color
-      el.style.color = outcome.type==='Falha'? 'var(--muted)': outcome.type==='Normal'?'#ffffff': outcome.type==='Bom'?'#ffd24d':'#9ef39e';
-    }
-
-    /* ---------- Init ---------- */
-    function init(){
-      // ensure all skills in state
+      /* --- INICIALIZAÇÃO --- */
       SKILLS.forEach(([name,base])=>{ if(state.skills[name]===undefined) state.skills[name]=base; });
-      // fill details
-      ['nomePersonagem','nomeJogador','idade','genero','ocupacao','residencia','nascimento'].forEach(id=>{document.getElementById(id).value = state.details[id] || ''});
-      // attrs
-      if(!state.attrs) state.attrs = {FOR:10,CON:10,TAM:13,DES:10,APA:10,INT:10,MEN:10,SOR:10};
-      renderAttributes();renderPool();renderSkills();updateMeters();
-      // set attribute values to show
-      ATTRS.forEach(a=>document.getElementById('attr_'+a).textContent = state.attrs[a]);
-      // set inputs for HP/SAN/ADR
-      document.getElementById('hpCurrent').value = state.hpCurrent;document.getElementById('hpMax').value = state.hpMax;
-      document.getElementById('sanCurrent').value = state.sanCurrent;document.getElementById('sanMax').value = state.sanMax;
-      document.getElementById('adrCurrent').value = state.adrCurrent;document.getElementById('adrMax').value = state.adrMax;
-    }
+      syncAll();
+    });
 
-const maxAdrenalina = 4;
-let adrenalina = 0;
+    /* ---------- SCRIPT DO DIAGRAMA CORPORAL ---------- */
+    document.addEventListener("DOMContentLoaded", () => {
+      const parts = document.querySelectorAll("#body-svg path");
+      const state = { bodyColors: {} };
+      const saved = localStorage.getItem('bodyColors');
+      if (saved) {
+        const savedColors = JSON.parse(saved);
+        parts.forEach(part => {
+          if (savedColors[part.id]) part.setAttribute("fill", savedColors[part.id]);
+          state.bodyColors[part.id] = savedColors[part.id];
+        });
+      }
+      function saveBodyState() { localStorage.setItem('bodyColors', JSON.stringify(state.bodyColors)); }
+      parts.forEach(part => {
+        let current = part.getAttribute("fill") || "#888";
+        part.setAttribute("fill", current); state.bodyColors[part.id] = current;
+        part.addEventListener("click", () => {
+          const currentFill = part.getAttribute("fill");
+          let next;
+          switch (true) {
+            case currentFill === "#888" || currentFill.includes("136, 136, 136"): next = "rgba(255, 255, 0, 0.75)"; break; // amarelo
+            case currentFill.includes("255, 255, 0"): next = "rgba(255, 0, 0, 0.75)"; break; // vermelho
+            case currentFill.includes("255, 0, 0"): next = "#888"; break; // cinza
+            default: next = "#888"; break;
+          }
+          part.setAttribute("fill", next);
+          state.bodyColors[part.id] = next;
+          saveBodyState();
+        });
+        part.style.cursor = "pointer";
+        part.style.transition = "fill 0.3s ease";
+      });
+    });
 
-// Carregar adrenalina do localStorage
-const saved = parseInt(localStorage.getItem('adrenalina'));
-if (!isNaN(saved)) adrenalina = saved;
+    /* ---------- SCRIPT DO INVENTÁRIO ---------- */
+    document.addEventListener("DOMContentLoaded", () => {
+      const inventoryTable = document.getElementById("inventoryTable").querySelector("tbody");
+      const pesoAtualEl = document.getElementById("pesoAtual");
+      const espacoAtualEl = document.getElementById("espacoAtual");
+      const pesoMaxEl = document.getElementById("pesoMax");
+      const espacoMaxEl = document.getElementById("espacoMax");
+      const addItemBtn = document.getElementById("addItemBtn");
+      const mochilaInput = document.getElementById('Mochila');
 
-// Atualiza visual da barra
-function atualizarAdrenalinaBar() {
-  adrenalina = Math.min(Math.max(adrenalina, 0), maxAdrenalina); // garante limites
-  const segmentos = document.querySelectorAll('.adrenalina-bar .segment');
-  segmentos.forEach((seg, i) => {
-    seg.classList.toggle('filled', i < adrenalina);
-  });
-  document.getElementById('adrValue').textContent = adrenalina;
-}
+      let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+      function saveInventory() { localStorage.setItem('inventory', JSON.stringify(inventory)); }
+      
+      function atualizarTotais() {
+        const totalPeso = inventory.reduce((sum, item) => sum + (Number(item.peso)||0), 0);
+        const totalEspaco = inventory.reduce((sum, item) => sum + (Number(item.espaco)||0), 0);
+        pesoAtualEl.textContent = totalPeso.toFixed(1);
+        espacoAtualEl.textContent = totalEspaco;
+        
+        const pesoMaxValor = Number(pesoMaxEl.value) || 0;
+        pesoAtualEl.style.color = (totalPeso > pesoMaxValor && pesoMaxValor > 0) ? 'red' : '';
+        saveInventory();
+      }
 
-// Botões
-document.getElementById('adrMinus').addEventListener('click', () => {
-  adrenalina--;
-  atualizarAdrenalinaBar();
-});
-document.getElementById('adrPlus').addEventListener('click', () => {
-  adrenalina++;
-  atualizarAdrenalinaBar();
-});
+      function criarLinha(item = {nome:'', peso:0, espaco:0}) {
+        const tr = document.createElement("tr");
+        const createCell = (el) => { const td = document.createElement("td"); td.appendChild(el); return td; };
+        
+        const nomeInput = document.createElement("input"); nomeInput.type = "text"; nomeInput.value = item.nome;
+        const pesoInput = document.createElement("input"); pesoInput.type = "number"; pesoInput.min = 0; pesoInput.step = 0.1; pesoInput.value = item.peso; pesoInput.style.width = "60px";
+        const espacoInput = document.createElement("input"); espacoInput.type = "number"; espacoInput.min = 0; espacoInput.value = item.espaco; espacoInput.style.width = "60px";
+        const removeBtn = document.createElement("button"); removeBtn.textContent = "❌"; removeBtn.style.cursor = "pointer";
 
-// Salvar sempre que a barra mudar
-function saveState() {
-  localStorage.setItem('adrenalina', adrenalina);
-}
-window.addEventListener('beforeunload', saveState);
+        [nomeInput, pesoInput, espacoInput].forEach(inp => {
+          inp.addEventListener("input", () => {
+            item.nome = nomeInput.value;
+            item.peso = Number(pesoInput.value) || 0;
+            item.espaco = Number(espacoInput.value) || 0;
+            atualizarTotais();
+          });
+        });
+        removeBtn.addEventListener("click", () => {
+          inventory = inventory.filter(i => i !== item);
+          tr.remove();
+          atualizarTotais();
+        });
+        tr.appendChild(createCell(nomeInput)); tr.appendChild(createCell(pesoInput)); tr.appendChild(createCell(espacoInput)); tr.appendChild(createCell(removeBtn));
+        inventoryTable.appendChild(tr);
+      }
 
-// Atualiza barra após DOM pronto
-document.addEventListener("DOMContentLoaded", () => {
-  atualizarAdrenalinaBar();
-  // aqui você chama init() depois que tudo estiver visível
-  init();
-});
+      function renderInventory() {
+        inventoryTable.innerHTML = "";
+        inventory.forEach(item => criarLinha(item));
+        atualizarTotais();
+      }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const inventoryTable = document.getElementById("inventoryTable").querySelector("tbody");
-  const pesoAtualEl = document.getElementById("pesoAtual");
-  const espacoAtualEl = document.getElementById("espacoAtual");
-  const pesoMaxEl = document.getElementById("pesoMax");
-  const espacoMaxEl = document.getElementById("espacoMax");
-  const addItemBtn = document.getElementById("addItemBtn");
-
-  // Carrega inventário do localStorage
-  let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
-
-  function saveInventory() {
-    localStorage.setItem('inventory', JSON.stringify(inventory));
-  }
-
-  function atualizarTotais() {
-    const totalPeso = inventory.reduce((sum, item) => sum + (Number(item.peso)||0), 0);
-    const totalEspaco = inventory.reduce((sum, item) => sum + (Number(item.espaco)||0), 0);
-    pesoAtualEl.textContent = totalPeso;
-    espacoAtualEl.textContent = totalEspaco;
-    saveInventory();
-  }
-
-  function criarLinha(item = {nome:'', peso:0, espaco:0}) {
-    const tr = document.createElement("tr");
-
-    const nomeInput = document.createElement("input");
-    nomeInput.type = "text";
-    nomeInput.value = item.nome;
-    nomeInput.style.width = "100%";
-
-    const pesoInput = document.createElement("input");
-    pesoInput.type = "number";
-    pesoInput.min = 0;
-    pesoInput.value = item.peso;
-    pesoInput.style.width = "60px";
-
-    const espacoInput = document.createElement("input");
-    espacoInput.type = "number";
-    espacoInput.min = 0;
-    espacoInput.value = item.espaco;
-    espacoInput.style.width = "60px";
-
-    const removeBtn = document.createElement("button");
-    removeBtn.textContent = "❌";
-    removeBtn.style.cursor = "pointer";
-
-    // Atualiza objeto e totais ao mudar
-    [nomeInput, pesoInput, espacoInput].forEach(inp => {
-      inp.addEventListener("input", () => {
-        item.nome = nomeInput.value;
-        item.peso = Number(pesoInput.value) || 0;
-        item.espaco = Number(espacoInput.value) || 0;
+      addItemBtn.addEventListener("click", () => {
+        const newItem = {nome:'', peso:0, espaco:1};
+        inventory.push(newItem);
+        criarLinha(newItem);
         atualizarTotais();
       });
+
+      // Lógica da Mochila
+      function atualizarEspacoMax() {
+        const mochila = parseInt(mochilaInput.value) || 0;
+        espacoMaxEl.value = mochila + 4;
+        saveInventory(); // Salva para manter o valor da mochila
+      }
+      mochilaInput.addEventListener('input', atualizarEspacoMax);
+
+      // Listener para o pesoMax (necessário para o cálculo automático de FOR)
+      pesoMaxEl.addEventListener("input", () => {
+          atualizarTotais();
+          saveInventory();
+      });
+
+      // Inicialização
+      atualizarEspacoMax();
+      renderInventory();
     });
 
-    removeBtn.addEventListener("click", () => {
-      inventory = inventory.filter(i => i !== item);
-      tr.remove();
-      atualizarTotais();
+    /* ---------- SCRIPT DAS HABILIDADES (NOVO) ---------- */
+    document.addEventListener("DOMContentLoaded", () => {
+        const habilidadesTable = document.getElementById("habilidadesTable").querySelector("tbody");
+        const addHabilidadeBtn = document.getElementById("addHabilidadeBtn");
+
+        let habilidades = JSON.parse(localStorage.getItem('habilidades')) || [];
+        function saveHabilidades() { localStorage.setItem('habilidades', JSON.stringify(habilidades)); }
+
+        function criarLinhaHabilidade(habilidade = { nome: '', efeito: '', custo: '' }) {
+            const tr = document.createElement("tr");
+            const createCell = (el) => { const td = document.createElement("td"); td.appendChild(el); return td; };
+
+            const nomeInput = document.createElement("textarea"); nomeInput.value = habilidade.nome; nomeInput.rows = 1;
+            const efeitoInput = document.createElement("textarea"); efeitoInput.value = habilidade.efeito; efeitoInput.rows = 1;
+            const custoInput = document.createElement("textarea"); custoInput.value = habilidade.custo; custoInput.rows = 1;
+            
+            const removeBtn = document.createElement("button"); removeBtn.textContent = "❌"; removeBtn.style.cursor = "pointer";
+
+            // Auto-resize textareas
+            [nomeInput, efeitoInput, custoInput].forEach(textarea => {
+              textarea.style.resize = "none";
+              textarea.style.overflow = "hidden";
+              const resizeTextarea = () => {
+                textarea.style.height = 'auto';
+                textarea.style.height = textarea.scrollHeight + 'px';
+              };
+              textarea.addEventListener('input', resizeTextarea);
+              setTimeout(resizeTextarea, 0); // Ajusta no carregamento
+            });
+            
+            [nomeInput, efeitoInput, custoInput].forEach(inp => {
+                inp.addEventListener("input", () => {
+                    habilidade.nome = nomeInput.value;
+                    habilidade.efeito = efeitoInput.value;
+                    habilidade.custo = custoInput.value;
+                    saveHabilidades();
+                });
+            });
+
+            removeBtn.addEventListener("click", () => {
+                habilidades = habilidades.filter(h => h !== habilidade);
+                tr.remove();
+                saveHabilidades();
+            });
+
+            tr.appendChild(createCell(nomeInput));
+            tr.appendChild(createCell(efeitoInput));
+            tr.appendChild(createCell(custoInput));
+            tr.appendChild(createCell(removeBtn));
+            habilidadesTable.appendChild(tr);
+        }
+
+        function renderHabilidades() {
+            habilidadesTable.innerHTML = "";
+            habilidades.forEach(h => criarLinhaHabilidade(h));
+        }
+
+        addHabilidadeBtn.addEventListener("click", () => {
+            const novaHabilidade = { nome: '', efeito: '', custo: '' };
+            habilidades.push(novaHabilidade);
+            criarLinhaHabilidade(novaHabilidade);
+            saveHabilidades();
+        });
+
+        renderHabilidades();
     });
-
-    tr.appendChild(createTd(nomeInput));
-    tr.appendChild(createTd(pesoInput));
-    tr.appendChild(createTd(espacoInput));
-    tr.appendChild(createTd(removeBtn));
-
-    inventoryTable.appendChild(tr);
-  }
-
-  function createTd(el) {
-    const td = document.createElement("td");
-    td.appendChild(el);
-    return td;
-  }
-
-  function renderInventory() {
-    inventoryTable.innerHTML = "";
-    inventory.forEach(item => criarLinha(item));
-    atualizarTotais();
-  }
-
-  addItemBtn.addEventListener("click", () => {
-    const newItem = {nome:'', peso:0, espaco:1};
-    inventory.push(newItem);
-    criarLinha(newItem);
-    atualizarTotais();
-  });
-
-  // Atualiza máximos e salva
-  pesoMaxEl.addEventListener("input", () => saveInventory());
-  espacoMaxEl.addEventListener("input", () => saveInventory());
-
-  renderInventory();
-});
-
   </script>
 </body>
 </html>
