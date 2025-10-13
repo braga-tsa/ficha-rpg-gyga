@@ -31,14 +31,15 @@
     input[type=text],input[type=number],select,textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text);font-size:15px;}
     textarea{min-height:40px;resize:vertical;}
     .small{max-width:160px}
-    .attributes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .attributes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
     .attr{padding:10px;background:rgba(255,255,255,0.02);border-radius:6px;text-align:center}
     .attr h3{margin:0;font-size:14px;color:var(--accent)}
     .attr .val{font-size:20px;margin-top:6px}
     button{background:var(--accent);border:none;color:#0b0b0b;padding:8px 10px;border-radius:6px;cursor:pointer; font-weight: bold;}
     button.ghost{background:transparent;border:1px solid rgba(181,143,18,0.12);color:var(--text)}
     .bars{display:flex;gap:12px}
-    .bar{flex:1;padding:8px;border-radius:6px;background:linear-gradient(90deg, rgba(255,255,255,0.01), transparent);}
+    /* CORREÇÃO APLICADA: o display flex é aplicado em .bars, mas .bar deve ter comportamento de bloco para empilhar label e meter */
+    .bar{flex:1;padding:8px;border-radius:6px;background:linear-gradient(90deg, rgba(255,255,255,0.01), transparent);} 
     .meter{height:18px;background:var(--muted);border-radius:8px;overflow:hidden;margin-top:8px}
     .meter > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#ffd24d);width:0%}
     .controls {
@@ -71,6 +72,11 @@
     .adrenalina-bar .segment{ flex:1; border:2px solid #FFD700; border-radius:8px; height:100%; background:transparent; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); transition: background .15s, border-color .15s; }
     .adrenalina-bar .segment.filled{ background:#FFD700; border-color:#e6be00; }
     .adrenalina-controls { display: flex; align-items: center; gap: 8px; margin-top: 19px; }
+    
+    /* CORREÇÃO 2: Adiciona transição suave na cor do SVG */
+    #body-svg path {
+        transition: fill 0.3s ease;
+    }
 
     /* --- ESTILOS DAS ABAS --- */
     .tab-nav {
@@ -119,12 +125,64 @@
         grid-column: span 1;
       }
     }
+    /* --- NOVOS ESTILOS PARA O INDEX --- */
+    .index-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        text-align: center;
+        background: var(--panel);
+        border-radius: 8px;
+    }
+    .sheet-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 20px;
+        text-align: left;
+    }
+    .sheet-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        margin-bottom: 8px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 6px;
+    }
+    .sheet-name-link {
+        color: var(--text);
+        text-decoration: none;
+        flex-grow: 1;
+        cursor: pointer;
+        padding-right: 10px;
+    }
+    .sheet-delete-btn {
+        background: var(--danger);
+        color: white;
+        padding: 6px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .sheet-delete-btn:hover { background: #c0392b; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Ficha de Personagem — Cordyceps Protocol</h1>
+  <div id="indexPage" class="index-container" style="display:none;">
+      <h1>Selecione sua Ficha</h1>
+      <button id="createSheetBtn" style="margin-bottom: 20px; padding: 10px 20px;">Criar Nova Ficha</button>
+      <h2>Fichas Salvas:</h2>
+      <ul id="sheetList" class="sheet-list">
+          </ul>
+  </div>
+
+  <div id="fichaContent" style="display:none;">
+    <div class="container">
+      
+      <button id="backToIndexBtn" class="ghost" style="margin-bottom: 16px; padding: 6px 10px;">&larr; Voltar ao Índice</button>
+
+      <h1>Ficha de Personagem — Cordyceps Protocol</h1>
 
     <div class="tab-nav">
       <button class="tab-btn active" data-tab="tabStatus">Status</button>
@@ -204,24 +262,24 @@
                   </div>
                 </div>
 
-                <div class="bar">
+            <div class="bar" id="adrenalinaBarContainer">
                   <div class="label">Adrenalina</div>
                   <div class="adrenalina-container">
                     <div class="adrenalina-bar">
-                      <div class="segment"></div><div class="segment"></div><div class="segment"></div><div class="segment"></div>
-                    </div>
-                    <div class="adrenalina-controls">
-                      <button id="adrMinus">-</button>
-                      <span id="adrValue">1</span>
-                      <button id="adrPlus">+</button>
-                    </div>
-                  </div>
-                  <input id="adrCurrent" type="hidden" value="1"/><input id="adrMax" type="hidden" value="4"/>
+                       <div class="segment"></div><div class="segment"></div><div class="segment"></div><div class="segment"></div>
+                   </div>
+                   <div class="adrenalina-controls">
+                       <button id="adrMinus">-</button>
+                       <span id="adrValue">0</span>
+                       <button id="adrPlus">+</button>
+                     </div>
+                   </div>
+                  <input id="adrCurrent" type="hidden" value="0"/><input id="adrMax" type="hidden" value="4"/>
                 </div>
               </div>
 
               <div style="display:flex; gap:16px; margin-top:12px;">
-                <div id="body-diagram" style="height:270px; flex:1; display:flex; justify-content:flex-start; padding-left: 42px;">
+                <div id="body-diagram" style="height:270px; flex:1; display:none; justify-content:flex-start; padding-left: 42px;">
                    <svg id="body-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 2800" style="height:100%; width:auto;">
                     <g fill="#888">
                       <path id="head" d="M850.54 3.71c-286.42,0.77 -170.63,475.91 -2.26,470.04 176.41,-6.13 269.57,-470.77 2.26,-470.04z"/>
@@ -229,7 +287,7 @@
                       <path id="left-arm" d="M1136.68 831.22c-42.92,168.46 54.68,382.71 85.95,549.57 2.66,14.47 2.83,26.64 0.54,41.13 -4.83,25.14 -12.58,46.86 -18.15,72.59 -5.26,24.22 -12.97,46.02 -10.96,76.14 0.82,12.18 3.51,22.72 11.29,21.08 11.91,-2.52 24.75,-58.23 25.6,-68.42 0.36,-4.54 5.65,-3.61 9.63,-3.61 1.91,0 3.47,1.55 3.47,3.47 0,6.93 -7.88,47.37 -9.79,56.31 -3.23,15.23 -32.99,73.54 -36.7,82.34 -9.46,22.91 3.09,34.25 18.4,16.72 20.56,-23.54 26.72,-40.67 43.68,-65.47 14.98,-22.01 26.99,-44.79 31.36,-71.91 5.61,-34.37 9.5,-83.92 9.81,-118.24 0,-97.27 -8.45,-189.01 -14.85,-287.63 -5.75,-88.61 -25.67,-168.82 -29.78,-266.74 -2.81,-66.88 -13.15,-184.51 -12.99,-193.43 0.19,-10.8 -7.55,-16.29 -16.55,-7.18 -67.55,67.93 -69.39,79.77 -89.96,163.28z"/>
                       <path id="right-arm" d="M470.76 1385.48c31.99,-170.66 131.82,-389.81 87.92,-562.12 -21.04,-85.42 -22.92,-97.53 -92.02,-167.02 -9.21,-9.31 -17.13,-3.7 -16.93,7.35 0.16,9.12 -10.41,129.44 -13.29,197.86 -4.2,100.15 -24.58,182.19 -30.46,272.83 -6.54,100.87 -15.18,194.71 -15.18,294.2 0.32,35.1 4.29,85.79 10.03,120.94 4.46,27.74 16.75,51.04 32.08,73.55 17.34,25.37 23.65,42.9 44.68,66.97 15.66,17.93 28.49,6.34 18.81,-17.1 -3.79,-9 -34.24,-68.64 -37.53,-84.22 -1.96,-9.15 -10.02,-50.51 -10.02,-57.6 0,-1.96 1.59,-3.55 3.55,-3.55 4.07,0 9.48,-0.94 9.85,3.7 0.87,10.42 14,67.4 26.19,69.98 7.95,1.67 10.71,-9.11 11.54,-21.56 2.06,-30.81 -5.83,-53.11 -11.2,-77.88 -5.71,-26.32 -13.63,-48.54 -18.58,-74.25 -2.34,-14.83 -2.16,-27.27 0.56,-42.08z"/>
                       <path id="left-leg" d="M872.67 1544.43c0,9.41 30.97,314.66 41.97,384.88 1.31,8.36 11.27,50.77 16.45,76.8 7.92,39.81 -7,141.5 -10.02,207.52 -3.5,76.52 10.68,174.09 12.35,261.94 0.89,46.72 -6.58,86.72 -6.25,137.04 0.14,23.6 -6.78,34.09 -7.05,58.91 -0.57,41.88 62.01,34.99 90.24,34.99 10.62,-0.15 50.54,-2.78 53.76,-14.17 4.91,-17.53 -22.37,-35.86 -31.86,-54.65 -34.23,-67.94 -16.28,-148.64 -3.6,-220.04 0,-0.06 0.02,-0.12 0.04,-0.18 16.48,-57.06 36.57,-128.8 46,-186.53 14.91,-91.12 -1.25,-183.87 -1.93,-275.18 -1.43,-78.78 23.99,-190.27 25.65,-277.13 0.32,-47.63 0,-94.14 0,-140.74 0.01,-2.82 -6.3,-1.89 -8.01,-1.71 -83.9,8.95 -131.68,10.6 -216.38,6.95 -0.65,-0.06 -1.36,0.59 -1.36,1.3z"/>
-                      <path id="right-leg" d="M820.47 1537.12c-85.58,3.69 -133.86,2.01 -218.63,-7.02 -1.73,-0.19 -8.1,-1.13 -8.09,1.72 0,47.09 -0.32,94.08 0,142.21 1.67,87.76 27.36,200.41 25.91,280.01 -0.68,92.26 -17.01,185.97 -1.95,278.03 9.53,58.34 29.83,130.83 46.48,188.48 0.03,0.06 0.04,0.12 0.04,0.18 12.81,72.14 30.95,153.68 -3.63,222.32 -9.59,18.99 -37.16,37.51 -32.19,55.22 3.24,11.52 43.58,14.18 54.32,14.33 28.52,0 91.75,6.95 91.18,-35.36 -0.29,-25.08 -7.27,-35.68 -7.13,-59.52 0.34,-50.85 -7.22,-91.26 -6.32,-138.47 1.69,-88.76 16.02,-187.34 12.48,-264.66 -3.05,-66.71 -18.13,-169.45 -10.12,-209.68 5.23,-26.3 15.29,-69.15 16.62,-77.6 11.11,-70.95 42.41,-379.37 42.41,-388.87 0,-0.73 -0.72,-1.38 -1.38,-1.32z"/>
+                      <path id="right-leg" d="M820.47 1537.12c-85.58,3.69 -133.86,2.01 -218.63,-7.02 -1.73,-0.19 -8.1,-1.13 -8.09,1.72 0,47.09 -0.32,94.08 0,142.21 1.69,88.76 27.36,200.41 25.91,280.01 -0.68,92.26 -17.01,185.97 -1.95,278.03 9.53,58.34 29.83,130.83 46.48,188.48 0.03,0.06 0.04,0.12 0.04,0.18 12.81,72.14 30.95,153.68 -3.63,222.32 -9.59,18.99 -37.16,37.51 -32.19,55.22 3.24,11.52 43.58,14.18 54.32,14.33 28.52,0 91.75,6.95 91.18,-35.36 -0.29,-25.08 -7.27,-35.68 -7.13,-59.52 0.34,-50.85 -7.22,-91.26 -6.32,-138.47 1.69,-88.76 16.02,-187.34 12.48,-264.66 -3.05,-66.71 -18.13,-169.45 -10.12,-209.68 5.23,-26.3 15.29,-69.15 16.62,-77.6 11.11,-70.95 42.41,-379.37 42.41,-388.87 0,-0.73 -0.72,-1.38 -1.38,-1.32z"/>
                     </g>
                   </svg>
                 </div>
@@ -251,7 +309,7 @@
                         </div>
                         <div>
                           <label><strong>Mochila:</strong></label>
-                          <input type="number" id="Mochila" style="width:35px; text-align: center;" min="0" value="8">
+                          <input type="number" id="Mochila" style="width:35px; text-align: center;" min="0" value="0">
                         </div>
                       </div>
                       <table id="inventoryTable" style="width:125%;margin-top:8px;">
@@ -354,54 +412,220 @@
 
     <div class="footer">Ficha salva automaticamente no armazenamento local do navegador.</div>
   </div>
+</div>
 
 
   <script>
     /* ---------- DATA (SEM MUDANÇAS) ---------- */
-    const ATTRS = ['FOR','CON','TAM','DES','APA','INT','MEN','SOR'];
+    // ATUALIZADO: Adiciona COH
+    const ATTRS = ['FOR','CON','TAM','DES','APA','INT','MEN','COH','SOR'];
     const SKILLS = [['Acrobacia',4],['Antropologia',1],['Armas (Pistolas)',4],['Armas (Rifles/Espingardas)',5],['Armas (Arcos/Bestas)',3],['Arqueologia',1],['Arremessar',4],['Arte e Ofício',1],['Avaliação',1],['Cavalgar',1],['Charme',3],['Chaveiro',1],['Ciência (Biologia)',1],['Ciência (Forense)',1],['Ciência (Farmácia)',1],['Ciência (Química)',1],['Conhecimento',1],['Consertos Elétricos',2],['Consertos Mecânicos',2],['Contabilidade',1],['Demolições',1],['Direito',1],['Dirigir',4],['Disfarce',1],['Eletrônica',1],['Encontrar',5],['Escutar',4],['Esquivar',0],['Furtividade',4],['Hipnose',1],['História',1],['Intimidação',3],['Lábia',1],['Leitura Labial',1],['Língua (Nativa)',0],['Língua (Outra)',1],['Lutar (Brigar)',5],['Medicina',1],['Mergulho',1],['Mundo Natural',2],['Natação',2],['Navegação',2],['Ocultismo',2],['Operar Maquinário',1],['Persuasão',2],['Pilotar (Aeronave)',1],['Pilotar (Barco)',1],['Prestidigitação',2],['Primeiros Socorros',6],['Psicanálise',1],['Psicologia',2],['Rastrear',2],['Sobrevivência',2],['Treinar Animais',1],['Usar Bibliotecas',4],['Usar Computadores',4]];
     const THRESHOLDS = {1:{N:20,B:null,E:null},2:{N:19,B:20,E:null},3:{N:18,B:20,E:null},4:{N:17,B:19,E:null},5:{N:16,B:19,E:20},6:{N:15,B:18,E:20},7:{N:14,B:18,E:20},8:{N:13,B:17,E:20},9:{N:12,B:17,E:20},10:{N:11,B:16,E:19},11:{N:10,B:16,E:19},12:{N:9,B:15,E:19},13:{N:8,B:15,E:19},14:{N:7,B:14,E:19},15:{N:6,B:14,E:18},16:{N:5,B:13,E:18},17:{N:4,B:13,E:18},18:{N:3,B:12,E:18},19:{N:2,B:12,E:18},20:{N:1,B:11,E:18}};
 
-    /* ---------- UTILITIES ---------- */
+ /* ---------- UTILITIES (MODIFICADO PARA MÚLTIPLAS FICHAS) ---------- */
     function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
     function rollDice(n,sides){let out=[];for(let i=0;i<n;i++)out.push(randInt(1,sides));return out}
-    function saveState(){localStorage.setItem('ficha_cp',JSON.stringify(state))}
-    function loadState(){try{return JSON.parse(localStorage.getItem('ficha_cp'))||{}}catch(e){return {}}}
     function escapeId(s){return s.replace(/[^a-z0-9]/gi,'_')}
+    
+    const SHEET_LIST_KEY = 'cp_sheet_list';
+    const SHEET_PREFIX = 'cp_sheet_';
+    let currentSheetId = null; 
+    let state = {}; 
+    
+    function saveState(){
+        if(currentSheetId) {
+            localStorage.setItem(SHEET_PREFIX + currentSheetId, JSON.stringify(state));
+        }
+    }
+    
+    function loadState(id){
+        try{
+            const data = JSON.parse(localStorage.getItem(SHEET_PREFIX + id))||{};
+            
+            // INICIALIZAÇÃO GARANTIDA DE TODOS OS CAMPOS (CORRIGIDO)
+            if(!data.attrs) data.attrs = {FOR:10,CON:10,TAM:13,DES:10,APA:10,INT:10,MEN:10,COH:10,SOR:10};
+            if(!data.skills) data.skills = {}; // Garante que state.skills exista
+            if(!data.details) data.details = {}; // Garante que data.details exista
+            if(!data.info) data.info = {}; // Garante que data.info exista
+            if(data.hpMax===undefined) data.hpMax = Math.floor((data.attrs.CON + data.attrs.TAM)/2);
+            if(data.hpCurrent===undefined) data.hpCurrent = data.hpMax;
+            if(data.sanMax===undefined) data.sanMax = data.attrs.MEN * 5;
+            if(data.sanCurrent===undefined) data.sanCurrent = data.sanMax;
+            if(data.adrCurrent===undefined) data.adrCurrent = 0;
+            if (data.isAdrenalineVisible === undefined) data.isAdrenalineVisible = false;
+            if (data.isBodyDiagramVisible === undefined) data.isBodyDiagramVisible = false;
+            
+            // CORREÇÃO ESSENCIAL: Inicializa valores das perícias
+            SKILLS.forEach(([name,base])=>{ 
+                 if(data.skills[name]===undefined) data.skills[name]=base; 
+            });
+            
+            return data;
+        }catch(e){
+            return {};
+        }
+    }
 
-    /* ---------- STATE (MODIFICADO) ---------- */
-    let state = loadState();
-    if(!state.attrs) state.attrs = {FOR:10,CON:10,TAM:13,DES:10,APA:10,INT:10,MEN:10,SOR:10};
-    if(!state.skills) state.skills = {};
-    if(!state.details) state.details = {};
-    if(!state.info) state.info = {}; // <-- NOVO: Adiciona o objeto 'info' para a nova aba
-    if(state.hpMax===undefined) state.hpMax = Math.floor((state.attrs.CON + state.attrs.TAM)/2);
-    if(state.hpCurrent===undefined) state.hpCurrent = state.hpMax;
-    if(state.sanMax===undefined) state.sanMax = state.attrs.MEN * 5;
-    if(state.sanCurrent===undefined) state.sanCurrent = state.sanMax;
-    if(state.adrCurrent===undefined) state.adrCurrent = 1;
-
-    /* ---------- SCRIPT PRINCIPAL (MODIFICADO) ---------- */
+    /* ---------- SCRIPT PRINCIPAL (REESTRUTURADO) ---------- */
     document.addEventListener("DOMContentLoaded", () => {
         
-      /* --- LÓGICA DAS ABAS --- */
-      const tabButtons = document.querySelectorAll(".tab-btn");
-      const tabContents = document.querySelectorAll(".tab-content");
+      const indexPageEl = document.getElementById('indexPage');
+      const fichaContentEl = document.getElementById('fichaContent');
+      const sheetListEl = document.getElementById('sheetList');
+      const createSheetBtn = document.getElementById('createSheetBtn');
+      const backToIndexBtn = document.getElementById('backToIndexBtn');
+      const nomePersonagemInput = document.getElementById('nomePersonagem');
 
-      tabButtons.forEach(button => {
-        button.addEventListener("click", () => {
-          // Remove 'active' de todos
-          tabButtons.forEach(btn => btn.classList.remove("active"));
-          tabContents.forEach(content => content.classList.remove("active"));
+      // --- Variáveis Globais de Estado ---
+      let inventory = [];
+      let habilidades = [];
+      let bodyColors = {};
+
+      // Função para alternar entre as visualizações
+      function showPage(pageId) {
+          indexPageEl.style.display = pageId === 'index' ? 'block' : 'none';
+          fichaContentEl.style.display = pageId === 'ficha' ? 'block' : 'none';
+      }
+      
+      // ----------------------------------------------------
+      // LÓGICA DE GERENCIAMENTO DE FICHAS (INDEX)
+      // ----------------------------------------------------
+
+      function getSheetList() {
+          try {
+              return JSON.parse(localStorage.getItem(SHEET_LIST_KEY)) || [];
+          } catch (e) {
+              return [];
+          }
+      }
+
+      function saveSheetList(list) {
+          localStorage.setItem(SHEET_LIST_KEY, JSON.stringify(list));
+      }
+      
+      function renderIndex() {
+          const list = getSheetList();
+          sheetListEl.innerHTML = '';
           
-          // Adiciona 'active' ao clicado
-          button.classList.add("active");
-          document.getElementById(button.dataset.tab).classList.add("active");
-        });
-      });
+          if (list.length === 0) {
+              sheetListEl.innerHTML = '<li style="justify-content:center; color: var(--muted);">Nenhuma ficha salva. Crie uma nova!</li>';
+          } else {
+              list.forEach(sheet => {
+                  const li = document.createElement('li');
+                  
+                  const nameLink = document.createElement('a');
+                  nameLink.className = 'sheet-name-link';
+                  nameLink.textContent = sheet.name || 'Personagem Sem Nome';
+                  nameLink.addEventListener('click', () => loadSheet(sheet.id));
+                  
+                  const deleteBtn = document.createElement('button');
+                  deleteBtn.className = 'sheet-delete-btn';
+                  deleteBtn.textContent = 'Deletar';
+                  deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Previne que o clique no link de nome seja ativado
+                    deleteSheet(sheet.id, sheet.name);
+                  });
+                  
+                  li.appendChild(nameLink);
+                  li.appendChild(deleteBtn);
+                  sheetListEl.appendChild(li);
+              });
+          }
+          showPage('index'); // <-- CORREÇÃO: Garante que o índice fique visível
+      }
 
-      /* --- LÓGICA DA FICHA (adaptada) --- */
+      function createNewSheet() {
+          const newId = 'sheet-' + Date.now();
+          const list = getSheetList();
+          
+          list.push({ id: newId, name: 'Novo Personagem' });
+          saveSheetList(list);
+          
+          // Zera o estado para a nova ficha (o loadState cuida da inicialização)
+          loadSheet(newId);
+      }
+
+      function deleteSheet(id, name) {
+          if (confirm(`Tem certeza que deseja deletar a ficha de "${name}"? Esta ação é irreversível.`)) {
+              // 1. Remove do localStorage
+              localStorage.removeItem(SHEET_PREFIX + id);
+              localStorage.removeItem(SHEET_PREFIX + id + '_inventory');
+              localStorage.removeItem(SHEET_PREFIX + id + '_habilidades');
+              localStorage.removeItem(SHEET_PREFIX + id + '_bodyColors');
+              
+              // 2. Remove da lista de fichas
+              let list = getSheetList();
+              list = list.filter(sheet => sheet.id !== id);
+              saveSheetList(list);
+              
+              // 3. Redireciona para o índice
+              if (currentSheetId === id) {
+                  currentSheetId = null;
+              }
+              renderIndex();
+          }
+      }
+
+      // ----------------------------------------------------
+      // FUNÇÕES AUXILIARES DE SALVAMENTO PARA SUB-SESSÕES
+      // ----------------------------------------------------
+
+      function saveInventory() { 
+          if(currentSheetId) localStorage.setItem(SHEET_PREFIX + currentSheetId + '_inventory', JSON.stringify(inventory)); 
+      }
+      function saveHabilidades() { 
+          if(currentSheetId) localStorage.setItem(SHEET_PREFIX + currentSheetId + '_habilidades', JSON.stringify(habilidades)); 
+      }
+      function saveBodyState() { 
+          if(currentSheetId) localStorage.setItem(SHEET_PREFIX + currentSheetId + '_bodyColors', JSON.stringify(bodyColors)); 
+      }
+
+      // ----------------------------------------------------
+      // LÓGICA DE CARREGAMENTO (FICHA)
+      // ----------------------------------------------------
+
+      function loadSheet(id) {
+          currentSheetId = id;
+          localStorage.setItem('cp_last_sheet_id', id);
+          
+          // 1. Carrega o estado principal
+          state = loadState(id);
+          
+          // 2. Carrega estados secundários
+          inventory = JSON.parse(localStorage.getItem(SHEET_PREFIX + currentSheetId + '_inventory')) || [];
+          habilidades = JSON.parse(localStorage.getItem(SHEET_PREFIX + currentSheetId + '_habilidades')) || [];
+          bodyColors = JSON.parse(localStorage.getItem(SHEET_PREFIX + currentSheetId + '_bodyColors')) || {};
+          
+          // 3. Renderiza TUDO
+          syncAll();
+          
+          // 4. Aplica estado de visibilidade
+          const bodyDiagram = document.getElementById('body-diagram');
+          if (bodyDiagram) bodyDiagram.style.display = state.isBodyDiagramVisible ? 'flex' : 'none';
+          const adrenalinaBarContainer = document.getElementById('adrenalinaBarContainer'); 
+          if (adrenalinaBarContainer) adrenalinaBarContainer.style.display = state.isAdrenalineVisible ? 'block' : 'none';
+
+          // 5. Exibe a ficha
+          showPage('ficha');
+      }
+
+      // Função para atualizar o nome na lista de fichas
+      function updateSheetName() {
+          if (!nomePersonagemInput || !currentSheetId) return;
+          
+          const newName = nomePersonagemInput.value || 'Personagem Sem Nome';
+          const list = getSheetList();
+          const sheet = list.find(s => s.id === currentSheetId);
+          
+          if (sheet) {
+              sheet.name = newName;
+              saveSheetList(list);
+          }
+      }
+
+      // --- LÓGICA DA FICHA (Mantida e Adaptada) ---
       function renderAttributes() {
+        // ... (CÓDIGO EXISTENTE DE renderAttributes) ...
         const container = document.getElementById('attributes');
         container.innerHTML = '';
         ATTRS.forEach(a => {
@@ -432,6 +656,7 @@
       }
 
       function recalcHPandSAN(){
+          // ... (CÓDIGO EXISTENTE DE recalcHPandSAN) ...
           state.hpMax = Math.floor((Number(state.attrs.CON||0) + Number(state.attrs.TAM||0))/2);
           if(state.hpCurrent > state.hpMax) state.hpCurrent = state.hpMax;
           state.sanMax = (Number(state.attrs.MEN)||0)*5;
@@ -442,7 +667,7 @@
               const forca = Number(state.attrs.FOR) || 0;
               const pesoMaxCalculado = 11 + Math.floor(forca / 2);
               pesoMaxEl.value = pesoMaxCalculado;
-              pesoMaxEl.dispatchEvent(new Event('input', { bubbles: true }));
+              // Não dispara evento aqui, apenas atualiza o valor.
           }
           
           document.getElementById('hpMax').value = state.hpMax;
@@ -454,6 +679,7 @@
       }
 
       function updateMeters(){
+          // ... (CÓDIGO EXISTENTE DE updateMeters) ...
           const hpPct = state.hpMax? Math.max(0,Math.min(100,Math.round(state.hpCurrent/state.hpMax*100))):0;
           const sanPct = state.sanMax? Math.max(0,Math.min(100,Math.round(state.sanCurrent/state.sanMax*100))):0;
           document.getElementById('hpMeter').style.width = hpPct + '%';
@@ -468,6 +694,7 @@
       }
 
       function renderSkills(){
+        // ... (CÓDIGO EXISTENTE DE renderSkills) ...
         const tbody = document.querySelector('#skillsTable tbody');
         tbody.innerHTML='';
         SKILLS.forEach(([name,base])=>{
@@ -491,6 +718,7 @@
       }
 
       function rollSkill(name){
+          // ... (CÓDIGO EXISTENTE DE rollSkill) ...
           const val = state.skills[name] ?? SKILLS.find(s=>s[0]===name)[1] ?? 0;
           const roll = randInt(1,20);
           const th = THRESHOLDS[Math.max(1,Math.min(20,Math.floor(val)))] || {N:21,B:null,E:null};
@@ -503,71 +731,27 @@
           el.innerHTML = `<strong>${outcome.type}</strong> — ${outcome.detail}`;
           el.style.color = outcome.type==='Falha'? 'var(--muted)': outcome.type==='Normal'?'#ffffff': outcome.type==='Bom'?'#ffd24d':'#9ef39e';
       }
-
-      function syncAll(){
-          renderAttributes();
-          renderSkills();
-          updateMeters();
-          saveState();
-      }
-
-      // --- LISTENERS DE CONTROLES (HP, SAN, ADR) ---
-      document.getElementById('hpMinus').addEventListener('click',()=>{state.hpCurrent=Math.max(0,Number(state.hpCurrent)-1);syncAll();});
-      document.getElementById('hpPlus').addEventListener('click',()=>{state.hpCurrent=Math.min(state.hpMax,Number(state.hpCurrent)+1);syncAll();});
-      document.getElementById('sanMinus').addEventListener('click',()=>{state.sanCurrent=Math.max(0,Number(state.sanCurrent)-1);syncAll();});
-      document.getElementById('sanPlus').addEventListener('click',()=>{state.sanCurrent=Math.min(state.sanMax,Number(state.sanCurrent)+1);syncAll();});
-      document.getElementById('adrMinus').addEventListener('click',()=>{state.adrCurrent=Math.max(0,Number(state.adrCurrent)-1);syncAll();});
-      document.getElementById('adrPlus').addEventListener('click',()=>{state.adrCurrent=Math.min(4,Number(state.adrCurrent)+1);syncAll();});
-
-      ['hpCurrent','hpMax','sanCurrent','sanMax'].forEach(id=>{
-        const el = document.getElementById(id);
-        el.value = state[id];
-        el.addEventListener('change',e=>{
-          state[id]=Number(e.target.value);
-          if(id==='hpMax' && state.hpCurrent>state.hpMax) state.hpCurrent=state.hpMax; 
-          if(id==='sanMax' && state.sanCurrent>state.sanMax) state.sanCurrent=state.sanMax;
-          syncAll();
-        });
-      });
-
-      // --- LISTENERS PARA CAMPOS DE TEXTO (DETALHES E INFO) ---
-      const detailIds = ['nomePersonagem','nomeJogador','idade','genero','ocupacao','residencia','nascimento'];
-      detailIds.forEach(id=>{
-        const el = document.getElementById(id);
-        el.value = state.details[id] || '';
-        el.addEventListener('input',e=>{state.details[id]=e.target.value;saveState();});
-      });
       
-      const infoIds = ['infoDescricao','infoCaracteristicas','infoIdeologia','infoFerimentos','infoPessoas','infoLocais','infoFobias','infoObjetos', 'infoDinheiro', 'infoPatrimonio'];
-      infoIds.forEach(id=>{
-        const el = document.getElementById(id);
-        el.value = state.info[id] || '';
-        el.addEventListener('input',e=>{state.info[id]=e.target.value;saveState();});
-      });
-
-
-      /* --- INICIALIZAÇÃO --- */
-      SKILLS.forEach(([name,base])=>{ if(state.skills[name]===undefined) state.skills[name]=base; });
-      syncAll();
-    });
-
-    /* ---------- SCRIPT DO DIAGRAMA CORPORAL ---------- */
-    document.addEventListener("DOMContentLoaded", () => {
-      const parts = document.querySelectorAll("#body-svg path");
-      const state = { bodyColors: {} };
-      const saved = localStorage.getItem('bodyColors');
-      if (saved) {
-        const savedColors = JSON.parse(saved);
-        parts.forEach(part => {
-          if (savedColors[part.id]) part.setAttribute("fill", savedColors[part.id]);
-          state.bodyColors[part.id] = savedColors[part.id];
-        });
+      function renderBodyDiagram() {
+          const bodyDiagramContainer = document.getElementById('body-svg');
+          if (!bodyDiagramContainer) return;
+          
+          const parts = bodyDiagramContainer.querySelectorAll("path");
+          
+          parts.forEach(part => {
+              // Aplica a cor salva no bodyColors
+              const savedColor = bodyColors[part.id] || "#888";
+              part.setAttribute("fill", savedColor);
+              // Garante que o estado interno do script do Body Diagram use o novo bodyColors
+              
+              part.removeEventListener("click", handleBodyPartClick);
+              part.addEventListener("click", handleBodyPartClick);
+              part.style.cursor = "pointer";
+          });
       }
-      function saveBodyState() { localStorage.setItem('bodyColors', JSON.stringify(state.bodyColors)); }
-      parts.forEach(part => {
-        let current = part.getAttribute("fill") || "#888";
-        part.setAttribute("fill", current); state.bodyColors[part.id] = current;
-        part.addEventListener("click", () => {
+
+      function handleBodyPartClick(e) {
+          const part = e.currentTarget;
           const currentFill = part.getAttribute("fill");
           let next;
           switch (true) {
@@ -577,16 +761,31 @@
             default: next = "#888"; break;
           }
           part.setAttribute("fill", next);
-          state.bodyColors[part.id] = next;
-          saveBodyState();
-        });
-        part.style.cursor = "pointer";
-        part.style.transition = "fill 0.3s ease";
-      });
-    });
+          bodyColors[part.id] = next; // Salva no estado global local
+          saveBodyState(); // Salva no localStorage com o ID da ficha
+      }
 
-    /* ---------- SCRIPT DO INVENTÁRIO ---------- */
-    document.addEventListener("DOMContentLoaded", () => {
+      // --- CORREÇÃO 3: Renderiza os campos de detalhes e info ao carregar a ficha ---
+      function renderDetailsAndInfo() {
+          const detailIds = ['nomePersonagem','nomeJogador','idade','genero','ocupacao','residencia','nascimento'];
+          detailIds.forEach(id => {
+              const el = document.getElementById(id);
+              if (el) {
+                  el.value = state.details[id] ?? '';
+              }
+          });
+          
+          const infoIds = ['infoDescricao','infoCaracteristicas','infoIdeologia','infoFerimentos','infoPessoas','infoLocais','infoFobias','infoObjetos', 'infoDinheiro', 'infoPatrimonio'];
+          infoIds.forEach(id => {
+              const el = document.getElementById(id);
+              if (el) {
+                  el.value = state.info[id] ?? '';
+              }
+          });
+      }
+      // --- FIM CORREÇÃO 3 ---
+
+      // --- LÓGICA DO INVENTÁRIO (Adaptada) ---
       const inventoryTable = document.getElementById("inventoryTable").querySelector("tbody");
       const pesoAtualEl = document.getElementById("pesoAtual");
       const espacoAtualEl = document.getElementById("espacoAtual");
@@ -594,14 +793,12 @@
       const espacoMaxEl = document.getElementById("espacoMax");
       const addItemBtn = document.getElementById("addItemBtn");
       const mochilaInput = document.getElementById('Mochila');
-
-      let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
-      function saveInventory() { localStorage.setItem('inventory', JSON.stringify(inventory)); }
       
+      // Funções do Inventário (Mantidas e Adaptadas para usar `inventory` e `saveInventory`)
       function atualizarTotais() {
         const totalPeso = inventory.reduce((sum, item) => sum + (Number(item.peso)||0), 0);
         const totalEspaco = inventory.reduce((sum, item) => sum + (Number(item.espaco)||0), 0);
-        pesoAtualEl.textContent = totalPeso.toFixed(1);
+        pesoAtualEl.textContent = totalPeso;
         espacoAtualEl.textContent = totalEspaco;
         
         const pesoMaxValor = Number(pesoMaxEl.value) || 0;
@@ -648,91 +845,205 @@
         atualizarTotais();
       });
 
-      // Lógica da Mochila
       function atualizarEspacoMax() {
         const mochila = parseInt(mochilaInput.value) || 0;
         espacoMaxEl.value = mochila + 4;
-        saveInventory(); // Salva para manter o valor da mochila
+        saveInventory();
       }
       mochilaInput.addEventListener('input', atualizarEspacoMax);
+      pesoMaxEl.addEventListener("input", atualizarTotais);
+      
+      
+      // --- LÓGICA DAS HABILIDADES (Adaptada) ---
+      const habilidadesTable = document.getElementById("habilidadesTable").querySelector("tbody");
+      const addHabilidadeBtn = document.getElementById("addHabilidadeBtn");
 
-      // Listener para o pesoMax (necessário para o cálculo automático de FOR)
-      pesoMaxEl.addEventListener("input", () => {
-          atualizarTotais();
-          saveInventory();
+      function criarLinhaHabilidade(habilidade = { nome: '', efeito: '', custo: '' }) {
+          const tr = document.createElement("tr");
+          const createCell = (el) => { const td = document.createElement("td"); td.appendChild(el); return td; };
+
+          const nomeInput = document.createElement("textarea"); nomeInput.value = habilidade.nome; nomeInput.rows = 1;
+          const efeitoInput = document.createElement("textarea"); efeitoInput.value = habilidade.efeito; efeitoInput.rows = 1;
+          const custoInput = document.createElement("textarea"); custoInput.value = habilidade.custo; custoInput.rows = 1;
+          
+          const removeBtn = document.createElement("button"); removeBtn.textContent = "❌"; removeBtn.style.cursor = "pointer";
+
+          [nomeInput, efeitoInput, custoInput].forEach(textarea => {
+            textarea.style.resize = "none";
+            textarea.style.overflow = "hidden";
+            const resizeTextarea = () => {
+              textarea.style.height = 'auto';
+              textarea.style.height = textarea.scrollHeight + 'px';
+            };
+            textarea.addEventListener('input', resizeTextarea);
+            setTimeout(resizeTextarea, 0);
+          });
+          
+          [nomeInput, efeitoInput, custoInput].forEach(inp => {
+              inp.addEventListener("input", () => {
+                  habilidade.nome = nomeInput.value;
+                  habilidade.efeito = efeitoInput.value;
+                  habilidade.custo = custoInput.value;
+                  saveHabilidades();
+              });
+          });
+
+          removeBtn.addEventListener("click", () => {
+              habilidades = habilidades.filter(h => h !== habilidade);
+              tr.remove();
+              saveHabilidades();
+          });
+
+          tr.appendChild(createCell(nomeInput));
+          tr.appendChild(createCell(efeitoInput));
+          tr.appendChild(createCell(custoInput));
+          tr.appendChild(createCell(removeBtn));
+          habilidadesTable.appendChild(tr);
+      }
+
+      function renderHabilidades() {
+          habilidadesTable.innerHTML = "";
+          habilidades.forEach(h => criarLinhaHabilidade(h));
+      }
+
+      addHabilidadeBtn.addEventListener("click", () => {
+          const novaHabilidade = { nome: '', efeito: '', custo: '' };
+          habilidades.push(novaHabilidade);
+          criarLinhaHabilidade(novaHabilidade);
+          saveHabilidades();
+      });
+      // FIM: LÓGICA DAS HABILIDADES
+
+
+      // Funções de Renderização Total
+      function syncAll(){
+          renderAttributes();
+          renderSkills();
+          updateMeters();
+          renderInventory(); 
+          renderHabilidades();
+          renderBodyDiagram();
+          renderDetailsAndInfo(); // <--- NOVO: Carrega os valores dos campos de Detalhes/Info
+          saveState();
+      }
+
+      // --- LISTENERS DE CONTROLES (HP, SAN, ADR) ---
+      document.getElementById('hpMinus').addEventListener('click',()=>{state.hpCurrent=Math.max(0,Number(state.hpCurrent)-1);syncAll();});
+      document.getElementById('hpPlus').addEventListener('click',()=>{state.hpCurrent=Math.min(state.hpMax,Number(state.hpCurrent)+1);syncAll();});
+      document.getElementById('sanMinus').addEventListener('click',()=>{state.sanCurrent=Math.max(0,Number(state.sanCurrent)-1);syncAll();});
+      document.getElementById('sanPlus').addEventListener('click',()=>{state.sanCurrent=Math.min(state.sanMax,Number(state.sanCurrent)+1);syncAll();});
+      document.getElementById('adrMinus').addEventListener('click',()=>{state.adrCurrent=Math.max(0,Number(state.adrCurrent)-1);syncAll();});
+      document.getElementById('adrPlus').addEventListener('click',()=>{state.adrCurrent=Math.min(4,Number(state.adrCurrent)+1);syncAll();});
+
+      ['hpCurrent','hpMax','sanCurrent','sanMax'].forEach(id=>{
+        const el = document.getElementById(id);
+        // Note: os valores iniciais serão definidos em loadSheet
+        el.addEventListener('change',e=>{
+          state[id]=Number(e.target.value);
+          if(id==='hpMax' && state.hpCurrent>state.hpMax) state.hpCurrent=state.hpMax; 
+          if(id==='sanMax' && state.sanCurrent>state.sanMax) state.sanCurrent=state.sanMax;
+          syncAll();
+        });
       });
 
-      // Inicialização
-      atualizarEspacoMax();
-      renderInventory();
-    });
+      /* --- LÓGICA DE MOSTRAR/ESCONDER POR DUPLO CLIQUE (Corrigido e com Salvamento de Estado) --- */
 
-    /* ---------- SCRIPT DAS HABILIDADES (NOVO) ---------- */
-    document.addEventListener("DOMContentLoaded", () => {
-        const habilidadesTable = document.getElementById("habilidadesTable").querySelector("tbody");
-        const addHabilidadeBtn = document.getElementById("addHabilidadeBtn");
+      // --- Body Diagram (HP) ---
+      const hpLabel = document.querySelector('.bar:first-child .label'); 
+      const bodyDiagram = document.getElementById('body-diagram');
+      
+      if (hpLabel) {
+          hpLabel.style.cursor = 'pointer';
+          hpLabel.addEventListener('dblclick', () => {
+              state.isBodyDiagramVisible = !state.isBodyDiagramVisible; 
+              bodyDiagram.style.display = state.isBodyDiagramVisible ? 'flex' : 'none'; 
+              saveState();
+          });
+      }
 
-        let habilidades = JSON.parse(localStorage.getItem('habilidades')) || [];
-        function saveHabilidades() { localStorage.setItem('habilidades', JSON.stringify(habilidades)); }
 
-        function criarLinhaHabilidade(habilidade = { nome: '', efeito: '', custo: '' }) {
-            const tr = document.createElement("tr");
-            const createCell = (el) => { const td = document.createElement("td"); td.appendChild(el); return td; };
+      // --- Barra de Adrenalina (Título "Barras") ---
+      const h2Bars = document.querySelector('.panel h2');
+      const adrenalinaBarContainer = document.getElementById('adrenalinaBarContainer'); 
 
-            const nomeInput = document.createElement("textarea"); nomeInput.value = habilidade.nome; nomeInput.rows = 1;
-            const efeitoInput = document.createElement("textarea"); efeitoInput.value = habilidade.efeito; efeitoInput.rows = 1;
-            const custoInput = document.createElement("textarea"); custoInput.value = habilidade.custo; custoInput.rows = 1;
-            
-            const removeBtn = document.createElement("button"); removeBtn.textContent = "❌"; removeBtn.style.cursor = "pointer";
+      if (h2Bars && adrenalinaBarContainer) {
+          h2Bars.style.cursor = 'pointer'; 
+          h2Bars.addEventListener('dblclick', (e) => {
+              e.preventDefault(); 
+              state.isAdrenalineVisible = !state.isAdrenalineVisible; 
+              adrenalinaBarContainer.style.display = state.isAdrenalineVisible ? 'block' : 'none'; 
+              saveState();
+          });
+      }
 
-            // Auto-resize textareas
-            [nomeInput, efeitoInput, custoInput].forEach(textarea => {
-              textarea.style.resize = "none";
-              textarea.style.overflow = "hidden";
-              const resizeTextarea = () => {
-                textarea.style.height = 'auto';
-                textarea.style.height = textarea.scrollHeight + 'px';
-              };
-              textarea.addEventListener('input', resizeTextarea);
-              setTimeout(resizeTextarea, 0); // Ajusta no carregamento
-            });
-            
-            [nomeInput, efeitoInput, custoInput].forEach(inp => {
-                inp.addEventListener("input", () => {
-                    habilidade.nome = nomeInput.value;
-                    habilidade.efeito = efeitoInput.value;
-                    habilidade.custo = custoInput.value;
-                    saveHabilidades();
-                });
-            });
+      // --- CORREÇÃO 1: Lógica das Abas ---
+      document.querySelectorAll('.tab-btn').forEach(button => {
+          button.addEventListener('click', () => {
+              const targetTabId = button.dataset.tab;
 
-            removeBtn.addEventListener("click", () => {
-                habilidades = habilidades.filter(h => h !== habilidade);
-                tr.remove();
-                saveHabilidades();
-            });
+              // Remove 'active' class from all buttons and content
+              document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+              document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-            tr.appendChild(createCell(nomeInput));
-            tr.appendChild(createCell(efeitoInput));
-            tr.appendChild(createCell(custoInput));
-            tr.appendChild(createCell(removeBtn));
-            habilidadesTable.appendChild(tr);
-        }
+              // Add 'active' class to the clicked button and its corresponding content
+              button.classList.add('active');
+              document.getElementById(targetTabId).classList.add('active');
+          });
+      });
+      // --- FIM CORREÇÃO 1 ---
 
-        function renderHabilidades() {
-            habilidadesTable.innerHTML = "";
-            habilidades.forEach(h => criarLinhaHabilidade(h));
-        }
 
-        addHabilidadeBtn.addEventListener("click", () => {
-            const novaHabilidade = { nome: '', efeito: '', custo: '' };
-            habilidades.push(novaHabilidade);
-            criarLinhaHabilidade(novaHabilidade);
-            saveHabilidades();
+      // --- LISTENERS PARA CAMPOS DE TEXTO (DETALHES E INFO) ---
+
+      const detailIds = ['nomePersonagem','nomeJogador','idade','genero','ocupacao','residencia','nascimento'];
+      detailIds.forEach(id=>{
+        const el = document.getElementById(id);
+        el.addEventListener('input',e=>{
+            state.details[id]=e.target.value;
+            // ATUALIZA NOME DA FICHA NA LISTA
+            if(id === 'nomePersonagem') updateSheetName();
+            saveState();
         });
+      });
+      
+      const infoIds = ['infoDescricao','infoCaracteristicas','infoIdeologia','infoFerimentos','infoPessoas','infoLocais','infoFobias','infoObjetos', 'infoDinheiro', 'infoPatrimonio'];
+      infoIds.forEach(id=>{
+        const el = document.getElementById(id);
+        el.addEventListener('input',e=>{state.info[id]=e.target.value;saveState();});
+      });
 
-        renderHabilidades();
-    });
+
+      // --- LISTENERS DE NAVEGAÇÃO (FINAL) ---
+      createSheetBtn.addEventListener('click', createNewSheet);
+      backToIndexBtn.addEventListener('click', () => {
+          currentSheetId = null;
+          localStorage.removeItem('cp_last_sheet_id'); // Garante que a última ficha aberta seja limpa
+          renderIndex();
+      });
+
+      /* --- INICIALIZAÇÃO --- */
+      
+      // Função principal de inicialização (Corrigida)
+      function initApp() {
+          const list = getSheetList();
+          const lastSheetId = localStorage.getItem('cp_last_sheet_id');
+          
+          // 1. Tenta carregar a última ficha aberta se ela existir na lista
+          if (lastSheetId && list.some(s => s.id === lastSheetId)) {
+              loadSheet(lastSheetId);
+          } 
+          // 2. Se houver fichas, mas nenhuma "última" salva, carrega a primeira
+          else if (list.length > 0) {
+              loadSheet(list[0].id);
+          } 
+          // 3. Se não houver fichas salvas, mostra a página de índice
+          else {
+              renderIndex(); 
+          }
+      }
+
+      initApp(); // INICIALIZA O APP
+    }); // FIM DO document.addEventListener
   </script>
 </body>
 </html>
