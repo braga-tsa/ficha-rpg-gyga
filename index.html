@@ -309,7 +309,7 @@
                         </div>
                         <div>
                           <label><strong>Mochila:</strong></label>
-                          <input type="number" id="Mochila" style="width:35px; text-align: center;" min="0" value="0">
+                          <input type="number" id="Mochila" style="width:35px; text-align: center;" min="0" value="8">
                         </div>
                       </div>
                       <table id="inventoryTable" style="width:125%;margin-top:8px;">
@@ -452,6 +452,7 @@
             if(data.sanMax===undefined) data.sanMax = data.attrs.MEN * 5;
             if(data.sanCurrent===undefined) data.sanCurrent = data.sanMax;
             if(data.adrCurrent===undefined) data.adrCurrent = 0;
+            if(data.mochila===undefined) data.mochila = 8; // <--- CORREÇÃO: Inicializa o valor da mochila
             if (data.isAdrenalineVisible === undefined) data.isAdrenalineVisible = false;
             if (data.isBodyDiagramVisible === undefined) data.isBodyDiagramVisible = false;
             
@@ -571,6 +572,7 @@
       // ----------------------------------------------------
 
       function saveInventory() { 
+          // O valor da mochila agora é salvo via saveState() em atualizarEspacoMax
           if(currentSheetId) localStorage.setItem(SHEET_PREFIX + currentSheetId + '_inventory', JSON.stringify(inventory)); 
       }
       function saveHabilidades() { 
@@ -835,7 +837,15 @@
       function renderInventory() {
         inventoryTable.innerHTML = "";
         inventory.forEach(item => criarLinha(item));
+        
+        // <--- CORREÇÃO: Carrega o valor da mochila do estado
+        if (mochilaInput) {
+            mochilaInput.value = state.mochila ?? 8; 
+        }
+        // ---> FIM CORREÇÃO
+        
         atualizarTotais();
+        atualizarEspacoMax(); // Garante que o espacoMax seja calculado e atualizado
       }
 
       addItemBtn.addEventListener("click", () => {
@@ -848,7 +858,11 @@
       function atualizarEspacoMax() {
         const mochila = parseInt(mochilaInput.value) || 0;
         espacoMaxEl.value = mochila + 4;
-        saveInventory();
+        
+        // <--- CORREÇÃO: Salva o valor da mochila no estado principal
+        state.mochila = mochila;
+        saveState(); 
+        // ---> FIM CORREÇÃO
       }
       mochilaInput.addEventListener('input', atualizarEspacoMax);
       pesoMaxEl.addEventListener("input", atualizarTotais);
@@ -923,7 +937,7 @@
           renderInventory(); 
           renderHabilidades();
           renderBodyDiagram();
-          renderDetailsAndInfo(); // <--- NOVO: Carrega os valores dos campos de Detalhes/Info
+          renderDetailsAndInfo(); 
           saveState();
       }
 
