@@ -170,14 +170,14 @@
       }
       
       /* Garante que o painel de Inventário fique full-width e não force scroll, resolvendo o min-width: 540px */
-      .row.bottom .col.panel[style*="min-width:540px"] { 
+      .row.bottom .col.panel[style*="min-width:600px"] { 
           min-width: unset !important;
           flex: 1 1 100% !important;
           max-width: 100% !important;
       }
       /* Ajusta o layout interno de Diagrama/Inventário, que usa display:flex; gap:16px; */
       .row.bottom > .col:first-child > div[style*="display:flex;"] {
-          flex-direction: column; /* Empilha Diagrama Corporal e Inventário */
+          flex-direction: column-reverse !important; /* CORREÇÃO 1: Coloca o corpo em cima do inventário */
           gap: 12px;
       }
       /* Garante que as tabelas sejam scrolláveis horizontalmente */
