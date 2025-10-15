@@ -117,15 +117,8 @@
     #tabInfo .info-grid .full-width {
       grid-column: span 2;
     }
-    @media(max-width: 768px) {
-      #tabInfo .info-grid {
-        grid-template-columns: 1fr;
-      }
-      #tabInfo .info-grid .full-width {
-        grid-column: span 1;
-      }
-    }
-    /* --- NOVOS ESTILOS PARA O INDEX --- */
+
+    /* --- ESTILOS PARA O INDEX --- */
     .index-container {
         max-width: 600px;
         margin: 50px auto;
@@ -165,6 +158,128 @@
         cursor: pointer;
     }
     .sheet-delete-btn:hover { background: #c0392b; }
+
+    /* INÍCIO: ESTILOS DE RESPONSIVIDADE (768px) */
+    @media(max-width: 768px) {
+      /* Empilha as colunas de Informações/Antecedentes */
+      #tabInfo .info-grid {
+        grid-template-columns: 1fr;
+      }
+      #tabInfo .info-grid .full-width {
+        grid-column: span 1;
+      }
+      
+      /* Garante que o painel de Inventário fique full-width e não force scroll, resolvendo o min-width: 540px */
+      .row.bottom .col.panel[style*="min-width:540px"] { 
+          min-width: unset !important;
+          flex: 1 1 100% !important;
+          max-width: 100% !important;
+      }
+      /* Ajusta o layout interno de Diagrama/Inventário, que usa display:flex; gap:16px; */
+      .row.bottom > .col:first-child > div[style*="display:flex;"] {
+          flex-direction: column; /* Empilha Diagrama Corporal e Inventário */
+          gap: 12px;
+      }
+      /* Garante que as tabelas sejam scrolláveis horizontalmente */
+      #skillsTable, #habilidadesTable {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+      }
+      /* Aumenta a largura mínima da célula de nome da perícia para melhor leitura */
+      #skillsTable tr td:first-child {
+           min-width: 120px;
+      }
+    }
+
+    /* INÍCIO: ESTILOS DE RESPONSIVIDADE ADICIONAIS (600px - Mobile) */
+    @media (max-width: 600px) {
+        /* Container: Remove margens laterais e adiciona padding */
+        .container {
+            margin: 0;
+            padding: 12px;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        
+        h1 {
+            font-size: 24px;
+        }
+
+        /* Ajuste do grid de atributos para telas menores */
+        .attributes {
+            /* 2 colunas para atributos em mobile */
+            grid-template-columns: repeat(2, 1fr) !important; 
+            gap: 8px;
+        }
+
+        /* Sobrescreve inline styles problemáticos na .row.bottom (Barras/Inventário) */
+        .row.bottom > .col:first-child { 
+            flex: 1 1 100% !important; 
+            max-width: 100% !important;
+        }
+        
+        /* Coluna de Perícias: garante que não tenha min-width e ocupe o espaço disponível */
+        .row.bottom > .col:nth-child(2) {
+             min-width: unset !important;
+        }
+
+        /* Inventário: Ajusta a tabela para caber na tela */
+        #inventoryTable {
+            width: 100% !important; /* Sobrescreve o 125% */
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        /* Torna os inputs internos mais compactos */
+        #inventoryTable input[type=text], #inventoryTable input[type=number] {
+            padding: 6px 4px;
+            font-size: 13px;
+        }
+        
+        /* Diagrama Corporal: Ajusta o padding para caber na tela e centraliza */
+        #body-diagram {
+             padding-left: 0px !important;
+             justify-content: center !important;
+             height: 250px !important; 
+             margin-top: 10px;
+        }
+
+        /* Ajusta os controles de HP/SAN/ADR */
+        .controls {
+             flex-wrap: wrap;
+        }
+        .bars {
+            flex-direction: column;
+            gap: 10px;
+        }
+        .bar {
+            padding: 10px;
+        }
+        .bar input {
+            width: 60px !important;
+        }
+        .adrenalina-controls {
+            margin-top: 10px;
+            justify-content: center;
+        }
+        
+        /* Ajuste dos campos de detalhes pessoais na .row.top para empilhar */
+        .row.top > .col:first-child > .row.top {
+             flex-direction: column;
+             gap: 10px;
+        }
+        .row.top > .col:first-child > .row.top > div {
+            width: 100% !important;
+        }
+        
+        /* Ajusta o layout dos totais de inventário */
+        .col.panel div:first-child > div[style*="display:flex;"] {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+    }
   </style>
 </head>
 <body>
