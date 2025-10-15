@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ficha - Cordyceps Protocol (The Last of Us) - Editável</title>
+  <title>Ficha - Cordyceps Protocol</title>
   <style>
     :root{
       --bg:#000000;
@@ -300,9 +300,9 @@
   <div id="fichaContent" style="display:none;">
     <div class="container">
       
-      <button id="backToIndexBtn" class="ghost" style="margin-bottom: 16px; padding: 6px 10px;">&larr; Voltar ao Índice</button>
+      <button id="backToIndexBtn" class="ghost" style="margin-bottom: 16px; padding: 6px 10px;">&larr; Voltar ao Menu</button>
 
-      <h1>Ficha de Personagem — Cordyceps Protocol</h1>
+      <h1>Ficha de Personagem</h1>
 
     <div class="tab-nav">
       <button class="tab-btn active" data-tab="tabStatus">Status</button>
@@ -313,7 +313,7 @@
     <div id="tabStatus" class="tab-content active">
       <div class="row top">
           <div class="col panel">
-            <h2>Etapa 1 — Detalhes Pessoais</h2>
+            <h2>Detalhes Pessoais</h2>
             <div class="row top">
               <div class="col">
                 <label>Nome do Personagem</label>
@@ -348,7 +348,7 @@
             </div>
           </div>
           <div class="col panel">
-            <h2>Etapa 2 — Atributos</h2>
+            <h2>Atributos</h2>
             <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Atribua os valores nos campos abaixo.</div>
             <div class="attributes" id="attributes">
               </div>
@@ -358,10 +358,10 @@
         <div class="row bottom">
           <div class="col" style="flex: 0 0 805px; max-width:805px; display:flex; flex-direction:column; gap:12px;">
             <div class="panel">
-              <h2>Barras: Vida, Sanidade, Adrenalina</h2>
+              <h2>Status</h2>
                <div class="bars">
                 <div class="bar">
-                  <div class="label">Vida (HP)</div>
+                  <div class="label">Vida</div>
                   <div class="meter"><i id="hpMeter"></i></div>
                   <div class="controls">
                     <div>Atual: <input id="hpCurrent" type="number" min="0" style="width:80px;"/></div>
@@ -429,7 +429,7 @@
                         </div>
                         <div>
                           <label><strong>Mochila:</strong></label>
-                          <input type="number" id="Mochila" style="width:35px; text-align: center;" min="0" value="8">
+                          <input type="number" id="Mochila" style="width:35px; text-align: center;" min="0" value="0">
                         </div>
                       </div>
                       <table id="inventoryTable" style="width:125%;margin-top:8px;">
@@ -445,7 +445,7 @@
           </div>
 
           <div class="col panel" style="flex: 1; min-width: 440px;">
-            <h2>Etapa 3 e 4 — Ocupação & Perícias</h2>
+            <h2>Perícias</h2>
             <div style="font-size:13px;color:var(--muted)">Distribua os pontos de perícia abaixo.</div>
             <div style="margin-top:8px;max-height:430px;overflow:auto">
               <table id="skillsTable">
@@ -459,7 +459,7 @@
 
     <div id="tabHabilidades" class="tab-content">
       <div class="panel">
-        <h2>Habilidades Especiais</h2>
+        <h2>Habilidades</h2>
         <table id="habilidadesTable">
             <thead>
                 <tr>
@@ -562,21 +562,21 @@
         try{
             const data = JSON.parse(localStorage.getItem(SHEET_PREFIX + id))||{};
             
-            // INICIALIZAÇÃO GARANTIDA DE TODOS OS CAMPOS (CORRIGIDO)
+            // INICIALIZAÇÃO DE TODOS OS CAMPOS
             if(!data.attrs) data.attrs = {FOR:10,CON:10,TAM:13,DES:10,APA:10,INT:10,MEN:10,COH:10,SOR:10};
-            if(!data.skills) data.skills = {}; // Garante que state.skills exista
-            if(!data.details) data.details = {}; // Garante que data.details exista
-            if(!data.info) data.info = {}; // Garante que data.info exista
+            if(!data.skills) data.skills = {};
+            if(!data.details) data.details = {};
+            if(!data.info) data.info = {};
             if(data.hpMax===undefined) data.hpMax = Math.floor((data.attrs.CON + data.attrs.TAM)/2);
             if(data.hpCurrent===undefined) data.hpCurrent = data.hpMax;
             if(data.sanMax===undefined) data.sanMax = data.attrs.MEN * 5;
             if(data.sanCurrent===undefined) data.sanCurrent = data.sanMax;
             if(data.adrCurrent===undefined) data.adrCurrent = 0;
-            if(data.mochila===undefined) data.mochila = 8; // <--- CORREÇÃO: Inicializa o valor da mochila
+            if(data.mochila===undefined) data.mochila = 0;
             if (data.isAdrenalineVisible === undefined) data.isAdrenalineVisible = false;
             if (data.isBodyDiagramVisible === undefined) data.isBodyDiagramVisible = false;
             
-            // CORREÇÃO ESSENCIAL: Inicializa valores das perícias
+            // Inicializa valores das perícias
             SKILLS.forEach(([name,base])=>{ 
                  if(data.skills[name]===undefined) data.skills[name]=base; 
             });
@@ -587,7 +587,7 @@
         }
     }
 
-    /* ---------- SCRIPT PRINCIPAL (REESTRUTURADO) ---------- */
+    /* ---------- SCRIPT PRINCIPAL ---------- */
     document.addEventListener("DOMContentLoaded", () => {
         
       const indexPageEl = document.getElementById('indexPage');
@@ -667,7 +667,7 @@
       }
 
       function deleteSheet(id, name) {
-          if (confirm(`Tem certeza que deseja deletar a ficha de "${name}"? Esta ação é irreversível.`)) {
+          if (confirm(`Vai deletar a ficha de "${name}"? Não da pra restaurar, seu comédia.`)) {
               // 1. Remove do localStorage
               localStorage.removeItem(SHEET_PREFIX + id);
               localStorage.removeItem(SHEET_PREFIX + id + '_inventory');
@@ -960,7 +960,7 @@
         
         // <--- CORREÇÃO: Carrega o valor da mochila do estado
         if (mochilaInput) {
-            mochilaInput.value = state.mochila ?? 8; 
+            mochilaInput.value = state.mochila ?? 0; 
         }
         // ---> FIM CORREÇÃO
         
@@ -969,7 +969,7 @@
       }
 
       addItemBtn.addEventListener("click", () => {
-        const newItem = {nome:'', peso:0, espaco:1};
+        const newItem = {nome:'', peso:0, espaco:0};
         inventory.push(newItem);
         criarLinha(newItem);
         atualizarTotais();
