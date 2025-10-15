@@ -224,7 +224,16 @@
              min-width: unset !important;
         }
 
-        /* Inventário: Ajusta a tabela para caber na tela */
+        /* 1. CORREÇÃO INVENTÁRIO (Peso/Espaços/Mochila lado a lado) */
+        /* Alvo: div que contém os 3 campos e tem gap:24px (inline style) */
+        .col.panel div:first-child > div[style*="display:flex; gap:24px;"] {
+            flex-direction: row !important; /* Força que fiquem lado a lado */
+            flex-wrap: wrap; /* Permite quebra se a tela for muito pequena */
+            gap: 8px !important; /* Reduz o espaçamento */
+            justify-content: space-between; /* Distribui o espaço entre eles */
+        }
+
+        /* 2. CORREÇÃO INVENTÁRIO (Tabela) e Alinhamento */
         #inventoryTable {
             width: 100% !important; /* Sobrescreve o 125% */
             display: block;
@@ -273,9 +282,10 @@
             width: 100% !important;
         }
         
-        /* Ajusta o layout dos totais de inventário */
-        .col.panel div:first-child > div[style*="display:flex;"] {
-            flex-direction: column;
+        /* Remove a regra que causava duplo empilhamento ou desalinhamento */
+        .col.panel div:first-child > div[style*="display:flex;"]:not([style*="gap:24px;"]) {
+            /* Esta regra garante que apenas a div container (que empilha Totais e Tabela) seja column */
+            flex-direction: column !important;
             align-items: flex-start;
             gap: 8px;
         }
