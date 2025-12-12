@@ -641,13 +641,13 @@ pointer-events: none;
 </div>
 </div>
 
-<audio id="criticalFailSound" preload="auto">
+ /* <audio id="criticalFailSound" preload="auto">
     <source src="https://braga-tsa.github.io/ficha-rpg-gyga/buzin%C3%A3o.mp3" type="audio/mpeg">
-</audio>
+</audio> */
 
-<audio id="extremeSound" preload="auto">
+/* <audio id="extremeSound" preload="auto">
     <source src="https://braga-tsa.github.io/ficha-rpg-gyga/YAY.mp3" type="audio/mpeg">
-</audio>
+</audio> */
 
   </div>
 </div>
@@ -943,15 +943,25 @@ pointer-events: none;
           tr.innerHTML = `<td>${name}</td><td class="skill-base">${base}</td><td><input class="skill-val" data-name="${name}" type="number" min="1" max="20" value="${curVal}"/></td><td><button data-roll="${name}" style="background:none; border:none; padding:0; cursor:pointer;"><span class="roll-icon"></span></button></td>`;
           tbody.appendChild(tr);
         });
-        document.querySelectorAll('button[data-roll]').forEach(btn => {
+	document.querySelectorAll('.skill-val').forEach(inp => {
+           inp.addEventListener('input', e => {
+            const skillName = e.target.dataset.name;
+            let value = Number(e.target.value);
+            
+            value = Math.max(1, Math.min(20, value));
+            
+            state.skills[skillName] = value;
+            saveState(); 
+        });
+    });
+
+    document.querySelectorAll('button[data-roll]').forEach(btn => {
         btn.addEventListener('click', e => {
-            // Pega o nome da perícia do atributo data-roll
             const skillName = e.currentTarget.dataset.roll;
-            // Chama a função de rolagem
             rollSkill(skillName); 
         });
     });
-      }
+}
 
       
       function renderBodyDiagram() {
@@ -1246,11 +1256,11 @@ function rollSkill(name){
     if(th.B !== null && roll >= th.B) outcome = {type:'Bom',detail:`Rolou ${roll} ≥ Bom(${th.B})`};
     if(th.E !== null && roll >= th.E) {outcome = {type:'Extremo',detail:`Rolou ${roll} ≥ Extremo(${th.E})`};
 	    
-	extremeSound.play();
+	// extremeSound.play();
 }
-    if(roll === 1) {outcome = {type:'Falha Crítica',detail:`Tirou 1 seu bosta 😂`};
+    if(roll === 1) {outcome = {type:'Falha Crítica',detail:`Sinistro '-'};
 
-    criticalFailSound.play();
+   // criticalFailSound.play();
 }
 
     const finalResult = outcome.type;
