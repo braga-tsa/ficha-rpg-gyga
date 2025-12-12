@@ -6,14 +6,19 @@
   <title>Ficha - Cordyceps Protocol</title>
   <style>
     :root{
-      --bg:#000000;
-      --panel:#0b0b0b;
-      --accent:#b58f12; /* amarelo escuro */
-      --muted:#ffffff;
-      --text:#f2f2f2;
-      --danger:#d14;
-      --success:#2bd14c;
-    }
+  --bg:#000000;
+  --panel:#0b0b0b;
+  --accent:#b58f12;
+  --muted:#ffffff;
+  --text:#f2f2f2;
+  --danger:#d14;
+  --info: #4169E1;
+  --critfail: #b10000;
+  --fail: #ffffff;
+  --success:#56ff56;
+  --great: #794dff;
+  --extreme: #ffbf00;
+}
     #hpMeter { background: red !important; }
     #sanMeter { background: #8A2BE2 !important; }
     #adrMeter { background: #FFFF00 !important; }
@@ -57,11 +62,57 @@
     font-size: 12px;
     padding: 0px;
     }
-    .roll-result{min-width:130px}
+
+    /* CORREÇÃO 2: Adiciona transição suave na cor do SVG */
+    #body-svg path {
+        transition: fill 0.3s ease;
+    }
+    
+.roll-icon {
+    /* * MUDANÇA AQUI:
+     * Substituímos 'url(image_367c40.png)' pelo novo URL.
+     */
+    background: url(https://crisordemparanormal.com/assets/d20-icon-TtjmS7-Z.png) no-repeat center center;
+    
+    background-size: contain;
+    width: 28px; 
+    height: 28px;
+    display: inline-block;
+    opacity: 0.8;
+    transition: transform 0.2s ease, opacity 0.2s ease; /* Adiciona animação */
+}
+
+#rollModal {
+
+.roll-icon:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.skills-button-td button {
+    background: none; 
+    border: none; 
+    padding: 0; 
+    cursor: pointer;
+    
+    /* Adicione estas duas propriedades para garantir que o botão fique acima da modal (z-index: 100) */
+    position: relative;
+    z-index: 101;
+    }
+
+pointer-events: none;
+
+}
+  #rollModalContent {
+
+  .roll-result{min-width:130px}
     .footer{margin-top:16px;font-size:13px;color:var(--muted)}
     .flex{display:flex;gap:8px;align-items:center}
     @media(max-width:900px){.attributes{grid-template-columns:repeat(4,1fr)}.row{flex-direction:column}}
-    
+    pointer-events: none;
+}
+
+
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     input[type=number] { -moz-appearance: textfield; appearance: textfield; }
@@ -285,6 +336,18 @@
             gap: 8px;
         }
     }
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
   </style>
 </head>
 <body>
@@ -306,6 +369,7 @@
 
     <div class="tab-nav">
       <button class="tab-btn active" data-tab="tabStatus">Status</button>
+      <button class="tab-btn" data-tab="tabInventario">Inventario</button>
       <button class="tab-btn" data-tab="tabHabilidades">Habilidades</button>
       <button class="tab-btn" data-tab="tabInfo">Info</button>
     </div>
@@ -411,35 +475,6 @@
                     </g>
                   </svg>
                 </div>
-
-                <div class="col panel" style="flex:0 0 340px; min-width:540px;">
-                  <h2>Inventário</h2>
-                  <div style="display:flex;gap:12px;align-items:center;">
-                    <div>
-                      <div style="display:flex; gap:24px; align-items:center; margin-bottom:8px;">
-                        <div>
-                          <label><strong>Peso:</strong></label>
-                          <span id="pesoAtual">0</span> /
-                          <input type="number" id="pesoMax" style="width:35px; text-align: center; background:transparent; border:none;" min="0" value="11" readonly>
-                        </div>
-                        <div>
-                          <label><strong>Espaço:</strong></label>
-                          <span id="espacoAtual">0</span> /
-                          <input type="number" id="espacoMax" style="width:35px; text-align: center;" min="0" value="4">
-                        </div>
-                        <div>
-                          <label><strong>Mochila:</strong></label>
-                          <input type="number" id="Mochila" style="width:35px; text-align: center;" min="0" value="0">
-                        </div>
-                      </div>
-                      <table id="inventoryTable" style="width:125%;margin-top:8px;">
-                        <thead><tr><th>Item</th><th>Peso</th><th>Espaços</th><th></th></tr></thead>
-                        <tbody></tbody>
-                      </table>
-                      <button id="addItemBtn" style="margin-top:8px;">Adicionar Item</button>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -448,10 +483,7 @@
             <h2>Perícias</h2>
             <div style="font-size:13px;color:var(--muted)">Distribua os pontos de perícia abaixo.</div>
             <div style="margin-top:8px;max-height:430px;overflow:auto">
-              <table id="skillsTable">
-                <thead><tr><th>Perícia</th><th>Valor Base</th><th>Valor Atual</th><th>Rolar</th><th>Resultado</th></tr></thead>
-                <tbody></tbody>
-              </table>
+              <table id="skillsTable"><thead><tr><th>Perícia</th><th>Valor Base</th><th>Valor Atual</th><th style="width: 40px;"></th></tr></thead><tbody></tbody></table>
             </div>
           </div>
         </div>
@@ -473,8 +505,49 @@
                 </tbody>
         </table>
         <button id="addHabilidadeBtn" style="margin-top: 12px;">Adicionar Habilidade</button>
+
       </div>
     </div>
+
+<div id="tabInventario" class="tab-content">
+  <div class="panel">
+    
+    <div class="col panel" style="flex:0 0 340px; min-width:540px;"> 
+        
+        <h2>Inventário</h2>
+        
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div>
+            
+            <div style="display:flex; gap:24px; align-items:center; margin-bottom:8px;">
+              <div>
+                <label><strong>Peso:</strong></label>
+                <span id="pesoAtual">0</span> /
+                <input type="number" id="pesoMax" style="width:35px; text-align: center; background:transparent; border:none;" min="0" value="11" readonly>
+              </div>
+              <div>
+                <label><strong>Espaço:</strong></label>
+                <span id="espacoAtual">0</span> /
+                <input type="number" id="espacoMax" style="width:35px; text-align: center;" min="0" value="4">
+              </div>
+              <div>
+                <label><strong>Mochila:</strong></label>
+                <input type="number" id="Mochila" style="width:35px; text-align: center;" min="0" value="0">
+              </div>
+            </div>
+            
+            <table id="inventoryTable" style="width:125%;margin-top:8px;">
+              <thead><tr><th>Item</th><th>Peso</th><th>Espaços</th><th></th></tr></thead>
+              <tbody>
+                  </tbody>
+            </table>
+            
+            <button id="addItemBtn" style="margin-top:8px;">Adicionar Item</button>
+          </div>
+        </div>
+        
+    </div> </div>
+</div>
 
     <div id="tabInfo" class="tab-content">
       <div class="panel">
@@ -529,6 +602,28 @@
       </div>
     </div>
 
+<div id="rollModal" style="display:none; position:fixed; z-index:100; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgba(0,0,0,0); pointer-events: none;">
+    
+    <div id="rollModalContent" style="background-color: var(--panel); padding: 1px; border: 1px solid var(--accent); border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); pointer-events: auto; position: absolute; right: 40px; bottom: 30px; width: 320px; max-width: 320px;">
+        
+        <span id="closeModalBtn" style="color: var(--accent); float: right; font-size: 28px; font-weight: bold; margin-right: 10px; cursor: pointer;">&times;</span>
+
+	<p id="rollSkillName" style="font-size: 18px; font-weight: bold; margin-left: 10px; margin-top: 8px; color: var(--accent);"></p>
+        
+        <p id="rollValue" style="font-size: 55px; font-weight: bold; text-align: center; margin: 10px 0;"></p>
+        
+        <p id="rollResult" style="font-size: 30px; font-weight: bold; text-align: center; margin-top: -15px;"></p> 
+
+        <p id="rollDetails" style="font-size: 18px; font-weight: bold; color: var(--muted); margin-left: 5px; margin-top: -15px;"></p>
+       
+    </div>
+</div>
+</div>
+
+<audio id="criticalFailSound" preload="auto">
+    <source src="https://braga-tsa.github.io/ficha-rpg-gyga/buzin%C3%A3o.mp3" type="audio/mpeg">
+    Seu navegador não suporta o elemento de áudio.
+</audio>
 
     <div class="footer">Ficha salva automaticamente no armazenamento local do navegador.</div>
   </div>
@@ -822,37 +917,19 @@
         SKILLS.forEach(([name,base])=>{
           const tr = document.createElement('tr');
           const curVal = state.skills[name] ?? base;
-          tr.innerHTML = `<td>${name}</td><td class="skill-base">${base}</td><td><input class="skill-val" data-name="${name}" type="number" min="1" max="20" value="${curVal}"/></td><td><button data-roll="${name}">Rolar</button></td><td class="roll-result" id="res-${escapeId(name)}">-</td>`;
+          tr.innerHTML = `<td>${name}</td><td class="skill-base">${base}</td><td><input class="skill-val" data-name="${name}" type="number" min="1" max="20" value="${curVal}"/></td><td><button data-roll="${name}" style="background:none; border:none; padding:0; cursor:pointer;"><span class="roll-icon"></span></button></td>`;
           tbody.appendChild(tr);
         });
-        document.querySelectorAll('.skill-val').forEach(inp=>{
-          inp.addEventListener('input', e=>{
-            let val = Number(e.target.value);
-            if(isNaN(val)) val = 0; if(val < 1) val = 1; if(val > 20) val = 20;
-            e.target.value = val;
-            state.skills[e.target.dataset.name] = val;
-            saveState();
-          });
+        document.querySelectorAll('button[data-roll]').forEach(btn => {
+        btn.addEventListener('click', e => {
+            // Pega o nome da perícia do atributo data-roll
+            const skillName = e.currentTarget.dataset.roll;
+            // Chama a função de rolagem
+            rollSkill(skillName); 
         });
-        document.querySelectorAll('button[data-roll]').forEach(btn=>{
-          btn.addEventListener('click',e=>{const name=e.currentTarget.dataset.roll;rollSkill(name);});
-        });
+    });
       }
 
-      function rollSkill(name){
-          // ... (CÓDIGO EXISTENTE DE rollSkill) ...
-          const val = state.skills[name] ?? SKILLS.find(s=>s[0]===name)[1] ?? 0;
-          const roll = randInt(1,20);
-          const th = THRESHOLDS[Math.max(1,Math.min(20,Math.floor(val)))] || {N:21,B:null,E:null};
-          let outcome = {type:'Falha',detail:`Rolou ${roll} < Normal(${th.N})`};
-          if(roll >= th.N) outcome = {type:'Normal',detail:`Rolou ${roll} ≥ Normal(${th.N})`};
-          if(th.B !== null && roll >= th.B) outcome = {type:'Bom',detail:`Rolou ${roll} ≥ Bom(${th.B})`};
-          if(th.E !== null && roll >= th.E) outcome = {type:'Extremo',detail:`Rolou ${roll} ≥ Extremo(${th.E})`};
-          
-          const el = document.getElementById('res-'+escapeId(name));
-          el.innerHTML = `<strong>${outcome.type}</strong> — ${outcome.detail}`;
-          el.style.color = outcome.type==='Falha'? 'var(--muted)': outcome.type==='Normal'?'#ffffff': outcome.type==='Bom'?'#ffd24d':'#9ef39e';
-      }
       
       function renderBodyDiagram() {
           const bodyDiagramContainer = document.getElementById('body-svg');
@@ -1109,6 +1186,87 @@
               saveState();
           });
       }
+
+// --- Lógica do Pop-up de Rolagem ---
+      const rollModal = document.getElementById('rollModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const rollResultContent = document.getElementById('rollResultContent');
+      const rollSkillName = document.getElementById('rollSkillName');
+      const criticalFailSound = document.getElementById('criticalFailSound'); 
+
+      // Função para abrir o modal e mostrar o resultado
+      function showRollResult(skillName, resultText, rollNumber) {
+        rollSkillName.textContent = `Perícia: ${skillName}`;
+        rollResultContent.innerHTML = `${resultText} (Rolagem: ${rollNumber})`;
+        rollModal.style.display = 'block';
+      }
+
+      // Evento para fechar o modal no 'X'
+      closeModalBtn.onclick = function() {
+        rollModal.style.display = 'none';
+      }
+
+
+      closeModalBtn.onclick = function() {
+        rollModal.style.display = 'none';
+      };
+
+      // --- Fim Lógica do Pop-up ---
+
+function rollSkill(name){
+    // ... (Seu código de cálculo: 'val', 'roll', 'th') ...
+    const val = state.skills[name] ?? SKILLS.find(s=>s[0]===name)[1] ?? 0;
+    const roll = randInt(1,20);
+    const th = THRESHOLDS[Math.max(1,Math.min(20,Math.floor(val)))] || {N:21,B:null,E:null};
+    let outcome = {type:'Falha',detail:`Rolou ${roll} < Normal(${th.N})`};
+    if(roll >= th.N) outcome = {type:'Normal',detail:`Rolou ${roll} ≥ Normal(${th.N})`};
+    if(th.B !== null && roll >= th.B) outcome = {type:'Bom',detail:`Rolou ${roll} ≥ Bom(${th.B})`};
+    if(th.E !== null && roll >= th.E) outcome = {type:'Extremo',detail:`Rolou ${roll} ≥ Extremo(${th.E})`};
+    if(roll === 1) {outcome = {type:'Falha Crítica',detail:`Tirou 1 seu bosta 😂`};}
+
+    criticalFailSound.play();
+
+    const finalResult = outcome.type;
+    const details = outcome.detail;
+            
+    // --- NOVO BLOCO DE LÓGICA DE CORES E EXIBIÇÃO DA MODAL ---
+    
+    let resultColor = 'var(--text)'; // Cor padrão
+    
+    switch (finalResult) { 
+        case 'Falha Crítica':
+            resultColor = 'var(  --critfail)';
+            break;
+        case 'Falha':
+            resultColor = 'var(--fail)';
+            break;
+        case 'Normal':
+            resultColor = 'var(--success)';
+            break;
+        case 'Bom':
+            resultColor = 'var(--great)';
+            break;
+        case 'Extremo':
+            resultColor = 'var(--extreme)';
+            break;
+    }
+    
+    const skillNameElement = document.getElementById('rollSkillName');
+    skillNameElement.textContent = name.toUpperCase();
+    skillNameElement.style.color = 'var(--text)';
+
+    const rollValueElement = document.getElementById('rollValue');
+    rollValueElement.textContent = roll;
+    rollValueElement.style.color = resultColor;
+    
+    const rollResultElement = document.getElementById('rollResult');
+    rollResultElement.textContent = finalResult;
+    rollResultElement.style.color = resultColor; 
+    
+    document.getElementById('rollDetails').textContent = details;
+    
+    rollModal.style.display = 'block';
+}
 
       // --- CORREÇÃO 1: Lógica das Abas ---
       document.querySelectorAll('.tab-btn').forEach(button => {
