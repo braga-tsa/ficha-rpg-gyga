@@ -641,14 +641,6 @@ pointer-events: none;
 </div>
 </div>
 
- /* <audio id="criticalFailSound" preload="auto">
-    <source src="https://braga-tsa.github.io/ficha-rpg-gyga/buzin%C3%A3o.mp3" type="audio/mpeg">
-</audio> */
-
-/* <audio id="extremeSound" preload="auto">
-    <source src="https://braga-tsa.github.io/ficha-rpg-gyga/YAY.mp3" type="audio/mpeg">
-</audio> */
-
   </div>
 </div>
 
@@ -1255,12 +1247,10 @@ function rollSkill(name){
     if(roll >= th.N) outcome = {type:'Normal',detail:`Rolou ${roll} ≥ Normal(${th.N})`};
     if(th.B !== null && roll >= th.B) outcome = {type:'Bom',detail:`Rolou ${roll} ≥ Bom(${th.B})`};
     if(th.E !== null && roll >= th.E) {outcome = {type:'Extremo',detail:`Rolou ${roll} ≥ Extremo(${th.E})`};
-	    
-	// extremeSound.play();
+	
 }
     if(roll === 1) {outcome = {type:'Falha Crítica',detail:`Sinistro '-'};
-
-   // criticalFailSound.play();
+	
 }
 
     const finalResult = outcome.type;
