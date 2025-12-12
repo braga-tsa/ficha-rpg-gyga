@@ -1243,9 +1243,10 @@ function rollSkill(name){
     if(roll >= th.N) outcome = {type:'Normal',detail:`Rolou ${roll} ≥ Normal(${th.N})`};
     if(th.B !== null && roll >= th.B) outcome = {type:'Bom',detail:`Rolou ${roll} ≥ Bom(${th.B})`};
     if(th.E !== null && roll >= th.E) outcome = {type:'Extremo',detail:`Rolou ${roll} ≥ Extremo(${th.E})`};
-    if(roll === 1) {outcome = {type:'Falha Crítica',detail:`Tirou 1 seu bosta 😂`};}
+    if(roll === 1) {outcome = {type:'Falha Crítica',detail:`Tirou 1 seu bosta 😂`};
 
     criticalFailSound.play();
+}
 
     const finalResult = outcome.type;
     const details = outcome.detail;
