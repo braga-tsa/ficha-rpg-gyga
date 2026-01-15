@@ -43,7 +43,7 @@
     button{background:var(--accent);border:none;color:#0b0b0b;padding:8px 10px;border-radius:6px;cursor:pointer; font-weight: bold;}
     button.ghost{background:transparent;border:1px solid rgba(181,143,18,0.12);color:var(--text)}
     .bars{display:flex;gap:12px}
-    /* CORREÇÃO APLICADA: o display flex é aplicado em .bars, mas .bar deve ter comportamento de bloco para empilhar label e meter */
+    
     .bar{flex:1;padding:8px;border-radius:6px;background:linear-gradient(90deg, rgba(255,255,255,0.01), transparent);} 
     .meter{height:18px;background:var(--muted);border-radius:8px;overflow:hidden;margin-top:8px}
     .meter > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#ffd24d);width:0%}
@@ -63,23 +63,18 @@
     padding: 0px;
     }
 
-    /* CORREÇÃO 2: Adiciona transição suave na cor do SVG */
     #body-svg path {
         transition: fill 0.3s ease;
     }
     
 .roll-icon {
-    /* * MUDANÇA AQUI:
-     * Substituímos 'url(image_367c40.png)' pelo novo URL.
-     */
     background: url(https://crisordemparanormal.com/assets/d20-icon-TtjmS7-Z.png) no-repeat center center;
-    
     background-size: contain;
     width: 28px; 
     height: 28px;
     display: inline-block;
     opacity: 0.8;
-    transition: transform 0.2s ease, opacity 0.2s ease; /* Adiciona animação */
+    transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 #rollModal {
@@ -94,8 +89,6 @@
     border: none; 
     padding: 0; 
     cursor: pointer;
-    
-    /* Adicione estas duas propriedades para garantir que o botão fique acima da modal (z-index: 100) */
     position: relative;
     z-index: 101;
     }
@@ -124,7 +117,6 @@ pointer-events: none;
     .adrenalina-bar .segment.filled{ background:#FFD700; border-color:#e6be00; }
     .adrenalina-controls { display: flex; align-items: center; gap: 8px; margin-top: 19px; }
     
-    /* CORREÇÃO 2: Adiciona transição suave na cor do SVG */
     #body-svg path {
         transition: fill 0.3s ease;
     }
@@ -153,10 +145,10 @@ pointer-events: none;
       border-bottom: 2px solid var(--accent);
     }
     .tab-content {
-      display: none; /* Esconde todas as abas por padrão */
+      display: none; 
     }
     .tab-content.active {
-      display: block; /* Mostra a aba ativa */
+      display: block; 
     }
 
     /* --- ESTILOS PARA ABA INFO --- */
@@ -212,7 +204,6 @@ pointer-events: none;
 
     /* INÍCIO: ESTILOS DE RESPONSIVIDADE (768px) */
  @media(max-width: 768px) {
-      /* Empilha as colunas de Informações/Antecedentes */
       #tabInfo .info-grid {
         grid-template-columns: 1fr;
       }
@@ -220,24 +211,20 @@ pointer-events: none;
         grid-column: span 1;
       }
       
-      /* Garante que o painel de Inventário fique full-width e não force scroll, resolvendo o min-width: 540px */
       .row.bottom .col.panel[style*="min-width:540px"] { 
           min-width: unset !important;
           flex: 1 1 100% !important;
           max-width: 100% !important;
       }
-      /* Ajusta o layout interno de Diagrama/Inventário, que usa display:flex; gap:16px; */
       .row.bottom > .col:first-child > div[style*="display:flex;"] {
-          flex-direction: column-reverse !important; /* CORREÇÃO 1: Coloca o corpo em cima do inventário */
+          flex-direction: column-reverse !important; 
           gap: 12px;
       }
-      /* Garante que as tabelas sejam scrolláveis horizontalmente */
       #skillsTable, #habilidadesTable {
           display: block;
           overflow-x: auto;
           white-space: nowrap;
       }
-      /* Aumenta a largura mínima da célula de nome da perícia para melhor leitura */
       #skillsTable tr td:first-child {
            min-width: 120px;
       }
@@ -248,25 +235,20 @@ pointer-events: none;
 
 .row.top,
 .row.bottom {
-    display: flex !important;           /* Garante que é um contêiner flexível */
-    flex-direction: column !important;  /* Força a ordem vertical (empilhamento) */
-    width: 100% !important;             /* Garante que o container use a largura máxima */
+    display: flex !important;           
+    flex-direction: column !important;  
+    width: 100% !important;             
 }
 
-/* 2. FORÇA OS FILHOS (.col) A OCUPAREM 100% E QUEBRAR A LINHA */
 .row.top > .col,
 .row.bottom > .col {
-    /* Anula min-width/max-width e força 100% de largura */
     flex: 1 1 100% !important;
     max-width: 100% !important;
     min-width: unset !important;
     width: 100% !important; 
-    
-    /* Adiciona margem entre os painéis (Status e Perícias) empilhados */
     margin-bottom: 15px; 
 }
 
-        /* Container: Remove margens laterais e adiciona padding */
         .container {
             margin: 0;
             padding: 12px;
@@ -278,7 +260,6 @@ pointer-events: none;
             font-size: 24px;
         }
 
-        /* CORREÇÃO PRINCIPAL: Força todas as colunas principais a ter 100% de largura, garantindo o alinhamento total */
         .row.top > .col,
         .row.bottom > .col {
             flex: 1 1 100% !important;
@@ -286,35 +267,29 @@ pointer-events: none;
             min-width: unset !important;
         }
 
-        /* Ajuste do grid de atributos para telas menores */
         .attributes {
-            /* 2 colunas para atributos em mobile */
             grid-template-columns: repeat(3, 1fr) !important; 
             gap: 8px;
         }
 
-        /* Inventário: Peso/Espaços/Mochila lado a lado */
         .col.panel div:first-child > div[style*="display:flex; gap:24px;"] {
-            flex-direction: row !important; /* Força que fiquem lado a lado */
-            flex-wrap: wrap; /* Permite quebra se a tela for muito pequena */
-            gap: 8px !important; /* Reduz o espaçamento */
-            justify-content: space-between; /* Distribui o espaço entre eles */
+            flex-direction: row !important; 
+            flex-wrap: wrap; 
+            gap: 8px !important; 
+            justify-content: space-between; 
         }
 
-        /* Inventário: Tabela ajustada para scroll horizontal */
         #inventoryTable {
-            width: 100% !important; /* Sobrescreve o 125% */
+            width: 100% !important; 
             display: block;
             overflow-x: auto;
             white-space: nowrap;
         }
-        /* Torna os inputs internos mais compactos */
         #inventoryTable input[type=text], #inventoryTable input[type=number] {
             padding: 6px 4px;
             font-size: 13px;
         }
         
-        /* Diagrama Corporal: Ajusta o padding para caber na tela e centraliza */
         #body-diagram {
              padding-left: 0px !important;
              justify-content: center !important;
@@ -322,7 +297,6 @@ pointer-events: none;
              margin-top: 10px;
         }
 
-        /* Ajusta os controles de HP/SAN/ADR */
         .controls {
              flex-wrap: wrap;
         }
@@ -341,7 +315,6 @@ pointer-events: none;
             justify-content: center;
         }
         
-        /* Ajuste dos campos de detalhes pessoais na .row.top para empilhar */
         .row.top > .col:first-child > .row.top {
              flex-direction: column;
              gap: 10px;
@@ -350,7 +323,6 @@ pointer-events: none;
             width: 100% !important;
         }
         
-        /* Ajusta o layout dos totais de inventário */
         .col.panel div:first-child > div[style*="display:flex;"]:not([style*="gap:24px;"]) {
             flex-direction: column !important;
             align-items: flex-start;
@@ -449,8 +421,8 @@ pointer-events: none;
                   <div class="label">Vida</div>
                   <div class="meter"><i id="hpMeter"></i></div>
                   <div class="controls">
-                    <div>Atual: <input id="hpCurrent" type="number" min="0" style="width:80px;"/></div>
-                    <div>Máx: <input id="hpMax" type="number" min="0" style="width:80px;"/></div>
+                    <div>Atual: <input id="hpCurrent" type="number" style="width:80px;"/></div>
+                    <div>Máx: <input id="hpMax" type="number" style="width:60px;" title="HP Base (Manual)"/> <span id="hpTotalDisplay" style="font-size:12px; color:var(--success); font-weight:bold; margin-left:4px;"></span></div>
                     <button id="hpMinus">-</button>
                     <button id="hpPlus">+</button>
                   </div>
@@ -647,7 +619,6 @@ pointer-events: none;
 
   <script>
     /* ---------- DATA (SEM MUDANÇAS) ---------- */
-    // ATUALIZADO: Adiciona COH
     const ATTRS = ['FOR','CON','TAM','DES','APA','INT','MEN','COH','SOR'];
     const SKILLS = [['Acrobacia',4],['Antropologia',1],['Armas (Pistolas)',4],['Armas (Rifles/Espingardas)',5],['Armas (Arcos/Bestas)',3],['Arqueologia',1],['Arremessar',4],['Arte e Ofício',1],['Avaliação',1],['Cavalgar',1],['Charme',3],['Chaveiro',1],['Ciência (Biologia)',1],['Ciência (Forense)',1],['Ciência (Farmácia)',1],['Ciência (Química)',1],['Conhecimento',1],['Consertos Elétricos',2],['Consertos Mecânicos',2],['Contabilidade',1],['Demolições',1],['Direito',1],['Dirigir',4],['Disfarce',1],['Eletrônica',1],['Encontrar',5],['Escutar',4],['Esquivar',0],['Furtividade',4],['Hipnose',1],['História',1],['Intimidação',3],['Lábia',1],['Leitura Labial',1],['Língua (Nativa)',0],['Língua (Outra)',1],['Lutar (Brigar)',5],['Medicina',1],['Mergulho',1],['Mundo Natural',2],['Natação',2],['Navegação',2],['Ocultismo',2],['Operar Maquinário',1],['Persuasão',2],['Pilotar (Aeronave)',1],['Pilotar (Barco)',1],['Prestidigitação',2],['Primeiros Socorros',6],['Psicanálise',1],['Psicologia',2],['Rastrear',2],['Sobrevivência',2],['Treinar Animais',1],['Usar Bibliotecas',4],['Usar Computadores',4]];
     const THRESHOLDS = {1:{N:20,B:null,E:null},2:{N:19,B:20,E:null},3:{N:18,B:20,E:null},4:{N:17,B:19,E:null},5:{N:16,B:19,E:20},6:{N:15,B:18,E:20},7:{N:14,B:18,E:20},8:{N:13,B:17,E:20},9:{N:12,B:17,E:20},10:{N:11,B:16,E:19},11:{N:10,B:16,E:19},12:{N:9,B:15,E:19},13:{N:8,B:15,E:19},14:{N:7,B:14,E:19},15:{N:6,B:14,E:18},16:{N:5,B:13,E:18},17:{N:4,B:13,E:18},18:{N:3,B:12,E:18},19:{N:2,B:12,E:18},20:{N:1,B:11,E:18}};
@@ -673,12 +644,17 @@ pointer-events: none;
             const data = JSON.parse(localStorage.getItem(SHEET_PREFIX + id))||{};
             
             // INICIALIZAÇÃO DE TODOS OS CAMPOS
-            if(!data.attrs) data.attrs = {FOR:10,CON:10,TAM:13,DES:10,APA:10,INT:10,MEN:10,COH:10,SOR:10};
+            if(!data.attrs) data.attrs = {FOR:10,CON:10,TAM:10,DES:10,APA:10,INT:10,MEN:10,COH:10,SOR:10};
             if(!data.skills) data.skills = {};
             if(!data.details) data.details = {};
             if(!data.info) data.info = {};
-            if(data.hpMax===undefined) data.hpMax = Math.floor((data.attrs.CON + data.attrs.TAM)/2);
+            
+            // HP: Inicializa Base se não existir
+            if(data.hpBase===undefined) data.hpBase = 0;
+            // O hpMax agora será calculado (Total), mas precisamos de um placeholder
+            if(data.hpMax===undefined) data.hpMax = 10; 
             if(data.hpCurrent===undefined) data.hpCurrent = data.hpMax;
+            
             if(data.sanMax===undefined) data.sanMax = data.attrs.MEN * 5;
             if(data.sanCurrent===undefined) data.sanCurrent = data.sanMax;
             if(data.adrCurrent===undefined) data.adrCurrent = 0;
@@ -712,7 +688,6 @@ pointer-events: none;
       let habilidades = [];
       let bodyColors = {};
 
-      // Função para alternar entre as visualizações
       function showPage(pageId) {
           indexPageEl.style.display = pageId === 'index' ? 'block' : 'none';
           fichaContentEl.style.display = pageId === 'ficha' ? 'block' : 'none';
@@ -753,7 +728,7 @@ pointer-events: none;
                   deleteBtn.className = 'sheet-delete-btn';
                   deleteBtn.textContent = 'Deletar';
                   deleteBtn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Previne que o clique no link de nome seja ativado
+                    e.stopPropagation(); 
                     deleteSheet(sheet.id, sheet.name);
                   });
                   
@@ -762,7 +737,7 @@ pointer-events: none;
                   sheetListEl.appendChild(li);
               });
           }
-          showPage('index'); // <-- CORREÇÃO: Garante que o índice fique visível
+          showPage('index'); 
       }
 
       function createNewSheet() {
@@ -778,18 +753,15 @@ pointer-events: none;
 
       function deleteSheet(id, name) {
           if (confirm(`Vai deletar a ficha de "${name}"? Não da pra restaurar, seu comédia.`)) {
-              // 1. Remove do localStorage
               localStorage.removeItem(SHEET_PREFIX + id);
               localStorage.removeItem(SHEET_PREFIX + id + '_inventory');
               localStorage.removeItem(SHEET_PREFIX + id + '_habilidades');
               localStorage.removeItem(SHEET_PREFIX + id + '_bodyColors');
               
-              // 2. Remove da lista de fichas
               let list = getSheetList();
               list = list.filter(sheet => sheet.id !== id);
               saveSheetList(list);
               
-              // 3. Redireciona para o índice
               if (currentSheetId === id) {
                   currentSheetId = null;
               }
@@ -797,12 +769,7 @@ pointer-events: none;
           }
       }
 
-      // ----------------------------------------------------
-      // FUNÇÕES AUXILIARES DE SALVAMENTO PARA SUB-SESSÕES
-      // ----------------------------------------------------
-
       function saveInventory() { 
-          // O valor da mochila agora é salvo via saveState() em atualizarEspacoMax
           if(currentSheetId) localStorage.setItem(SHEET_PREFIX + currentSheetId + '_inventory', JSON.stringify(inventory)); 
       }
       function saveHabilidades() { 
@@ -820,28 +787,22 @@ pointer-events: none;
           currentSheetId = id;
           localStorage.setItem('cp_last_sheet_id', id);
           
-          // 1. Carrega o estado principal
           state = loadState(id);
           
-          // 2. Carrega estados secundários
           inventory = JSON.parse(localStorage.getItem(SHEET_PREFIX + currentSheetId + '_inventory')) || [];
           habilidades = JSON.parse(localStorage.getItem(SHEET_PREFIX + currentSheetId + '_habilidades')) || [];
           bodyColors = JSON.parse(localStorage.getItem(SHEET_PREFIX + currentSheetId + '_bodyColors')) || {};
           
-          // 3. Renderiza TUDO
           syncAll();
           
-          // 4. Aplica estado de visibilidade
           const bodyDiagram = document.getElementById('body-diagram');
           if (bodyDiagram) bodyDiagram.style.display = state.isBodyDiagramVisible ? 'flex' : 'none';
           const adrenalinaBarContainer = document.getElementById('adrenalinaBarContainer'); 
           if (adrenalinaBarContainer) adrenalinaBarContainer.style.display = state.isAdrenalineVisible ? 'block' : 'none';
 
-          // 5. Exibe a ficha
           showPage('ficha');
       }
 
-      // Função para atualizar o nome na lista de fichas
       function updateSheetName() {
           if (!nomePersonagemInput || !currentSheetId) return;
           
@@ -855,9 +816,7 @@ pointer-events: none;
           }
       }
 
-      // --- LÓGICA DA FICHA (Mantida e Adaptada) ---
       function renderAttributes() {
-        // ... (CÓDIGO EXISTENTE DE renderAttributes) ...
         const container = document.getElementById('attributes');
         container.innerHTML = '';
         ATTRS.forEach(a => {
@@ -871,7 +830,7 @@ pointer-events: none;
           input.max = 20;
           input.value = state.attrs[a] ?? 0;
           input.classList.add('attr-input');
-          input.addEventListener('input', e => {
+          input.addEventListener('change', e => {
             let val = e.target.value.replace(/[^0-9]/g, '');
             if (val === '') val = 0;
             let n = Number(val);
@@ -887,31 +846,45 @@ pointer-events: none;
         recalcHPandSAN();
       }
 
-      function recalcHPandSAN(){
-          // ... (CÓDIGO EXISTENTE DE recalcHPandSAN) ...
-          state.hpMax = Math.floor((Number(state.attrs.CON||0) + Number(state.attrs.TAM||0))/2);
-          if(state.hpCurrent > state.hpMax) state.hpCurrent = state.hpMax;
-          state.sanMax = (Number(state.attrs.MEN)||0)*5;
-          if(state.sanCurrent > state.sanMax) state.sanCurrent = state.sanMax;
-          
-          const pesoMaxEl = document.getElementById('pesoMax');
-          if (pesoMaxEl) {
-              const forca = Number(state.attrs.FOR) || 0;
-              const pesoMaxCalculado = 11 + Math.floor(forca / 2);
-              pesoMaxEl.value = pesoMaxCalculado;
-              // Não dispara evento aqui, apenas atualiza o valor.
-          }
-          
-          document.getElementById('hpMax').value = state.hpMax;
-          document.getElementById('hpCurrent').value = state.hpCurrent;
-          document.getElementById('sanMax').value = state.sanMax;
-          document.getElementById('sanCurrent').value = state.sanCurrent;
-          updateMeters();
-          saveState();
-      }
+      // --- ALTERAÇÃO AQUI: LÓGICA DE HP ---
+function recalcHPandSAN(){
+    // Cálculo HP: Valor Digitado (Base) + ((CON + TAM) / 2 - 10)
+    const con = Number(state.attrs.CON) || 0;
+    const tam = Number(state.attrs.TAM) || 0;
+    const hpBonus = Math.floor(con + tam) / 2;
+    
+    // Define 10 como base inicial se for novo
+    if(state.hpBase === undefined) state.hpBase = 0;
+    state.hpMax = state.hpBase + hpBonus;
+
+    // Cálculo SAN: Valor Digitado (Base) + (MEN * 5)
+    // 50 é o valor inicial sugerido
+    const men = Number(state.attrs.MEN) || 0;
+    const sanBonus = men * 5;
+    
+    if(state.sanBase === undefined) state.sanBase = 0;
+    state.sanMax = state.sanBase + sanBonus;
+    
+    // Atualiza os inputs com o valor total (Base + Bônus)
+    document.getElementById('hpMax').value = state.hpMax;
+    document.getElementById('sanMax').value = state.sanMax;
+    document.getElementById('hpCurrent').value = state.hpCurrent;
+    document.getElementById('sanCurrent').value = state.sanCurrent;
+    
+    // Peso Máximo baseado na FOR
+    const pesoMaxEl = document.getElementById('pesoMax');
+    if (pesoMaxEl) {
+        const forca = Number(state.attrs.FOR) || 0;
+        const pesoMaxCalculado = 11 + Math.floor(forca / 2);
+        pesoMaxEl.value = pesoMaxCalculado;
+    }
+    
+    updateMeters();
+    saveState();
+}
 
       function updateMeters(){
-          // ... (CÓDIGO EXISTENTE DE updateMeters) ...
+          // Usa state.hpMax (que agora é o Total) para a porcentagem
           const hpPct = state.hpMax? Math.max(0,Math.min(100,Math.round(state.hpCurrent/state.hpMax*100))):0;
           const sanPct = state.sanMax? Math.max(0,Math.min(100,Math.round(state.sanCurrent/state.sanMax*100))):0;
           document.getElementById('hpMeter').style.width = hpPct + '%';
@@ -926,7 +899,6 @@ pointer-events: none;
       }
 
       function renderSkills(){
-        // ... (CÓDIGO EXISTENTE DE renderSkills) ...
         const tbody = document.querySelector('#skillsTable tbody');
         tbody.innerHTML='';
         SKILLS.forEach(([name,base])=>{
@@ -939,9 +911,7 @@ pointer-events: none;
            inp.addEventListener('input', e => {
             const skillName = e.target.dataset.name;
             let value = Number(e.target.value);
-            
             value = Math.max(1, Math.min(20, value));
-            
             state.skills[skillName] = value;
             saveState(); 
         });
@@ -963,10 +933,8 @@ pointer-events: none;
           const parts = bodyDiagramContainer.querySelectorAll("path");
           
           parts.forEach(part => {
-              // Aplica a cor salva no bodyColors
               const savedColor = bodyColors[part.id] || "#888";
               part.setAttribute("fill", savedColor);
-              // Garante que o estado interno do script do Body Diagram use o novo bodyColors
               
               part.removeEventListener("click", handleBodyPartClick);
               part.addEventListener("click", handleBodyPartClick);
@@ -985,11 +953,10 @@ pointer-events: none;
             default: next = "#888"; break;
           }
           part.setAttribute("fill", next);
-          bodyColors[part.id] = next; // Salva no estado global local
-          saveBodyState(); // Salva no localStorage com o ID da ficha
+          bodyColors[part.id] = next; 
+          saveBodyState(); 
       }
 
-      // --- CORREÇÃO 3: Renderiza os campos de detalhes e info ao carregar a ficha ---
       function renderDetailsAndInfo() {
           const detailIds = ['nomePersonagem','nomeJogador','idade','genero','ocupacao','residencia','nascimento'];
           detailIds.forEach(id => {
@@ -1007,9 +974,7 @@ pointer-events: none;
               }
           });
       }
-      // --- FIM CORREÇÃO 3 ---
 
-      // --- LÓGICA DO INVENTÁRIO (Adaptada) ---
       const inventoryTable = document.getElementById("inventoryTable").querySelector("tbody");
       const pesoAtualEl = document.getElementById("pesoAtual");
       const espacoAtualEl = document.getElementById("espacoAtual");
@@ -1018,7 +983,6 @@ pointer-events: none;
       const addItemBtn = document.getElementById("addItemBtn");
       const mochilaInput = document.getElementById('Mochila');
       
-      // Funções do Inventário (Mantidas e Adaptadas para usar `inventory` e `saveInventory`)
       function atualizarTotais() {
         const totalPeso = inventory.reduce((sum, item) => sum + (Number(item.peso)||0), 0);
         const totalEspaco = inventory.reduce((sum, item) => sum + (Number(item.espaco)||0), 0);
@@ -1060,14 +1024,12 @@ pointer-events: none;
         inventoryTable.innerHTML = "";
         inventory.forEach(item => criarLinha(item));
         
-        // <--- CORREÇÃO: Carrega o valor da mochila do estado
         if (mochilaInput) {
             mochilaInput.value = state.mochila ?? 0; 
         }
-        // ---> FIM CORREÇÃO
         
         atualizarTotais();
-        atualizarEspacoMax(); // Garante que o espacoMax seja calculado e atualizado
+        atualizarEspacoMax(); 
       }
 
       addItemBtn.addEventListener("click", () => {
@@ -1081,16 +1043,12 @@ pointer-events: none;
         const mochila = parseInt(mochilaInput.value) || 0;
         espacoMaxEl.value = mochila + 4;
         
-        // <--- CORREÇÃO: Salva o valor da mochila no estado principal
         state.mochila = mochila;
         saveState(); 
-        // ---> FIM CORREÇÃO
       }
       mochilaInput.addEventListener('input', atualizarEspacoMax);
       pesoMaxEl.addEventListener("input", atualizarTotais);
       
-      
-      // --- LÓGICA DAS HABILIDADES (Adaptada) ---
       const habilidadesTable = document.getElementById("habilidadesTable").querySelector("tbody");
       const addHabilidadeBtn = document.getElementById("addHabilidadeBtn");
 
@@ -1148,10 +1106,7 @@ pointer-events: none;
           criarLinhaHabilidade(novaHabilidade);
           saveHabilidades();
       });
-      // FIM: LÓGICA DAS HABILIDADES
 
-
-      // Funções de Renderização Total
       function syncAll(){
           renderAttributes();
           renderSkills();
@@ -1164,27 +1119,44 @@ pointer-events: none;
       }
 
       // --- LISTENERS DE CONTROLES (HP, SAN, ADR) ---
-      document.getElementById('hpMinus').addEventListener('click',()=>{state.hpCurrent=Math.max(0,Number(state.hpCurrent)-1);syncAll();});
-      document.getElementById('hpPlus').addEventListener('click',()=>{state.hpCurrent=Math.min(state.hpMax,Number(state.hpCurrent)+1);syncAll();});
-      document.getElementById('sanMinus').addEventListener('click',()=>{state.sanCurrent=Math.max(0,Number(state.sanCurrent)-1);syncAll();});
-      document.getElementById('sanPlus').addEventListener('click',()=>{state.sanCurrent=Math.min(state.sanMax,Number(state.sanCurrent)+1);syncAll();});
+      document.getElementById('hpMinus').addEventListener('click',()=>{state.hpCurrent=Number(state.hpCurrent)-1;syncAll();});
+      document.getElementById('hpPlus').addEventListener('click',()=>{state.hpCurrent=Number(state.hpCurrent)+1;syncAll();});
+      document.getElementById('sanMinus').addEventListener('click',()=>{state.sanCurrent=Number(state.sanCurrent)-1;syncAll();});
+      document.getElementById('sanPlus').addEventListener('click',()=>{state.sanCurrent=Number(state.sanCurrent)+1;syncAll();});
       document.getElementById('adrMinus').addEventListener('click',()=>{state.adrCurrent=Math.max(0,Number(state.adrCurrent)-1);syncAll();});
       document.getElementById('adrPlus').addEventListener('click',()=>{state.adrCurrent=Math.min(4,Number(state.adrCurrent)+1);syncAll();});
 
-      ['hpCurrent','hpMax','sanCurrent','sanMax'].forEach(id=>{
+      // --- ALTERAÇÃO AQUI: Listener do Input de HP Máximo ---
+
+document.getElementById('hpMax').addEventListener('change', e => {
+    const con = Number(state.attrs.CON) || 0;
+    const tam = Number(state.attrs.TAM) || 0;
+    const hpBonus = Math.floor(con + tam) / 2;
+    
+    // O valor que você digitou menos o bônus atual vira a nova Base
+    state.hpBase = Number(e.target.value) - hpBonus;
+    recalcHPandSAN();
+});
+
+// Listener para o SAN Máximo
+document.getElementById('sanMax').addEventListener('change', e => {
+    const men = Number(state.attrs.MEN) || 0;
+    const sanBonus = men * 5;
+    
+    // O valor que você digitou menos o bônus atual vira a nova Base
+    state.sanBase = Number(e.target.value) - sanBonus;
+    recalcHPandSAN();
+});
+
+      ['hpCurrent','sanCurrent','sanMax'].forEach(id=>{
         const el = document.getElementById(id);
-        // Note: os valores iniciais serão definidos em loadSheet
         el.addEventListener('change',e=>{
           state[id]=Number(e.target.value);
-          if(id==='hpMax' && state.hpCurrent>state.hpMax) state.hpCurrent=state.hpMax; 
           if(id==='sanMax' && state.sanCurrent>state.sanMax) state.sanCurrent=state.sanMax;
           syncAll();
         });
       });
 
-      /* --- LÓGICA DE MOSTRAR/ESCONDER POR DUPLO CLIQUE (Corrigido e com Salvamento de Estado) --- */
-
-      // --- Body Diagram (HP) ---
       const hpLabel = document.querySelector('.bar:first-child .label'); 
       const bodyDiagram = document.getElementById('body-diagram');
       
@@ -1197,8 +1169,6 @@ pointer-events: none;
           });
       }
 
-
-      // --- Barra de Adrenalina (Título "Barras") ---
       const h2Bars = document.querySelector('.panel h2');
       const adrenalinaBarContainer = document.getElementById('adrenalinaBarContainer'); 
 
@@ -1212,34 +1182,27 @@ pointer-events: none;
           });
       }
 
-// --- Lógica do Pop-up de Rolagem ---
       const rollModal = document.getElementById('rollModal');
       const closeModalBtn = document.getElementById('closeModalBtn');
       const rollResultContent = document.getElementById('rollResultContent');
       const rollSkillName = document.getElementById('rollSkillName');
       const criticalFailSound = document.getElementById('criticalFailSound'); 
 
-      // Função para abrir o modal e mostrar o resultado
       function showRollResult(skillName, resultText, rollNumber) {
         rollSkillName.textContent = `Perícia: ${skillName}`;
         rollResultContent.innerHTML = `${resultText} (Rolagem: ${rollNumber})`;
         rollModal.style.display = 'block';
       }
 
-      // Evento para fechar o modal no 'X'
       closeModalBtn.onclick = function() {
         rollModal.style.display = 'none';
       }
-
 
       closeModalBtn.onclick = function() {
         rollModal.style.display = 'none';
       };
 
-      // --- Fim Lógica do Pop-up ---
-
 function rollSkill(name){
-    // ... (Seu código de cálculo: 'val', 'roll', 'th') ...
     const val = state.skills[name] ?? SKILLS.find(s=>s[0]===name)[1] ?? 0;
     const roll = randInt(1,20);
     const th = THRESHOLDS[Math.max(1,Math.min(20,Math.floor(val)))] || {N:21,B:null,E:null};
@@ -1253,10 +1216,8 @@ function rollSkill(name){
 
     const finalResult = outcome.type;
     const details = outcome.detail;
-            
-    // --- NOVO BLOCO DE LÓGICA DE CORES E EXIBIÇÃO DA MODAL ---
     
-    let resultColor = 'var(--text)'; // Cor padrão
+    let resultColor = 'var(--text)'; 
     
     switch (finalResult) { 
         case 'Falha Crítica':
@@ -1293,31 +1254,23 @@ function rollSkill(name){
     rollModal.style.display = 'block';
 }
 
-      // --- CORREÇÃO 1: Lógica das Abas ---
       document.querySelectorAll('.tab-btn').forEach(button => {
           button.addEventListener('click', () => {
               const targetTabId = button.dataset.tab;
 
-              // Remove 'active' class from all buttons and content
               document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
               document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-              // Add 'active' class to the clicked button and its corresponding content
               button.classList.add('active');
               document.getElementById(targetTabId).classList.add('active');
           });
       });
-      // --- FIM CORREÇÃO 1 ---
-
-
-      // --- LISTENERS PARA CAMPOS DE TEXTO (DETALHES E INFO) ---
 
       const detailIds = ['nomePersonagem','nomeJogador','idade','genero','ocupacao','residencia','nascimento'];
       detailIds.forEach(id=>{
         const el = document.getElementById(id);
         el.addEventListener('input',e=>{
             state.details[id]=e.target.value;
-            // ATUALIZA NOME DA FICHA NA LISTA
             if(id === 'nomePersonagem') updateSheetName();
             saveState();
         });
@@ -1330,37 +1283,30 @@ function rollSkill(name){
       });
 
 
-      // --- LISTENERS DE NAVEGAÇÃO (FINAL) ---
       createSheetBtn.addEventListener('click', createNewSheet);
       backToIndexBtn.addEventListener('click', () => {
           currentSheetId = null;
-          localStorage.removeItem('cp_last_sheet_id'); // Garante que a última ficha aberta seja limpa
+          localStorage.removeItem('cp_last_sheet_id'); 
           renderIndex();
       });
 
-      /* --- INICIALIZAÇÃO --- */
-      
-      // Função principal de inicialização (Corrigida)
       function initApp() {
           const list = getSheetList();
           const lastSheetId = localStorage.getItem('cp_last_sheet_id');
           
-          // 1. Tenta carregar a última ficha aberta se ela existir na lista
           if (lastSheetId && list.some(s => s.id === lastSheetId)) {
               loadSheet(lastSheetId);
           } 
-          // 2. Se houver fichas, mas nenhuma "última" salva, carrega a primeira
           else if (list.length > 0) {
               loadSheet(list[0].id);
           } 
-          // 3. Se não houver fichas salvas, mostra a página de índice
           else {
               renderIndex(); 
           }
       }
 
-      initApp(); // INICIALIZA O APP
-    }); // FIM DO document.addEventListener
+      initApp();
+    }); 
   </script>
 </body>
 </html>
