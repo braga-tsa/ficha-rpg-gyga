@@ -121,7 +121,6 @@ pointer-events: none;
         transition: fill 0.3s ease;
     }
 
-    /* --- ESTILOS DAS ABAS --- */
     .tab-nav {
       display: flex;
       gap: 4px;
@@ -151,7 +150,6 @@ pointer-events: none;
       display: block; 
     }
 
-    /* --- ESTILOS PARA ABA INFO --- */
     #tabInfo .info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -161,7 +159,6 @@ pointer-events: none;
       grid-column: span 2;
     }
 
-    /* --- ESTILOS PARA O INDEX --- */
     .index-container {
         max-width: 600px;
         margin: 50px auto;
@@ -202,7 +199,7 @@ pointer-events: none;
     }
     .sheet-delete-btn:hover { background: #c0392b; }
 
-    /* INÍCIO: ESTILOS DE RESPONSIVIDADE (768px) */
+    /* (768px - Mobile) */
  @media(max-width: 768px) {
       #tabInfo .info-grid {
         grid-template-columns: 1fr;
@@ -230,7 +227,7 @@ pointer-events: none;
       }
     }
 
-    /* INÍCIO: ESTILOS DE RESPONSIVIDADE ADICIONAIS (600px - Mobile) */
+    /* (600px - Mobile) */
     @media (max-width: 600px) {
 
 .row.top,
@@ -618,12 +615,10 @@ pointer-events: none;
 
 
   <script>
-    /* ---------- DATA (SEM MUDANÇAS) ---------- */
     const ATTRS = ['FOR','CON','TAM','DES','APA','INT','MEN','COH','SOR'];
     const SKILLS = [['Acrobacia',4],['Antropologia',1],['Armas (Pistolas)',4],['Armas (Rifles/Espingardas)',5],['Armas (Arcos/Bestas)',3],['Arqueologia',1],['Arremessar',4],['Arte e Ofício',1],['Avaliação',1],['Cavalgar',1],['Charme',3],['Chaveiro',1],['Ciência (Biologia)',1],['Ciência (Forense)',1],['Ciência (Farmácia)',1],['Ciência (Química)',1],['Conhecimento',1],['Consertos Elétricos',2],['Consertos Mecânicos',2],['Contabilidade',1],['Demolições',1],['Direito',1],['Dirigir',4],['Disfarce',1],['Eletrônica',1],['Encontrar',5],['Escutar',4],['Esquivar',0],['Furtividade',4],['Hipnose',1],['História',1],['Intimidação',3],['Lábia',1],['Leitura Labial',1],['Língua (Nativa)',0],['Língua (Outra)',1],['Lutar (Brigar)',5],['Medicina',1],['Mergulho',1],['Mundo Natural',2],['Natação',2],['Navegação',2],['Ocultismo',2],['Operar Maquinário',1],['Persuasão',2],['Pilotar (Aeronave)',1],['Pilotar (Barco)',1],['Prestidigitação',2],['Primeiros Socorros',6],['Psicanálise',1],['Psicologia',2],['Rastrear',2],['Sobrevivência',2],['Treinar Animais',1],['Usar Bibliotecas',4],['Usar Computadores',4]];
     const THRESHOLDS = {1:{N:20,B:null,E:null},2:{N:19,B:20,E:null},3:{N:18,B:20,E:null},4:{N:17,B:19,E:null},5:{N:16,B:19,E:20},6:{N:15,B:18,E:20},7:{N:14,B:18,E:20},8:{N:13,B:17,E:20},9:{N:12,B:17,E:20},10:{N:11,B:16,E:19},11:{N:10,B:16,E:19},12:{N:9,B:15,E:19},13:{N:8,B:15,E:19},14:{N:7,B:14,E:19},15:{N:6,B:14,E:18},16:{N:5,B:13,E:18},17:{N:4,B:13,E:18},18:{N:3,B:12,E:18},19:{N:2,B:12,E:18},20:{N:1,B:11,E:18}};
 
- /* ---------- UTILITIES (MODIFICADO PARA MÚLTIPLAS FICHAS) ---------- */
     function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
     function rollDice(n,sides){let out=[];for(let i=0;i<n;i++)out.push(randInt(1,sides));return out}
     function escapeId(s){return s.replace(/[^a-z0-9]/gi,'_')}
@@ -643,15 +638,12 @@ pointer-events: none;
         try{
             const data = JSON.parse(localStorage.getItem(SHEET_PREFIX + id))||{};
             
-            // INICIALIZAÇÃO DE TODOS OS CAMPOS
             if(!data.attrs) data.attrs = {FOR:10,CON:10,TAM:10,DES:10,APA:10,INT:10,MEN:10,COH:10,SOR:10};
             if(!data.skills) data.skills = {};
             if(!data.details) data.details = {};
             if(!data.info) data.info = {};
             
-            // HP: Inicializa Base se não existir
             if(data.hpBase===undefined) data.hpBase = 0;
-            // O hpMax agora será calculado (Total), mas precisamos de um placeholder
             if(data.hpMax===undefined) data.hpMax = 10; 
             if(data.hpCurrent===undefined) data.hpCurrent = data.hpMax;
             
@@ -662,7 +654,6 @@ pointer-events: none;
             if (data.isAdrenalineVisible === undefined) data.isAdrenalineVisible = false;
             if (data.isBodyDiagramVisible === undefined) data.isBodyDiagramVisible = false;
             
-            // Inicializa valores das perícias
             SKILLS.forEach(([name,base])=>{ 
                  if(data.skills[name]===undefined) data.skills[name]=base; 
             });
@@ -673,7 +664,6 @@ pointer-events: none;
         }
     }
 
-    /* ---------- SCRIPT PRINCIPAL ---------- */
     document.addEventListener("DOMContentLoaded", () => {
         
       const indexPageEl = document.getElementById('indexPage');
@@ -683,7 +673,6 @@ pointer-events: none;
       const backToIndexBtn = document.getElementById('backToIndexBtn');
       const nomePersonagemInput = document.getElementById('nomePersonagem');
 
-      // --- Variáveis Globais de Estado ---
       let inventory = [];
       let habilidades = [];
       let bodyColors = {};
@@ -692,10 +681,6 @@ pointer-events: none;
           indexPageEl.style.display = pageId === 'index' ? 'block' : 'none';
           fichaContentEl.style.display = pageId === 'ficha' ? 'block' : 'none';
       }
-      
-      // ----------------------------------------------------
-      // LÓGICA DE GERENCIAMENTO DE FICHAS (INDEX)
-      // ----------------------------------------------------
 
       function getSheetList() {
           try {
@@ -747,7 +732,6 @@ pointer-events: none;
           list.push({ id: newId, name: 'Novo Personagem' });
           saveSheetList(list);
           
-          // Zera o estado para a nova ficha (o loadState cuida da inicialização)
           loadSheet(newId);
       }
 
@@ -778,10 +762,6 @@ pointer-events: none;
       function saveBodyState() { 
           if(currentSheetId) localStorage.setItem(SHEET_PREFIX + currentSheetId + '_bodyColors', JSON.stringify(bodyColors)); 
       }
-
-      // ----------------------------------------------------
-      // LÓGICA DE CARREGAMENTO (FICHA)
-      // ----------------------------------------------------
 
       function loadSheet(id) {
           currentSheetId = id;
@@ -846,32 +826,25 @@ pointer-events: none;
         recalcHPandSAN();
       }
 
-      // --- ALTERAÇÃO AQUI: LÓGICA DE HP ---
 function recalcHPandSAN(){
-    // Cálculo HP: Valor Digitado (Base) + ((CON + TAM) / 2 - 10)
     const con = Number(state.attrs.CON) || 0;
     const tam = Number(state.attrs.TAM) || 0;
-    const hpBonus = Math.floor(con + tam) / 2;
+    const hpBonus = Math.floor((con + tam) / 2);
     
-    // Define 10 como base inicial se for novo
     if(state.hpBase === undefined) state.hpBase = 0;
     state.hpMax = state.hpBase + hpBonus;
 
-    // Cálculo SAN: Valor Digitado (Base) + (MEN * 5)
-    // 50 é o valor inicial sugerido
     const men = Number(state.attrs.MEN) || 0;
     const sanBonus = men * 5;
     
     if(state.sanBase === undefined) state.sanBase = 0;
     state.sanMax = state.sanBase + sanBonus;
     
-    // Atualiza os inputs com o valor total (Base + Bônus)
     document.getElementById('hpMax').value = state.hpMax;
     document.getElementById('sanMax').value = state.sanMax;
     document.getElementById('hpCurrent').value = state.hpCurrent;
     document.getElementById('sanCurrent').value = state.sanCurrent;
     
-    // Peso Máximo baseado na FOR
     const pesoMaxEl = document.getElementById('pesoMax');
     if (pesoMaxEl) {
         const forca = Number(state.attrs.FOR) || 0;
@@ -884,7 +857,6 @@ function recalcHPandSAN(){
 }
 
       function updateMeters(){
-          // Usa state.hpMax (que agora é o Total) para a porcentagem
           const hpPct = state.hpMax? Math.max(0,Math.min(100,Math.round(state.hpCurrent/state.hpMax*100))):0;
           const sanPct = state.sanMax? Math.max(0,Math.min(100,Math.round(state.sanCurrent/state.sanMax*100))):0;
           document.getElementById('hpMeter').style.width = hpPct + '%';
@@ -1118,7 +1090,6 @@ function recalcHPandSAN(){
           saveState();
       }
 
-      // --- LISTENERS DE CONTROLES (HP, SAN, ADR) ---
       document.getElementById('hpMinus').addEventListener('click',()=>{state.hpCurrent=Number(state.hpCurrent)-1;syncAll();});
       document.getElementById('hpPlus').addEventListener('click',()=>{state.hpCurrent=Number(state.hpCurrent)+1;syncAll();});
       document.getElementById('sanMinus').addEventListener('click',()=>{state.sanCurrent=Number(state.sanCurrent)-1;syncAll();});
@@ -1126,24 +1097,19 @@ function recalcHPandSAN(){
       document.getElementById('adrMinus').addEventListener('click',()=>{state.adrCurrent=Math.max(0,Number(state.adrCurrent)-1);syncAll();});
       document.getElementById('adrPlus').addEventListener('click',()=>{state.adrCurrent=Math.min(4,Number(state.adrCurrent)+1);syncAll();});
 
-      // --- ALTERAÇÃO AQUI: Listener do Input de HP Máximo ---
-
 document.getElementById('hpMax').addEventListener('change', e => {
     const con = Number(state.attrs.CON) || 0;
     const tam = Number(state.attrs.TAM) || 0;
-    const hpBonus = Math.floor(con + tam) / 2;
+    const hpBonus = Math.floor((con + tam) / 2);
     
-    // O valor que você digitou menos o bônus atual vira a nova Base
     state.hpBase = Number(e.target.value) - hpBonus;
     recalcHPandSAN();
 });
 
-// Listener para o SAN Máximo
 document.getElementById('sanMax').addEventListener('change', e => {
     const men = Number(state.attrs.MEN) || 0;
     const sanBonus = men * 5;
     
-    // O valor que você digitou menos o bônus atual vira a nova Base
     state.sanBase = Number(e.target.value) - sanBonus;
     recalcHPandSAN();
 });
