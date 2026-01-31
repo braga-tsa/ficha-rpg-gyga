@@ -634,6 +634,7 @@ pointer-events: none;
 	const _supabase = window.supabase ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 	const MASTER_PASS = "pontosdeadrenalina"; // <--- Escolha sua senha secreta de Mestre
 	const SHEET_PREFIX = 'cp_sheet_';
+	const SHEET_LIST_KEY = 'cp_sheets_list';
 	let currentSheetId = null;
 	let state = { /* ... seu estado inicial ... */ };
 
