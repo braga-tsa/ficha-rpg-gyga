@@ -630,11 +630,10 @@ pointer-events: none;
 
   <script>
 	const SUPABASE_URL = 'https://ndqnzqbbugidewnqlxmp.supabase.co';
-	const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kcW56cWJidWdpZGV3bnFseG1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg1MDU0MTUsImV4cCI6MjA4NDA4MTQxNX0.9l5p47Eu3POuegTracQUHOBpmdnJssjb2l0dCgdNwLw'; // Pegue a chave "anon" 	"public" no painel
+	const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kcW56cWJidWdpZGV3bnFseG1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg1MDU0MTUsImV4cCI6MjA4NDA4MTQxNX0.9l5p47Eu3POuegTracQUHOBpmdnJssjb2l0dCgdNwLw';
 	const _supabase = window.supabase ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 	const MASTER_PASS = "pontosdeadrenalina"; // <--- Escolha sua senha secreta de Mestre
 	const SHEET_PREFIX = 'cp_sheet_';
-	const SHEET_LIST_KEY = 'cp_sheets_list';
 	let currentSheetId = null;
 	let state = { /* ... seu estado inicial ... */ };
 
@@ -782,36 +781,16 @@ pointer-events: none;
     showPage('index');
 }
 
-async function createNewSheet() {
-    const id = 'sheet-' + Date.now();
-    const novoNome = prompt("Nome do Personagem:");
-    if (!novoNome) return;
-
-    // Estado inicial da ficha
-    const initialState = {
-        details: { nomePersonagem: novoNome },
-        attrs: { FOR:10, CON:10, TAM:10, DES:10, APA:10, INT:10, MEN:10, EDU:10, SOR:10 },
-        hpMax: 10, hpCurrent: 10, hpBase: 0,
-        sanMax: 50, sanCurrent: 50, sanBase: 0,
-        inventory: [],
-        notes: ""
-    };
-
-    // 1. Salva no Supabase (Obrigatório para os outros verem)
-    const { error } = await _supabase.from('fichas').insert({
-        nome_id: id,
-        dados: initialState
-    });
-
-    if (error) {
-        console.error("Erro ao criar no banco:", error.message);
-        alert("Erro ao criar ficha no servidor.");
-        return;
-    }
-
-    // 2. Abre a ficha recém-criada
-    loadSheet(id);
-}
+      function createNewSheet() {
+          const newId = 'sheet-' + Date.now();
+          const list = getSheetList();
+          
+          list.push({ id: newId, name: 'Novo Personagem' });
+          saveSheetList(list);
+          
+          // Zera o estado para a nova ficha (o loadState cuida da inicialização)
+          loadSheet(newId);
+      }
 
       function deleteSheet(id, name) {
           if (confirm(`Vai deletar a ficha de "${name}"? Não da pra restaurar, seu comédia.`)) {
@@ -855,30 +834,36 @@ document.getElementById('btnRemovePassword').onclick = () => {
     if(confirm("Remover a proteção por senha?")) { state.password = null; saveState(); alert("Senha removida!"); }
 };
 
-// SUBSTITUA sua função loadSheet por esta:
 async function loadSheet(id) {
-    const { data, error } = await _supabase.from('fichas').select('dados').eq('nome_id', id).single();
-    
+    // Busca os dados da ficha
+    const { data, error } = await _supabase
+        .from('fichas')
+        .select('*') // Busca tudo para evitar erro de seletor
+        .eq('nome_id', id)
+        .maybeSingle(); // Usa maybeSingle para evitar erro se não achar nada
+
+    if (error) {
+        console.error("Erro ao carregar:", error.message);
+        return;
+    }
+
     if (data) {
         const tempState = data.dados;
         
-        // Verifica Senha
+        // Lógica da senha (se existir)
         if (tempState.password) {
-            const tentativa = prompt("Ficha Protegida. Digite a senha (ou a de Mestre):");
+            const tentativa = prompt("Ficha protegida. Digite a senha:");
             if (tentativa !== tempState.password && tentativa !== MASTER_PASS) {
-                alert("Senha Incorreta!");
+                alert("Senha incorreta!");
                 return;
             }
         }
-        
+
         state = tempState;
         currentSheetId = id;
-        localStorage.setItem('cp_last_sheet_id', id);
         syncAll();
         showPage('ficha');
-        
-        // ATIVA O REALTIME AQUI
-        enableRealtime(id); 
+        enableRealtime(id);
     }
 }
 
@@ -1370,32 +1355,22 @@ function rollSkill(name){
       });
 
 function enableRealtime(id) {
-    // Remove qualquer conexão antiga para não bugar
-    _supabase.removeAllChannels();
-
-    console.log("--> TENTANDO CONECTAR NO REALTIME NA FICHA:", id);
+    _supabase.removeAllChannels(); // Evita conexões duplicadas
 
     _supabase
-        .channel('public:fichas')
+        .channel('mudancas-ficha')
         .on('postgres_changes', { 
-            event: '*', // Escuta TUDO (Insert, Update, Delete)
+            event: 'UPDATE', 
             schema: 'public', 
-            table: 'fichas',
-            filter: `nome_id=eq.${id}`
-        }, (payload) => {
-            console.log("--> OPA! O BANCO MANDOU UM SINAL:", payload);
-            
-            // Verifica se tem dados novos
-            if(payload.new && payload.new.dados) {
-                state = payload.new.dados; // Atualiza a variável local
-                syncAll(); // Atualiza a tela
-                console.log("--> TELA ATUALIZADA COM SUCESSO!");
-            }
+            table: 'fichas', 
+            filter: `nome_id=eq.${id}` 
+        }, payload => {
+            // Sincroniza o estado local com o que veio do banco
+            state = payload.new.dados;
+            syncAll(); // Atualiza toda a tela (campos e barras)
+            console.log("Sincronizado via Realtime");
         })
-        .subscribe((status) => {
-            // Isso nos diz se conectou ou falhou
-            console.log("--> STATUS DA CONEXÃO:", status);
-        });
+        .subscribe();
 }
 
       function initApp() {
