@@ -761,7 +761,7 @@ pointer-events: none;
             // Puxa o nome que está dentro do objeto de dados
             nameLink.textContent = sheetData.details?.nomePersonagem || 'Personagem Sem Nome';
             
-            nameLink.addEventListener('click', () => loadSheet(item.nome_id));
+            nameLink.addEventListener('click', () => (item.nome_id));
             
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'sheet-delete-btn';
@@ -865,35 +865,56 @@ document.getElementById('btnRemovePassword').onclick = () => {
 };
 
 async function loadSheet(id) {
-    // Busca os dados da ficha
+    console.log("Tentando carregar a ficha:", id);
+    
+    // 1. Busca no Supabase
     const { data, error } = await _supabase
         .from('fichas')
-        .select('*') // Busca tudo para evitar erro de seletor
+        .select('*')
         .eq('nome_id', id)
-        .maybeSingle(); // Usa maybeSingle para evitar erro se não achar nada
+        .maybeSingle();
 
     if (error) {
-        console.error("Erro ao carregar:", error.message);
+        console.error("Erro na busca do Supabase:", error.message);
+        alert("Erro ao conectar com o banco de dados.");
         return;
     }
 
-    if (data) {
-        const tempState = data.dados;
-        
-        // Lógica da senha (se existir)
-        if (tempState.password) {
-            const tentativa = prompt("Ficha protegida. Digite a senha:");
-            if (tentativa !== tempState.password && tentativa !== MASTER_PASS) {
-                alert("Senha incorreta!");
-                return;
-            }
-        }
+    if (!data) {
+        console.error("Ficha não encontrada no banco de dados para o ID:", id);
+        alert("Essa ficha não existe no servidor.");
+        return;
+    }
 
-        state = tempState;
-        currentSheetId = id;
-        syncAll();
-        showPage('ficha');
-        enableRealtime(id);
+    // 2. Extrai os dados
+    const tempState = data.dados;
+    console.log("Dados recebidos com sucesso:", tempState);
+
+    // 3. Verifica senha (simplificado para não travar)
+    if (tempState.password) {
+        const tentativa = prompt("Ficha protegida por senha:");
+        if (tentativa !== tempState.password && tentativa !== MASTER_PASS) {
+            alert("Senha incorreta!");
+            return;
+        }
+    }
+
+    // 4. ATUALIZA TUDO
+    state = tempState;
+    currentSheetId = id;
+    
+    // Salva o último ID no navegador
+    localStorage.setItem('cp_last_sheet_id', id);
+
+    // Chama as funções de atualizar a tela
+    try {
+        syncAll();        // Preenche os campos
+        showPage('ficha'); // MUDA A TELA (Importante!)
+        enableRealtime(id); // Ativa o tempo real
+        console.log("Ficha aberta com sucesso!");
+    } catch (err) {
+        console.error("Erro ao renderizar a ficha:", err);
+        alert("Erro visual: Verifique se as funções syncAll ou showPage existem.");
     }
 }
 
