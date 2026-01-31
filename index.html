@@ -787,12 +787,12 @@ async function renderIndex() {
       async function createNewSheet() {
     // 1. Gera um ID único e um nome padrão sem perguntar nada
     const id = 'sheet-' + Date.now();
-    const nomePadrao = "Novo Personagem"; 
+    const nomePadrao = ""; 
 
     // 2. Estado inicial da ficha (Limpo)
     const initialState = {
     details: { 
-        nomePersonagem: "Novo Personagem", 
+        nomePersonagem: "", 
         jogador: "",
         ocupacao: "",
         idade: "",
