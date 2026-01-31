@@ -789,20 +789,21 @@ pointer-events: none;
 
     // 2. Estado inicial da ficha (Limpo)
     const initialState = {
-        details: { 
-            nomePersonagem: nomePadrao, 
-            jogador: "",
-            ocupacao: "",
-            idade: ""
-        },
-        attrs: { FOR:10, CON:10, TAM:10, DES:10, APA:10, INT:10, MEN:10, EDU:10, SOR:10 },
-        hpMax: 10, hpCurrent: 10, hpBase: 0,
-        sanMax: 50, sanCurrent: 50, sanBase: 0,
-        inventory: [],
-        skills: [],
-        notes: "",
-        password: null 
-    };
+    details: { 
+        nomePersonagem: "Novo Personagem", 
+        jogador: "",
+        ocupacao: "",
+        idade: "",
+        infoDescricao: "" // Adicionado para evitar o erro!
+    },
+    attrs: { FOR:10, CON:10, TAM:10, DES:10, APA:10, INT:10, MEN:10, EDU:10, SOR:10 },
+    hpMax: 10, hpCurrent: 10, hpBase: 0,
+    sanMax: 50, sanCurrent: 50, sanBase: 0,
+    inventory: [],
+    skills: [],
+    notes: "",
+    password: null 
+};
 
     // 3. Envia para o Supabase
     const { error } = await _supabase
@@ -1082,12 +1083,12 @@ function recalcHPandSAN(){
           });
           
           const infoIds = ['infoDescricao','infoCaracteristicas','infoIdeologia','infoFerimentos','infoPessoas','infoLocais','infoFobias','infoObjetos', 'infoDinheiro', 'infoPatrimonio'];
-          infoIds.forEach(id => {
-              const el = document.getElementById(id);
-              if (el) {
-                  el.value = state.info[id] ?? '';
-              }
-          });
+			infoIds.forEach(id => {
+   		 	const el = document.getElementById(id);
+   			 if (el) {
+       		 el.value = (state.info && state.info[id]) ?? '';
+    }
+});
       }
 
       const inventoryTable = document.getElementById("inventoryTable").querySelector("tbody");
