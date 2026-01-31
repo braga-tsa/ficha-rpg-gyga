@@ -782,16 +782,41 @@ pointer-events: none;
     showPage('index');
 }
 
-      function createNewSheet() {
-          const newId = 'sheet-' + Date.now();
-          const list = getSheetList();
-          
-          list.push({ id: newId, name: 'Novo Personagem' });
-          saveSheetList(list);
-          
-          // Zera o estado para a nova ficha (o loadState cuida da inicialização)
-          loadSheet(newId);
-      }
+      async function createNewSheet() {
+    // 1. Pede o nome
+    const nome = prompt("Nome do Personagem:");
+    if (!nome) return;
+
+    // 2. Gera um ID único
+    const id = 'sheet-' + Date.now();
+
+    // 3. Cria o estado inicial padrão
+    const initialState = {
+        details: { nomePersonagem: nome, jogador: "" },
+        attrs: { FOR:10, CON:10, TAM:10, DES:10, APA:10, INT:10, MEN:10, EDU:10, SOR:10 },
+        hpMax: 10, hpCurrent: 10, hpBase: 0,
+        sanMax: 50, sanCurrent: 50, sanBase: 0,
+        inventory: [],
+        skills: [],
+        notes: "",
+        password: null // Começa sem senha
+    };
+
+    // 4. Envia para o Supabase
+    const { error } = await _supabase
+        .from('fichas')
+        .insert({ nome_id: id, dados: initialState });
+
+    if (error) {
+        console.error("Erro no Supabase:", error);
+        alert("Erro ao criar ficha: " + error.message);
+        return;
+    }
+
+    // 5. Se deu certo, carrega a ficha nova
+    // Não chamamos mais saveSheetList() aqui!
+    loadSheet(id);
+}
 
       function deleteSheet(id, name) {
           if (confirm(`Vai deletar a ficha de "${name}"? Não da pra restaurar, seu comédia.`)) {
