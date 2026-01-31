@@ -753,26 +753,38 @@ pointer-events: none;
         sheetListEl.innerHTML = '<li style="justify-content:center; color: var(--muted);">Nenhuma ficha encontrada na nuvem.</li>';
     } else {
         fichasNuvem.forEach(item => {
-            const sheetData = item.dados;
-            const li = document.createElement('li');
-            
-            const nameLink = document.createElement('a');
-            nameLink.className = 'sheet-name-link';
-            // Puxa o nome que está dentro do objeto de dados
-            nameLink.textContent = sheetData.details?.nomePersonagem || 'Personagem Sem Nome';
-            
-            nameLink.addEventListener('click', () => (item.nome_id));
-            
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'sheet-delete-btn';
-            deleteBtn.textContent = 'Deletar';
-            deleteBtn.addEventListener('click', async (e) => {
-                e.stopPropagation();
-                if(confirm("Deseja apagar esta ficha da nuvem permanentemente?")) {
-                    await _supabase.from('fichas').delete().eq('nome_id', item.nome_id);
-                    renderIndex();
-                }
-            });
+    const sheetData = item.dados;
+    const li = document.createElement('li');
+    
+    const nameLink = document.createElement('a');
+    nameLink.className = 'sheet-name-link';
+    nameLink.style.cursor = 'pointer'; // Adiciona a mãozinha do mouse
+    
+    // Puxa o nome que está dentro do objeto de dados
+    nameLink.textContent = sheetData.details?.nomePersonagem || 'Personagem Sem Nome';
+    
+    // --- AQUI ESTAVA O ERRO, AGORA CORRIGIDO ---
+    nameLink.addEventListener('click', (e) => {
+        e.preventDefault(); // Evita que a página recarregue se for um link
+        loadSheet(item.nome_id);
+    });
+    // -------------------------------------------
+    
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'sheet-delete-btn';
+    deleteBtn.textContent = 'Deletar';
+    deleteBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if(confirm("Deseja apagar esta ficha da nuvem permanentemente?")) {
+            await _supabase.from('fichas').delete().eq('nome_id', item.nome_id);
+            renderIndex();
+        }
+    });
+
+    li.appendChild(nameLink);
+    li.appendChild(deleteBtn);
+    sheetListEl.appendChild(li);
+});
 
             li.appendChild(nameLink);
             li.appendChild(deleteBtn);
