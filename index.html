@@ -1349,22 +1349,32 @@ function rollSkill(name){
       });
 
 function enableRealtime(id) {
-    _supabase.removeAllChannels(); // Evita conexões duplicadas
+    // Remove qualquer conexão antiga para não bugar
+    _supabase.removeAllChannels();
+
+    console.log("--> TENTANDO CONECTAR NO REALTIME NA FICHA:", id);
 
     _supabase
-        .channel('mudancas-ficha')
+        .channel('public:fichas')
         .on('postgres_changes', { 
-            event: 'UPDATE', 
+            event: '*', // Escuta TUDO (Insert, Update, Delete)
             schema: 'public', 
-            table: 'fichas', 
-            filter: `nome_id=eq.${id}` 
-        }, payload => {
-            // Sincroniza o estado local com o que veio do banco
-            state = payload.new.dados;
-            syncAll(); // Atualiza toda a tela (campos e barras)
-            console.log("Sincronizado via Realtime");
+            table: 'fichas',
+            filter: `nome_id=eq.${id}`
+        }, (payload) => {
+            console.log("--> OPA! O BANCO MANDOU UM SINAL:", payload);
+            
+            // Verifica se tem dados novos
+            if(payload.new && payload.new.dados) {
+                state = payload.new.dados; // Atualiza a variável local
+                syncAll(); // Atualiza a tela
+                console.log("--> TELA ATUALIZADA COM SUCESSO!");
+            }
         })
-        .subscribe();
+        .subscribe((status) => {
+            // Isso nos diz se conectou ou falhou
+            console.log("--> STATUS DA CONEXÃO:", status);
+        });
 }
 
       function initApp() {
