@@ -782,16 +782,36 @@ pointer-events: none;
     showPage('index');
 }
 
-      function createNewSheet() {
-          const newId = 'sheet-' + Date.now();
-          const list = getSheetList();
-          
-          list.push({ id: newId, name: 'Novo Personagem' });
-          saveSheetList(list);
-          
-          // Zera o estado para a nova ficha (o loadState cuida da inicialização)
-          loadSheet(newId);
-      }
+async function createNewSheet() {
+    const id = 'sheet-' + Date.now();
+    const novoNome = prompt("Nome do Personagem:");
+    if (!novoNome) return;
+
+    // Estado inicial da ficha
+    const initialState = {
+        details: { nomePersonagem: novoNome },
+        attrs: { FOR:10, CON:10, TAM:10, DES:10, APA:10, INT:10, MEN:10, EDU:10, SOR:10 },
+        hpMax: 10, hpCurrent: 10, hpBase: 0,
+        sanMax: 50, sanCurrent: 50, sanBase: 0,
+        inventory: [],
+        notes: ""
+    };
+
+    // 1. Salva no Supabase (Obrigatório para os outros verem)
+    const { error } = await _supabase.from('fichas').insert({
+        nome_id: id,
+        dados: initialState
+    });
+
+    if (error) {
+        console.error("Erro ao criar no banco:", error.message);
+        alert("Erro ao criar ficha no servidor.");
+        return;
+    }
+
+    // 2. Abre a ficha recém-criada
+    loadSheet(id);
+}
 
       function deleteSheet(id, name) {
           if (confirm(`Vai deletar a ficha de "${name}"? Não da pra restaurar, seu comédia.`)) {
