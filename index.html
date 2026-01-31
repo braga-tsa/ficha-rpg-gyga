@@ -783,13 +783,15 @@ pointer-events: none;
 }
 
       async function createNewSheet() {
-    const nome = prompt("Nome do Personagem:");
-    if (!nome) return;
-
+    // 1. Geramos o ID único imediatamente
     const id = 'sheet-' + Date.now();
 
+    // 2. Definimos o estado inicial com um nome padrão, sem perguntar nada
     const initialState = {
-        details: { nomePersonagem: nome, jogador: "" },
+        details: { 
+            nomePersonagem: "Novo Personagem", // Nome padrão inicial
+            jogador: "" 
+        },
         attrs: { FOR:10, CON:10, TAM:10, DES:10, APA:10, INT:10, MEN:10, EDU:10, SOR:10 },
         hpMax: 10, hpCurrent: 10, hpBase: 0,
         sanMax: 50, sanCurrent: 50, sanBase: 0,
@@ -799,18 +801,18 @@ pointer-events: none;
         password: null
     };
 
-    // Salva no Supabase
+    // 3. Envia para o Supabase
     const { error } = await _supabase
         .from('fichas')
         .insert({ nome_id: id, dados: initialState });
 
     if (error) {
-        console.error("Erro Supabase:", error);
-        alert("Erro ao criar ficha. Verifique o console.");
+        console.error("Erro no Supabase:", error);
+        alert("Erro ao criar ficha. Verifique sua conexão.");
         return;
     }
 
-    // Carrega a ficha nova
+    // 4. Abre a ficha automaticamente
     loadSheet(id);
 }
 
