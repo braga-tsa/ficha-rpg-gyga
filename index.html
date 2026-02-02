@@ -1429,7 +1429,7 @@ function enableRealtime(id) {
                 if (dadosNovos !== dadosAtuais) {
                     console.log("Mudança detectada no banco! Atualizando tela...");
                     state = data.dados;
-                    syncAll(); // Atualiza o HP, atributos, etc.
+                    syncAll();
                 }
             }
         }
