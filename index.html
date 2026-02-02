@@ -651,21 +651,15 @@ pointer-events: none;
     async function saveState() {
     if (!currentSheetId) return;
 
-    // 1. Salva no navegador (localStorage)
-    localStorage.setItem(SHEET_PREFIX + currentSheetId, JSON.stringify(state));
+    const { error } = await _supabase
+        .from('fichas')
+        .update({ dados: state })
+        .eq('nome_id', currentSheetId);
 
-    // 2. Tenta salvar no Supabase apenas se a conexão existir
-    if (typeof _supabase !== 'undefined' && _supabase !== null) {
-        const { error } = await _supabase
-            .from('fichas')
-            .upsert({ 
-                nome_id: currentSheetId, 
-                dados: state 
-            }, { onConflict: 'nome_id' });
-
-        if (error) console.error('Erro no Supabase:', error.message);
+    if (error) {
+        console.error("Erro ao salvar:", error.message);
     } else {
-        console.warn('Conexão com Supabase não detectada. Dados salvos apenas localmente.');
+        console.log("Alteração salva com sucesso!");
     }
 }
     
@@ -1408,23 +1402,38 @@ function rollSkill(name){
           renderIndex();
       });
 
-function enableRealtime(id) {
-    _supabase.removeAllChannels(); // Evita conexões duplicadas
+let syncInterval = null; // Variável para controlar o tempo
 
-    _supabase
-        .channel('mudancas-ficha')
-        .on('postgres_changes', { 
-            event: 'UPDATE', 
-            schema: 'public', 
-            table: 'fichas', 
-            filter: `nome_id=eq.${id}` 
-        }, payload => {
-            // Sincroniza o estado local com o que veio do banco
-            state = payload.new.dados;
-            syncAll(); // Atualiza toda a tela (campos e barras)
-            console.log("Sincronizado via Realtime");
-        })
-        .subscribe();
+function enableRealtime(id) {
+    console.log("Monitoramento via Intervalo ativado para:", id);
+
+    // Se já houver um cronômetro rodando de outra ficha, a gente limpa ele
+    if (syncInterval) clearInterval(syncInterval);
+
+    // Criamos um novo cronômetro que roda a cada 4 segundos
+    syncInterval = setInterval(async () => {
+        // Só busca se o usuário estiver com a aba do navegador ativa
+        if (document.visibilityState === 'visible' && currentSheetId === id) {
+            
+            const { data, error } = await _supabase
+                .from('fichas')
+                .select('dados')
+                .eq('nome_id', id)
+                .maybeSingle();
+
+            if (data && data.dados) {
+                // Comparamos se o que está no banco é diferente do que está na tela
+                const dadosNovos = JSON.stringify(data.dados);
+                const dadosAtuais = JSON.stringify(state);
+
+                if (dadosNovos !== dadosAtuais) {
+                    console.log("Mudança detectada no banco! Atualizando tela...");
+                    state = data.dados;
+                    syncAll(); // Atualiza o HP, atributos, etc.
+                }
+            }
+        }
+    }, 4000); // 4000 milissegundos = 4 segundos
 }
 
       function initApp() {
