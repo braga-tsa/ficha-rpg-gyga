@@ -70,43 +70,42 @@
         transition: fill 0.3s ease;
     }
     
-.roll-icon {
-    background: url(https://crisordemparanormal.com/assets/d20-icon-TtjmS7-Z.png) no-repeat center center;
-    background-size: contain;
-    width: 28px; 
-    height: 28px;
-    display: inline-block;
-    opacity: 0.8;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
 #rollModal {
-
-.roll-icon:hover {
-    opacity: 1;
-    transform: scale(1.1);
-}
-
-.skills-button-td button {
-    background: none; 
-    border: none; 
-    padding: 0; 
-    cursor: pointer;
-    position: relative;
-    z-index: 101;
+        /* Removemos o nesting que estava quebrando o CSS */
+        pointer-events: none;
     }
 
-pointer-events: none;
+    /* Estilo do ícone separado corretamente */
+    .roll-icon {
+        background: url(https://crisordemparanormal.com/assets/d20-icon-TtjmS7-Z.png) no-repeat center center;
+        background-size: contain;
+        width: 28px; 
+        height: 28px;
+        display: inline-block;
+        opacity: 0.8;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    
+    .roll-icon:hover {
+        opacity: 1;
+        transform: scale(1.1);
+    }
 
-}
-  #rollModalContent {
+    /* Garante que o botão fique clicável e acima de outros elementos */
+    .skills-button-td button {
+        background: none; 
+        border: none; 
+        padding: 0; 
+        cursor: pointer;
+        position: relative;
+        z-index: 101; 
+        pointer-events: auto; /* Força o botão a aceitar cliques */
+    }
 
-  .roll-result{min-width:130px}
-    .footer{margin-top:16px;font-size:13px;color:var(--muted)}
-    .flex{display:flex;gap:8px;align-items:center}
-    @media(max-width:900px){.attributes{grid-template-columns:repeat(4,1fr)}.row{flex-direction:column}}
-    pointer-events: none;
-}
+    #rollModalContent {
+        pointer-events: auto;
+    }
+    .roll-result{min-width:130px}
 
 
     input[type=number]::-webkit-inner-spin-button,
@@ -475,7 +474,7 @@ pointer-events: none;
             </div>
           </div>
 
-          <div class="col panel" style="flex: 1; min-width: 440px;">
+          <div class="col panel" style="flex: 1; min-width: 440px;margin-bottom: 15px;">
             <h2>Perícias</h2>
             <div style="font-size:13px;color:var(--muted)">Distribua os pontos de perícia abaixo.</div>
             <div style="margin-top:8px;max-height:430px;overflow:auto">
@@ -602,12 +601,16 @@ pointer-events: none;
 	<div class="password-controls" style="margin: 10px 0; display: flex; gap: 10px;">
     <button id="btnSetPassword" class="btn" style="font-size: 12px;">🔐 Definir Senha</button>
     <button id="btnRemovePassword" class="btn" style="background: #441111; font-size: 12px;">🔓 Remover 		Senha</button>
+
 	</div>
       </div>
     </div>
+  </div>
+</div>
+
 
 <div id="rollModal" style="display:none; position:fixed; z-index:100; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgba(0,0,0,0); pointer-events: none;">
-    
+
     <div id="rollModalContent" style="background-color: var(--panel); padding: 1px; border: 1px solid var(--accent); border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); pointer-events: auto; position: absolute; right: 40px; bottom: 30px; width: 320px; max-width: 320px;">
         
         <span id="closeModalBtn" style="color: var(--accent); float: right; font-size: 28px; font-weight: bold; margin-right: 10px; cursor: pointer;">&times;</span>
@@ -621,12 +624,8 @@ pointer-events: none;
         <p id="rollDetails" style="font-size: 18px; font-weight: bold; color: var(--muted); margin-left: 5px; margin-top: -15px;"></p>
        
     </div>
-</div>
-</div>
-
   </div>
 </div>
-
 
   <script>
 	const SUPABASE_URL = 'https://ndqnzqbbugidewnqlxmp.supabase.co';
@@ -792,7 +791,8 @@ async function renderIndex() {
         idade: "",
         infoDescricao: "" // Adicionado para evitar o erro!
     },
-    attrs: { FOR:10, CON:10, TAM:10, DES:10, APA:10, INT:10, MEN:10, EDU:10, SOR:10 },
+    attrs: { FOR:10, CON:10, TAM:10, DES:10, APA:10, COH:10, INT:10, MEN:10, EDU:10, SOR:0 },
+    isAdrenalineVisible: false,
     hpMax: 10, hpCurrent: 10, hpBase: 0,
     sanMax: 50, sanCurrent: 50, sanBase: 0,
     inventory: [],
@@ -1010,30 +1010,52 @@ function recalcHPandSAN(){
           saveState();
       }
 
-      function renderSkills(){
-        const tbody = document.querySelector('#skillsTable tbody');
-        tbody.innerHTML='';
-        SKILLS.forEach(([name,base])=>{
-          const tr = document.createElement('tr');
-          const curVal = state.skills[name] ?? base;
-          tr.innerHTML = `<td>${name}</td><td class="skill-base">${base}</td><td><input class="skill-val" data-name="${name}" type="number" min="1" max="20" value="${curVal}"/></td><td><button data-roll="${name}" style="background:none; border:none; padding:0; cursor:pointer;"><span class="roll-icon"></span></button></td>`;
-          tbody.appendChild(tr);
-        });
-	document.querySelectorAll('.skill-val').forEach(inp => {
-           inp.addEventListener('input', e => {
-            const skillName = e.target.dataset.name;
-            let value = Number(e.target.value);
-            value = Math.max(1, Math.min(20, value));
-            state.skills[skillName] = value;
-            saveState(); 
-        });
+      function renderSkills() {
+    const tbody = document.querySelector('#skillsTable tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+
+    SKILLS.forEach(([name, base]) => {
+        const tr = document.createElement('tr');
+        const curVal = state.skills[name] ?? base;
+        
+        // Adicionei a classe 'btn-roll' para facilitar o clique
+        tr.innerHTML = `
+            <td>${name}</td>
+            <td class="skill-base">${base}</td>
+            <td>
+                <input class="skill-val" data-name="${name}" type="number" min="1" max="99" value="${curVal}"/>
+            </td>
+            <td>
+                <button class="btn-roll" data-roll="${name}" style="background:none; border:none; padding:5px; cursor:pointer;">
+                    <span class="roll-icon"></span>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(tr);
     });
 
-    document.querySelectorAll('button[data-roll]').forEach(btn => {
-        btn.addEventListener('click', e => {
-            const skillName = e.currentTarget.dataset.roll;
+    // Delegando o evento de INPUT (mais eficiente)
+    tbody.addEventListener('input', e => {
+        if (e.target.classList.contains('skill-val')) {
+            const skillName = e.target.dataset.name;
+            let value = Number(e.target.value);
+            state.skills[skillName] = value;
+            saveState(); 
+        }
+    });
+
+    // Delegando o evento de CLIQUE (mais eficiente e não falha)
+    tbody.addEventListener('click', e => {
+        // Busca o botão mais próximo do clique (caso clique no ícone dentro do botão)
+        const btn = e.target.closest('button[data-roll]');
+        if (btn) {
+            e.preventDefault();
+            const skillName = btn.dataset.roll;
+            console.log("Rolando perícia:", skillName); // Verifique no F12 se isso aparece
             rollSkill(skillName); 
-        });
+        }
     });
 }
 
@@ -1285,14 +1307,20 @@ document.getElementById('sanMax').addEventListener('change', e => {
       const adrenalinaBarContainer = document.getElementById('adrenalinaBarContainer'); 
 
       if (h2Bars && adrenalinaBarContainer) {
-          h2Bars.style.cursor = 'pointer'; 
-          h2Bars.addEventListener('dblclick', (e) => {
-              e.preventDefault(); 
-              state.isAdrenalineVisible = !state.isAdrenalineVisible; 
-              adrenalinaBarContainer.style.display = state.isAdrenalineVisible ? 'block' : 'none'; 
-              saveState();
-          });
-      }
+    // 1. Força a barra a respeitar o banco de dados (escondida por padrão)
+    const isVisible = state.isAdrenalineVisible === true; 
+    adrenalinaBarContainer.style.display = isVisible ? 'block' : 'none';
+
+    // 2. Re-vincula o evento de clique duplo (limpando o anterior)
+    h2Bars.style.cursor = 'pointer';
+    h2Bars.ondblclick = (e) => {
+        e.preventDefault();
+        state.isAdrenalineVisible = !state.isAdrenalineVisible;
+        adrenalinaBarContainer.style.display = state.isAdrenalineVisible ? 'block' : 'none';
+        saveState();
+        console.log("Estado da Adrenalina salvo:", state.isAdrenalineVisible);
+    };
+}
 
       const rollModal = document.getElementById('rollModal');
       const closeModalBtn = document.getElementById('closeModalBtn');
@@ -1429,7 +1457,7 @@ function enableRealtime(id) {
                 if (dadosNovos !== dadosAtuais) {
                     console.log("Mudança detectada no banco! Atualizando tela...");
                     state = data.dados;
-                    syncAll();
+                    syncAll(); // Atualiza o HP, atributos, etc.
                 }
             }
         }
