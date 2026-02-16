@@ -70,42 +70,43 @@
         transition: fill 0.3s ease;
     }
     
+.roll-icon {
+    background: url(https://crisordemparanormal.com/assets/d20-icon-TtjmS7-Z.png) no-repeat center center;
+    background-size: contain;
+    width: 28px; 
+    height: 28px;
+    display: inline-block;
+    opacity: 0.8;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
 #rollModal {
-        /* Removemos o nesting que estava quebrando o CSS */
-        pointer-events: none;
+
+.roll-icon:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.skills-button-td button {
+    background: none; 
+    border: none; 
+    padding: 0; 
+    cursor: pointer;
+    position: relative;
+    z-index: 101;
     }
 
-    /* Estilo do ícone separado corretamente */
-    .roll-icon {
-        background: url(https://crisordemparanormal.com/assets/d20-icon-TtjmS7-Z.png) no-repeat center center;
-        background-size: contain;
-        width: 28px; 
-        height: 28px;
-        display: inline-block;
-        opacity: 0.8;
-        transition: transform 0.2s ease, opacity 0.2s ease;
-    }
-    
-    .roll-icon:hover {
-        opacity: 1;
-        transform: scale(1.1);
-    }
+pointer-events: none;
 
-    /* Garante que o botão fique clicável e acima de outros elementos */
-    .skills-button-td button {
-        background: none; 
-        border: none; 
-        padding: 0; 
-        cursor: pointer;
-        position: relative;
-        z-index: 101; 
-        pointer-events: auto; /* Força o botão a aceitar cliques */
-    }
+}
+  #rollModalContent {
 
-    #rollModalContent {
-        pointer-events: auto;
-    }
-    .roll-result{min-width:130px}
+  .roll-result{min-width:130px}
+    .footer{margin-top:16px;font-size:13px;color:var(--muted)}
+    .flex{display:flex;gap:8px;align-items:center}
+    @media(max-width:900px){.attributes{grid-template-columns:repeat(4,1fr)}.row{flex-direction:column}}
+    pointer-events: none;
+}
 
 
     input[type=number]::-webkit-inner-spin-button,
@@ -186,6 +187,7 @@
         margin-bottom: 8px;
         background: rgba(255,255,255,0.05);
         border-radius: 6px;
+	height: 85px;
     }
     .sheet-name-link {
         color: var(--text);
@@ -201,8 +203,49 @@
         border: none;
         border-radius: 4px;
         cursor: pointer;
+	height: 37px;
+	width: 76px;
     }
     .sheet-delete-btn:hover { background: #c0392b; }
+
+    .sheet-avatar {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        margin-right: 10px;
+        border: 1px solid var(--border-color);
+        background-color: #333;
+    }
+
+    #sheetList li {
+	display: flex;
+	align-items: center; /* Centraliza verticalmente */
+	padding: 10px;
+    }
+
+/* Estilo da foto dentro da ficha */
+#charAvatar {
+    width: 100px;  /* Tamanho da foto */
+    height: 100px;
+    object-fit: cover;  /* Garante que a imagem preencha sem esticar */
+    border: 3px solid var(--accent-color, #d4af37); /* Borda dourada ou da cor do tema */
+    cursor: pointer; /* Mãozinha indicando clique */
+    transition: transform 0.2s, filter 0.2s;
+    background-color: #222;
+}
+
+#charAvatar:hover {
+    transform: scale(1.05); /* Cresce um pouco ao passar o mouse */
+    filter: brightness(1.2); /* Fica mais brilhante */
+}
+
+/* Responsivo para celular */
+@media (max-width: 600px) {
+    #charAvatar {
+        width: 80px;
+        height: 80px;
+    }
+}
 
     /* INÍCIO: ESTILOS DE RESPONSIVIDADE (768px) */
  @media(max-width: 768px) {
@@ -357,10 +400,19 @@
 
   <div id="fichaContent" style="display:none;">
     <div class="container">
-      
+
       <button id="backToIndexBtn" class="ghost" style="margin-bottom: 16px; padding: 6px 10px;">&larr; Voltar ao Menu</button>
 
       <h1>Ficha de Personagem</h1>
+
+<div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+          <div class="avatar-container">
+              <img id="charAvatar" 
+                   src="https://i.imgur.com/huZjuCz.png" 
+                   title="Clique para mudar a foto"
+                   style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #d4af37; cursor: pointer;">
+          </div>
+      </div>
 
     <div class="tab-nav">
       <button class="tab-btn active" data-tab="tabStatus">Status</button>
@@ -372,6 +424,7 @@
     <div id="tabStatus" class="tab-content active">
       <div class="row top">
           <div class="col panel">
+
             <h2>Detalhes Pessoais</h2>
             <div class="row top">
               <div class="col">
@@ -601,16 +654,12 @@
 	<div class="password-controls" style="margin: 10px 0; display: flex; gap: 10px;">
     <button id="btnSetPassword" class="btn" style="font-size: 12px;">🔐 Definir Senha</button>
     <button id="btnRemovePassword" class="btn" style="background: #441111; font-size: 12px;">🔓 Remover 		Senha</button>
-
 	</div>
       </div>
     </div>
-  </div>
-</div>
-
 
 <div id="rollModal" style="display:none; position:fixed; z-index:100; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgba(0,0,0,0); pointer-events: none;">
-
+    
     <div id="rollModalContent" style="background-color: var(--panel); padding: 1px; border: 1px solid var(--accent); border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); pointer-events: auto; position: absolute; right: 40px; bottom: 30px; width: 320px; max-width: 320px;">
         
         <span id="closeModalBtn" style="color: var(--accent); float: right; font-size: 28px; font-weight: bold; margin-right: 10px; cursor: pointer;">&times;</span>
@@ -624,8 +673,12 @@
         <p id="rollDetails" style="font-size: 18px; font-weight: bold; color: var(--muted); margin-left: 5px; margin-top: -15px;"></p>
        
     </div>
+</div>
+</div>
+
   </div>
 </div>
+
 
   <script>
 	const SUPABASE_URL = 'https://ndqnzqbbugidewnqlxmp.supabase.co';
@@ -748,6 +801,22 @@ async function renderIndex() {
             const sheetData = item.dados;
             const li = document.createElement('li');
             
+	    const img = document.createElement('img');
+            img.className = 'sheet-avatar';
+            
+            const defaultImage = 'https://i.imgur.com/huZjuCz.png';
+            img.src = sheetData.details?.imagem || defaultImage;
+            
+            // Se a imagem der erro ao carregar (link quebrado), volta para o padrão
+            img.onerror = () => { img.src = defaultImage; };
+            
+            // Torna a imagem clicável também para abrir a ficha
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', (e) => {
+                e.preventDefault();
+                loadSheet(item.nome_id);
+            });
+
             const nameLink = document.createElement('a');
             nameLink.className = 'sheet-name-link';
             nameLink.style.cursor = 'pointer';
@@ -757,7 +826,7 @@ async function renderIndex() {
                 e.preventDefault();
                 loadSheet(item.nome_id);
             });
-            
+
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'sheet-delete-btn';
             deleteBtn.textContent = 'Deletar';
@@ -769,6 +838,7 @@ async function renderIndex() {
                 }
             });
 
+	    li.appendChild(img);
             li.appendChild(nameLink);
             li.appendChild(deleteBtn);
             sheetListEl.appendChild(li);
@@ -791,8 +861,7 @@ async function renderIndex() {
         idade: "",
         infoDescricao: "" // Adicionado para evitar o erro!
     },
-    attrs: { FOR:10, CON:10, TAM:10, DES:10, APA:10, COH:10, INT:10, MEN:10, EDU:10, SOR:0 },
-    isAdrenalineVisible: false,
+    attrs: { FOR:10, CON:10, TAM:10, DES:10, APA:10, INT:10, MEN:10, EDU:10, SOR:10 },
     hpMax: 10, hpCurrent: 10, hpBase: 0,
     sanMax: 50, sanCurrent: 50, sanBase: 0,
     inventory: [],
@@ -882,6 +951,64 @@ async function loadSheet(id) {
         alert("Essa ficha não existe no servidor.");
         return;
     }
+
+    const avatarImg = document.getElementById('charAvatar');
+    // Verifica se existe imagem salva no state, senão usa a padrão
+    if (state.details && state.details.imagem) {
+   	 avatarImg.src = state.details.imagem;
+    } else {
+ 	   avatarImg.src = 'https://i.imgur.com/huZjuCz.png'; // Imagem padrão
+    }
+
+	// Se a imagem quebrar (link antigo), volta pra padrão
+	avatarImg.onerror = () => { 
+  	  avatarImg.src = 'https://i.imgur.com/huZjuCz.png'; 
+    };
+
+const avatarImgElement = document.getElementById('charAvatar');
+    if (avatarImgElement) {
+        avatarImgElement.addEventListener('click', () => {
+        // Abre uma caixinha perguntando o link
+        const novaUrl = prompt("Cole o link da imagem do seu personagem (Discord, Imgur, 	        etc):", state.details?.imagem || "");
+        
+            if (novaUrl) {
+                // Atualiza na tela na hora
+                avatarImgElement.src = novaUrl;
+            
+                // Garante que o objeto details existe
+                if (!state.details) state.details = {};
+            
+                // Salva no estado
+                state.details.imagem = novaUrl;
+                saveState(); // Manda pro banco
+            }
+        });
+    }
+
+function updateAvatar() {
+    const avatarImg = document.getElementById('charAvatar');
+    if (avatarImg) {
+        // Busca a imagem do estado, se não tiver usa a padrão
+        const savedImg = state.details?.imagem || 'https://i.imgur.com/huZjuCz.png';
+        avatarImg.src = savedImg;
+
+        // Se o link estiver quebrado, não deixa a imagem sumir
+        avatarImg.onerror = () => {
+            avatarImg.src = 'https://i.imgur.com/huZjuCz.png';
+        };
+
+        // Adiciona o clique para mudar a foto (apenas se ainda não tiver o evento)
+        avatarImg.onclick = () => {
+            const novaUrl = prompt("Cole o link da imagem (URL):", state.details?.imagem || "");
+            if (novaUrl !== null) {
+                avatarImg.src = novaUrl;
+                if (!state.details) state.details = {};
+                state.details.imagem = novaUrl;
+                saveState(); // Salva no Supabase
+            }
+        };
+    }
+}
 
     // 2. Extrai os dados
     const tempState = data.dados;
@@ -1010,52 +1137,30 @@ function recalcHPandSAN(){
           saveState();
       }
 
-      function renderSkills() {
-    const tbody = document.querySelector('#skillsTable tbody');
-    if (!tbody) return;
-    
-    tbody.innerHTML = '';
-
-    SKILLS.forEach(([name, base]) => {
-        const tr = document.createElement('tr');
-        const curVal = state.skills[name] ?? base;
-        
-        // Adicionei a classe 'btn-roll' para facilitar o clique
-        tr.innerHTML = `
-            <td>${name}</td>
-            <td class="skill-base">${base}</td>
-            <td>
-                <input class="skill-val" data-name="${name}" type="number" min="1" max="99" value="${curVal}"/>
-            </td>
-            <td>
-                <button class="btn-roll" data-roll="${name}" style="background:none; border:none; padding:5px; cursor:pointer;">
-                    <span class="roll-icon"></span>
-                </button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-
-    // Delegando o evento de INPUT (mais eficiente)
-    tbody.addEventListener('input', e => {
-        if (e.target.classList.contains('skill-val')) {
+      function renderSkills(){
+        const tbody = document.querySelector('#skillsTable tbody');
+	tbody.innerHTML='';
+        SKILLS.forEach(([name,base])=>{
+          const tr = document.createElement('tr');
+          const curVal = state.skills[name] ?? base;
+          tr.innerHTML = `<td>${name}</td><td class="skill-base">${base}</td><td><input class="skill-val" data-name="${name}" type="number" min="1" max="20" value="${curVal}"/></td><td><button data-roll="${name}" style="background:none; border:none; padding:0; cursor:pointer;"><span class="roll-icon"></span></button></td>`;
+          tbody.appendChild(tr);
+        });
+	document.querySelectorAll('.skill-val').forEach(inp => {
+           inp.addEventListener('input', e => {
             const skillName = e.target.dataset.name;
             let value = Number(e.target.value);
+            value = Math.max(1, Math.min(20, value));
             state.skills[skillName] = value;
             saveState(); 
-        }
+        });
     });
 
-    // Delegando o evento de CLIQUE (mais eficiente e não falha)
-    tbody.addEventListener('click', e => {
-        // Busca o botão mais próximo do clique (caso clique no ícone dentro do botão)
-        const btn = e.target.closest('button[data-roll]');
-        if (btn) {
-            e.preventDefault();
-            const skillName = btn.dataset.roll;
-            console.log("Rolando perícia:", skillName); // Verifique no F12 se isso aparece
+    document.querySelectorAll('button[data-roll]').forEach(btn => {
+        btn.addEventListener('click', e => {
+            const skillName = e.currentTarget.dataset.roll;
             rollSkill(skillName); 
-        }
+        });
     });
 }
 
@@ -1307,20 +1412,14 @@ document.getElementById('sanMax').addEventListener('change', e => {
       const adrenalinaBarContainer = document.getElementById('adrenalinaBarContainer'); 
 
       if (h2Bars && adrenalinaBarContainer) {
-    // 1. Força a barra a respeitar o banco de dados (escondida por padrão)
-    const isVisible = state.isAdrenalineVisible === true; 
-    adrenalinaBarContainer.style.display = isVisible ? 'block' : 'none';
-
-    // 2. Re-vincula o evento de clique duplo (limpando o anterior)
-    h2Bars.style.cursor = 'pointer';
-    h2Bars.ondblclick = (e) => {
-        e.preventDefault();
-        state.isAdrenalineVisible = !state.isAdrenalineVisible;
-        adrenalinaBarContainer.style.display = state.isAdrenalineVisible ? 'block' : 'none';
-        saveState();
-        console.log("Estado da Adrenalina salvo:", state.isAdrenalineVisible);
-    };
-}
+          h2Bars.style.cursor = 'pointer'; 
+          h2Bars.addEventListener('dblclick', (e) => {
+              e.preventDefault(); 
+              state.isAdrenalineVisible = !state.isAdrenalineVisible; 
+              adrenalinaBarContainer.style.display = state.isAdrenalineVisible ? 'block' : 'none'; 
+              saveState();
+          });
+      }
 
       const rollModal = document.getElementById('rollModal');
       const closeModalBtn = document.getElementById('closeModalBtn');
