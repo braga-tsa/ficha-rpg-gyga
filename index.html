@@ -687,8 +687,12 @@ pointer-events: none;
 	const MASTER_PASS = "pontosdeadrenalina"; // <--- Escolha sua senha secreta de Mestre
 	const SHEET_PREFIX = 'cp_sheet_';
 	const SHEET_LIST_KEY = 'cp_sheets_list';
-	let currentSheetId = null;
-	let state = { /* ... seu estado inicial ... */ };
+
+	// VARIÁVEIS DE CONTROLE GLOBAL
+	let syncInterval = null;      // Cronómetro da Ficha
+	let indexSyncInterval = null; // Cronómetro do Menu
+	let currentSheetId = null;    // ID da ficha aberta
+	let isSaving = false;         // Trava para evitar o "rollback"
 
     /* ---------- DATA (SEM MUDANÇAS) ---------- */
     const ATTRS = ['FOR','CON','TAM','DES','APA','INT','MEN','COH','SOR'];
@@ -701,7 +705,8 @@ pointer-events: none;
     function escapeId(s){return s.replace(/[^a-z0-9]/gi,'_')}
     
     async function saveState() {
-    if (!currentSheetId) return;
+	isSaving = true; // Ativa a trava
+	if (!currentSheetId) return;
 
     const { error } = await _supabase
         .from('fichas')
@@ -713,6 +718,10 @@ pointer-events: none;
     } else {
         console.log("Alteração salva com sucesso!");
     }
+	await _supabase.from('fichas').update({ dados: state }).eq('nome_id', currentSheetId);
+    
+    // Libera a sincronização após 2 segundos (tempo do banco processar)
+    setTimeout(() => { isSaving = false; }, 2000);
 }
     
     function loadState(id){
@@ -765,9 +774,24 @@ pointer-events: none;
       let bodyColors = {};
 
       function showPage(pageId) {
-          indexPageEl.style.display = pageId === 'index' ? 'block' : 'none';
-          fichaContentEl.style.display = pageId === 'ficha' ? 'block' : 'none';
-      }
+    const indexPage = document.getElementById('indexPage');
+    const fichaContent = document.getElementById('fichaContent');
+
+    indexPage.style.display = pageId === 'index' ? 'block' : 'none';
+    fichaContent.style.display = pageId === 'ficha' ? 'block' : 'none';
+
+    if (pageId === 'index') {
+        // Quando volta pro menu:
+        if (syncInterval) clearInterval(syncInterval); // Para o tempo real da ficha
+        currentSheetId = null;
+        
+        renderIndex();           // Atualiza a lista na hora
+        enableIndexRealtime();   // RELIGA o tempo real do menu automaticamente
+    } else {
+        // Quando entra na ficha:
+        if (indexSyncInterval) clearInterval(indexSyncInterval); // Para o tempo real do menu
+    }
+}
       
       // ----------------------------------------------------
       // LÓGICA DE GERENCIAMENTO DE FICHAS (INDEX)
@@ -786,65 +810,83 @@ pointer-events: none;
       }
       
 async function renderIndex() {
+    // 1. Localiza os elementos
+    const indexPage = document.getElementById('indexPage');
+    const sheetListEl = document.getElementById('sheetList');
+    
+    // 2. Garante que a página do menu fique visível imediatamente
+    if (indexPage) indexPage.style.display = 'block';
+    if (fichaContentEl) fichaContentEl.style.display = 'none';
+
+    if (!sheetListEl) return;
+
+    // 3. Feedback visual de carregamento
     sheetListEl.innerHTML = '<li style="justify-content:center; color: var(--muted);">Buscando fichas na nuvem...</li>';
     
-    const { data: fichasNuvem, error } = await _supabase
-        .from('fichas')
-        .select('nome_id, dados');
+    try {
+        const { data: fichasNuvem, error } = await _supabase
+            .from('fichas')
+            .select('nome_id, dados');
 
-    sheetListEl.innerHTML = '';
-    
-    if (error || !fichasNuvem || fichasNuvem.length === 0) {
-        sheetListEl.innerHTML = '<li style="justify-content:center; color: var(--muted);">Nenhuma ficha encontrada na nuvem.</li>';
-    } else {
-        fichasNuvem.forEach(item => {
-            const sheetData = item.dados;
-            const li = document.createElement('li');
-            
-	    const img = document.createElement('img');
-            img.className = 'sheet-avatar';
-            
-            const defaultImage = 'https://i.imgur.com/huZjuCz.png';
-            img.src = sheetData.details?.imagem || defaultImage;
-            
-            // Se a imagem der erro ao carregar (link quebrado), volta para o padrão
-            img.onerror = () => { img.src = defaultImage; };
-            
-            // Torna a imagem clicável também para abrir a ficha
-            img.style.cursor = 'pointer';
-            img.addEventListener('click', (e) => {
-                e.preventDefault();
-                loadSheet(item.nome_id);
+        sheetListEl.innerHTML = '';
+
+        if (error) throw error;
+
+        if (!fichasNuvem || fichasNuvem.length === 0) {
+            sheetListEl.innerHTML = '<li style="justify-content:center; color: var(--muted);">Nenhuma ficha encontrada na nuvem.</li>';
+        } else {
+            fichasNuvem.forEach(item => {
+                const sheetData = item.dados;
+                const li = document.createElement('li');
+                li.style.display = 'flex';
+                li.style.alignItems = 'center';
+                
+                const img = document.createElement('img');
+                img.className = 'sheet-avatar';
+                img.style.width = "70px";
+                img.style.height = "70px";
+                img.style.marginRight = "10px";
+                img.style.objectFit = "cover";
+                
+                const defaultImage = 'https://i.imgur.com/huZjuCz.png';
+                img.src = sheetData.details?.imagem || defaultImage;
+                img.onerror = () => { img.src = defaultImage; };
+                img.style.cursor = 'pointer';
+                img.onclick = () => loadSheet(item.nome_id);
+
+                const nameLink = document.createElement('a');
+                nameLink.className = 'sheet-name-link';
+                nameLink.style.cursor = 'pointer';
+                nameLink.style.flexGrow = '1';
+                nameLink.textContent = sheetData.details?.nomePersonagem || 'Personagem Sem Nome';
+                nameLink.onclick = () => loadSheet(item.nome_id);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'sheet-delete-btn';
+                deleteBtn.textContent = 'Deletar';
+                deleteBtn.style.marginLeft = '10px';
+                deleteBtn.onclick = async (e) => {
+                    e.stopPropagation();
+                    if(confirm("Deseja apagar esta ficha permanentemente?")) {
+                        await _supabase.from('fichas').delete().eq('nome_id', item.nome_id);
+                        renderIndex();
+                    }
+                };
+
+                li.appendChild(img);
+                li.appendChild(nameLink);
+                li.appendChild(deleteBtn);
+                sheetListEl.appendChild(li);
             });
+        }
+    } catch (err) {
+        console.error("Erro crítico no renderIndex:", err);
+        sheetListEl.innerHTML = '<li style="justify-content:center; color: var(--danger);">Erro de conexão.</li>';
+    }
 
-            const nameLink = document.createElement('a');
-            nameLink.className = 'sheet-name-link';
-            nameLink.style.cursor = 'pointer';
-            nameLink.textContent = sheetData.details?.nomePersonagem || 'Personagem Sem Nome';
-            
-            nameLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                loadSheet(item.nome_id);
-            });
-
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'sheet-delete-btn';
-            deleteBtn.textContent = 'Deletar';
-            deleteBtn.addEventListener('click', async (e) => {
-                e.stopPropagation();
-                if(confirm("Deseja apagar esta ficha da nuvem permanentemente?")) {
-                    await _supabase.from('fichas').delete().eq('nome_id', item.nome_id);
-                    renderIndex();
-                }
-            });
-
-	    li.appendChild(img);
-            li.appendChild(nameLink);
-            li.appendChild(deleteBtn);
-            sheetListEl.appendChild(li);
-        }); // Fechamento correto do forEach
-    } // Fechamento correto do else
-    showPage('index');
+	 if (!indexSyncInterval) {
+  	  enableIndexRealtime();
+    }
 }
 
       async function createNewSheet() {
@@ -936,20 +978,22 @@ async function loadSheet(id) {
     // 1. Busca no Supabase
     const { data, error } = await _supabase
         .from('fichas')
-        .select('*')
+        .select('dados')
         .eq('nome_id', id)
         .maybeSingle();
 
     if (error) {
-        console.error("Erro na busca do Supabase:", error.message);
-        alert("Erro ao conectar com o banco de dados.");
+        console.error("Erro na busca do Supabase:", error);
         return;
     }
 
-    if (!data) {
-        console.error("Ficha não encontrada no banco de dados para o ID:", id);
-        alert("Essa ficha não existe no servidor.");
-        return;
+    if (data && data.dados) {
+        currentSheetId = id;
+        state = data.dados;
+        
+        showPage('ficha'); // Troca para a tela da ficha
+        syncAll();         // Preenche os campos e a imagem
+        enableRealtime(id); // Ativa a atualização automática
     }
 
     const avatarImg = document.getElementById('charAvatar');
@@ -1355,6 +1399,16 @@ function recalcHPandSAN(){
           renderBodyDiagram();
           renderDetailsAndInfo(); 
           saveState();
+
+	const avatarImg = document.getElementById('charAvatar');
+if (avatarImg) {
+    // Pega a imagem do estado ou usa a padrão caso esteja vazio
+    const linkFoto = state.details?.imagem || 'https://i.imgur.com/huZjuCz.png';
+    avatarImg.src = linkFoto;
+    
+    // Se o link estiver quebrado, carrega a padrão
+    avatarImg.onerror = () => { avatarImg.src = 'https://i.imgur.com/huZjuCz.png'; };
+	}
       }
 
       // --- LISTENERS DE CONTROLES (HP, SAN, ADR) ---
@@ -1532,35 +1586,48 @@ function rollSkill(name){
 let syncInterval = null; // Variável para controlar o tempo
 
 function enableRealtime(id) {
-    console.log("Monitoramento via Intervalo ativado para:", id);
-
-    // Se já houver um cronômetro rodando de outra ficha, a gente limpa ele
     if (syncInterval) clearInterval(syncInterval);
-
-    // Criamos um novo cronômetro que roda a cada 4 segundos
     syncInterval = setInterval(async () => {
-        // Só busca se o usuário estiver com a aba do navegador ativa
-        if (document.visibilityState === 'visible' && currentSheetId === id) {
-            
-            const { data, error } = await _supabase
+        if (document.visibilityState === 'visible' && currentSheetId === id && !isSaving) {
+            const { data: fichaData } = await _supabase
                 .from('fichas')
                 .select('dados')
                 .eq('nome_id', id)
                 .maybeSingle();
 
-            if (data && data.dados) {
-                // Comparamos se o que está no banco é diferente do que está na tela
-                const dadosNovos = JSON.stringify(data.dados);
-                const dadosAtuais = JSON.stringify(state);
-
-                if (dadosNovos !== dadosAtuais) {
-                    console.log("Mudança detectada no banco! Atualizando tela...");
-                    state = data.dados;
-                    syncAll(); // Atualiza o HP, atributos, etc.
+            if (fichaData && fichaData.dados) {
+                const novos = JSON.stringify(fichaData.dados);
+                const atuais = JSON.stringify(state);
+                if (novos !== atuais) {
+                    state = fichaData.dados;
+                    syncAll(); 
                 }
             }
         }
-    }, 4000); // 4000 milissegundos = 4 segundos
+    }, 4000);
+}
+
+function enableIndexRealtime() {
+    // Se já existir um cronômetro rodando, para ele antes de começar outro
+    if (indexSyncInterval) clearInterval(indexSyncInterval);
+
+    indexSyncInterval = setInterval(async () => {
+        const indexPage = document.getElementById('indexPage');
+        
+        // Só tenta atualizar se o menu estiver realmente visível na tela
+        if (document.visibilityState === 'visible' && indexPage && indexPage.style.display === 'block') {
+            console.log("Sincronizando menu...");
+            
+            const { data: novasFichas, error } = await _supabase
+                .from('fichas')
+                .select('nome_id, dados');
+
+            if (!error && novasFichas) {
+                // Atualiza a lista visualmente
+                renderIndex(); 
+            }
+        }
+    }, 10000);
 }
 
       function initApp() {
