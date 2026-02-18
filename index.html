@@ -1663,6 +1663,38 @@ function enableIndexRealtime() {
         }
     }, 10000);
 }
+
+		async function changePhoto() {
+    const currentPhoto = state.details?.imagem || '';
+    const newPhoto = prompt("Cole o link da nova imagem (URL):", currentPhoto);
+
+    // Se o usuário não cancelou e o link é diferente do atual
+    if (newPhoto !== null && newPhoto !== currentPhoto) {
+        // 1. Atualiza o estado local
+        if (!state.details) state.details = {};
+        state.details.imagem = newPhoto;
+
+        // 2. Atualiza visualmente na hora (feedback instantâneo)
+        const imgEl = document.getElementById('charAvatar');
+        if (imgEl) imgEl.src = newPhoto;
+
+        // 3. Salva no banco de dados
+        if (currentSheetId) {
+            try {
+                const { error } = await _supabase
+                    .from('fichas')
+                    .update({ dados: state })
+                    .eq('nome_id', currentSheetId);
+
+                if (error) throw error;
+                console.log("Foto atualizada com sucesso!");
+            } catch (err) {
+                console.error("Erro ao salvar nova foto:", err);
+                alert("Erro ao salvar a foto no banco de dados.");
+            }
+        }
+    }
+}
 		
       function initApp() {
           const list = getSheetList();
