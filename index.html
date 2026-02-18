@@ -408,7 +408,6 @@ pointer-events: none;
 <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
           <div class="avatar-container">
               <img id="charAvatar" 
-				   onclick="changePhoto()"
                    src="https://i.imgur.com/huZjuCz.png" 
                    title="Clique para mudar a foto"
                    style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #d4af37; cursor: pointer;">
@@ -1077,13 +1076,13 @@ function updateAvatar() {
 
     // Chama as funções de atualizar a tela
     try {
-        syncAll();        // Preenche os campos
+        ();        // Preenche os campos
         showPage('ficha'); // MUDA A TELA (Importante!)
         enableRealtime(id); // Ativa o tempo real
         console.log("Ficha aberta com sucesso!");
     } catch (err) {
         console.error("Erro ao renderizar a ficha:", err);
-        alert("Erro visual: Verifique se as funções syncAll ou showPage existem.");
+        alert("Erro visual: Verifique se as funções  ou showPage existem.");
     }
 }
 
@@ -1401,15 +1400,34 @@ function recalcHPandSAN(){
           renderDetailsAndInfo(); 
           saveState();
 
-	const avatarImg = document.getElementById('charAvatar');
-if (avatarImg) {
-    // Pega a imagem do estado ou usa a padrão caso esteja vazio
-    const linkFoto = state.details?.imagem || 'https://i.imgur.com/huZjuCz.png';
-    avatarImg.src = linkFoto;
-    
-    // Se o link estiver quebrado, carrega a padrão
-    avatarImg.onerror = () => { avatarImg.src = 'https://i.imgur.com/huZjuCz.png'; };
-	}
+	if (imgAvatar) {
+        // 1. Atualiza a imagem visualmente
+        const linkSalvo = state.details?.imagem || 'https://i.imgur.com/huZjuCz.png';
+        if (imgAvatar.src !== linkSalvo) {
+            imgAvatar.src = linkSalvo;
+        }
+        
+        // 2. Previne erros de link quebrado
+        imgAvatar.onerror = () => { imgAvatar.src = 'https://i.imgur.com/huZjuCz.png'; };
+
+        // 3. Define o clique (Mudar foto) AQUI DENTRO
+        imgAvatar.onclick = function() {
+            const atual = state.details?.imagem || '';
+            const novoLink = prompt("Cole o link da nova imagem do personagem:", atual);
+            
+            if (novoLink && novoLink !== atual) {
+                // Atualiza estado
+                if (!state.details) state.details = {};
+                state.details.imagem = novoLink;
+                
+                // Atualiza visual
+                imgAvatar.src = novoLink;
+                
+                // Salva no banco
+                saveState();
+            }
+        };
+    }
 		  
 if (adrContainer) {
         if (adrAtu > 0) {
@@ -1644,38 +1662,6 @@ function enableIndexRealtime() {
             }
         }
     }, 10000);
-}
-
-async function changePhoto() {
-    const currentPhoto = state.details?.imagem || '';
-    const newPhoto = prompt("Cole o link da nova imagem (URL):", currentPhoto);
-
-    // Se o usuário não cancelou e o link é diferente do atual
-    if (newPhoto !== null && newPhoto !== currentPhoto) {
-        // 1. Atualiza o estado local
-        if (!state.details) state.details = {};
-        state.details.imagem = newPhoto;
-
-        // 2. Atualiza visualmente na hora (feedback instantâneo)
-        const imgEl = document.getElementById('charAvatar');
-        if (imgEl) imgEl.src = newPhoto;
-
-        // 3. Salva no banco de dados
-        if (currentSheetId) {
-            try {
-                const { error } = await _supabase
-                    .from('fichas')
-                    .update({ dados: state })
-                    .eq('nome_id', currentSheetId);
-
-                if (error) throw error;
-                console.log("Foto atualizada com sucesso!");
-            } catch (err) {
-                console.error("Erro ao salvar nova foto:", err);
-                alert("Erro ao salvar a foto no banco de dados.");
-            }
-        }
-    }
 }
 		
       function initApp() {
