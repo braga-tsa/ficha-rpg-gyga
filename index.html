@@ -1076,7 +1076,7 @@ function updateAvatar() {
 
     // Chama as funções de atualizar a tela
     try {
-        ();        // Preenche os campos
+        syncAll();        // Preenche os campos
         showPage('ficha'); // MUDA A TELA (Importante!)
         enableRealtime(id); // Ativa o tempo real
         console.log("Ficha aberta com sucesso!");
@@ -1084,6 +1084,7 @@ function updateAvatar() {
         console.error("Erro ao renderizar a ficha:", err);
         alert("Erro visual: Verifique se as funções  ou showPage existem.");
     }
+ }
 
       function updateSheetName() {
           if (!nomePersonagemInput || !currentSheetId) return;
