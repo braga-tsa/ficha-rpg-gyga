@@ -494,7 +494,7 @@ pointer-events: none;
                   </div>
                 </div>
 
-            <div class="bar" id="adrenalinaBarContainer">
+            <div class="bar" id="adrenalinaBarContainer" style="display: none;">
                   <div class="label">Adrenalina</div>
                   <div class="adrenalina-container">
                     <div class="adrenalina-bar">
@@ -1409,7 +1409,22 @@ if (avatarImg) {
     // Se o link estiver quebrado, carrega a padrão
     avatarImg.onerror = () => { avatarImg.src = 'https://i.imgur.com/huZjuCz.png'; };
 	}
-      }
+		  
+if (adrContainer) {
+        if (adrAtu > 0) {
+            // Se tiver adrenalina, mostra a barra
+            adrContainer.style.display = 'block';
+            
+            // Atualiza a largura da barra
+            const adrPercent = Math.min(100, Math.max(0, (adrAtu / adrMax) * 100));
+            const adrMeter = document.getElementById('adrMeter');
+            if (adrMeter) adrMeter.style.width = adrPercent + '%';
+        } else {
+            // Se estiver em 0 ou não existir, esconde
+            adrContainer.style.display = 'none';
+        }
+    }
+ }
 
       // --- LISTENERS DE CONTROLES (HP, SAN, ADR) ---
       document.getElementById('hpMinus').addEventListener('click',()=>{state.hpCurrent=Number(state.hpCurrent)-1;syncAll();});
