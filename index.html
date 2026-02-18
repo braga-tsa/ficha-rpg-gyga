@@ -1400,33 +1400,21 @@ function recalcHPandSAN(){
           renderDetailsAndInfo(); 
           saveState();
 
-	if (imgAvatar) {
-        // 1. Atualiza a imagem visualmente
-        const linkSalvo = state.details?.imagem || 'https://i.imgur.com/huZjuCz.png';
-        if (imgAvatar.src !== linkSalvo) {
-            imgAvatar.src = linkSalvo;
-        }
+	const imgAvatar = document.getElementById('charAvatar');
+    if (imgAvatar) {
+        // Usa a imagem do estado ou o placeholder se estiver vazio
+        const fotoNoEstado = state.details?.imagem || 'https://i.imgur.com/huZjuCz.png';
         
-        // 2. Previne erros de link quebrado
-        imgAvatar.onerror = () => { imgAvatar.src = 'https://i.imgur.com/huZjuCz.png'; };
+        // Só altera o src se for realmente diferente para evitar recarregamentos inúteis
+        if (imgAvatar.src !== fotoNoEstado) {
+            imgAvatar.src = fotoNoEstado;
+        }
 
-        // 3. Define o clique (Mudar foto) AQUI DENTRO
-        imgAvatar.onclick = function() {
-            const atual = state.details?.imagem || '';
-            const novoLink = prompt("Cole o link da nova imagem do personagem:", atual);
-            
-            if (novoLink && novoLink !== atual) {
-                // Atualiza estado
-                if (!state.details) state.details = {};
-                state.details.imagem = novoLink;
-                
-                // Atualiza visual
-                imgAvatar.src = novoLink;
-                
-                // Salva no banco
-                saveState();
-            }
-        };
+        // Garante que o clique funcione sempre
+        imgAvatar.onclick = () => changePhoto();
+        
+        // Se o link quebrar, volta pro placeholder
+        imgAvatar.onerror = () => { imgAvatar.src = 'https://i.imgur.com/huZjuCz.png'; };
     }
 		  
 if (adrContainer) {
@@ -1665,33 +1653,24 @@ function enableIndexRealtime() {
 }
 
 		async function changePhoto() {
-    const currentPhoto = state.details?.imagem || '';
-    const newPhoto = prompt("Cole o link da nova imagem (URL):", currentPhoto);
-
-    // Se o usuário não cancelou e o link é diferente do atual
-    if (newPhoto !== null && newPhoto !== currentPhoto) {
-        // 1. Atualiza o estado local
+    const atual = state.details?.imagem || '';
+    const novoLink = prompt("Cole o link da nova imagem do personagem:", atual);
+    
+    if (novoLink !== null && novoLink !== atual) {
+        // 1. Atualiza localmente
         if (!state.details) state.details = {};
-        state.details.imagem = newPhoto;
-
-        // 2. Atualiza visualmente na hora (feedback instantâneo)
-        const imgEl = document.getElementById('charAvatar');
-        if (imgEl) imgEl.src = newPhoto;
-
-        // 3. Salva no banco de dados
-        if (currentSheetId) {
-            try {
-                const { error } = await _supabase
-                    .from('fichas')
-                    .update({ dados: state })
-                    .eq('nome_id', currentSheetId);
-
-                if (error) throw error;
-                console.log("Foto atualizada com sucesso!");
-            } catch (err) {
-                console.error("Erro ao salvar nova foto:", err);
-                alert("Erro ao salvar a foto no banco de dados.");
-            }
+        state.details.imagem = novoLink;
+        
+        // 2. Mostra na hora
+        const imgAvatar = document.getElementById('charAvatar');
+        if (imgAvatar) imgAvatar.src = novoLink;
+        
+        // 3. Salva no Supabase (usando sua função de salvamento existente)
+        if (typeof saveState === "function") {
+            await saveState();
+        } else {
+            // Caso não tenha saveState definido, salva direto:
+            await _supabase.from('fichas').update({ dados: state }).eq('nome_id', currentSheetId);
         }
     }
 }
